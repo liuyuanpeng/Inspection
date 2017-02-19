@@ -1,5 +1,5 @@
 //
-//  SecondViewController.h
+//  IMainViewController.h
 //  Inspecting
 //
 //  Created by liuyuanpeng on 2017/2/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SecondViewController : UIViewController
-
+@interface IMainViewController : UIViewController
 
 @end
-

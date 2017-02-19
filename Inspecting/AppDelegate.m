@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "LoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [[UITabBar appearance] setShadowImage:[[UIImage alloc]init]];
+    
+    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc]init]];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.rootViewController = [[LoginViewController alloc] init];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
