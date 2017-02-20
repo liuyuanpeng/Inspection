@@ -73,8 +73,6 @@
     [button.layer setCornerRadius:3.0];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.view addSubview:button];
-    
-    HWPopTool
 }
 
 - (void)didReceiveMemoryWarning {
