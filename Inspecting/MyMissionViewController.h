@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyMissionViewController : UIViewController
+@interface MyMissionViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, strong) UITableView *tableview;
 
 @end

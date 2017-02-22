@@ -10,4 +10,15 @@
 
 @interface HomeViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, strong) UIImageView *avatar;
+@property (nonatomic, strong) UIImageView *organAvatar;
+@property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong) UILabel *organLabel;
+@property (nonatomic, strong) UILabel *finishedLabel;
+@property (nonatomic, strong) UILabel *unfinishedLabel;
+
+- (void)setAvartar:(UIImage *)avatar organAvatar:(UIImage *)organAvatar;
+- (void)setUsername:(NSString *)username organname:(NSString *)organname;
+- (void)setFinished:(NSNumber *)finished Unfinished:(NSNumber *)unfinished;
+
 @end

@@ -26,8 +26,8 @@
     
     self.view.backgroundColor = [UIColor colorWithRed:234/255.0 green:230/255.0 blue:221/255.0 alpha:1.0];
     
-    UIImageView *logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p_login_logo1.png"]];
-    logo.frame = CGRectMake(rScreen.size.width/2 - 464/4, 50, 232, 107);
+    UIImageView *logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p_login_logo3.png"]];
+    logo.frame = CGRectMake(rScreen.size.width/2 - 324/4, 50, 324/2, 203/2);
     [self.view addSubview:logo];
     
     UIImageView *logo2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p_login_logo2.png"]];
@@ -41,22 +41,26 @@
     [inputField.layer setCornerRadius:5];
     inputField.backgroundColor = [UIColor whiteColor];
     
-    UITextField* username = [[UITextField alloc] initWithFrame:CGRectMake(192/2, 0, 146, 240/4 - 1)];
-    UITextField *password = [[UITextField alloc] initWithFrame:CGRectMake(192/2, 240/4 + 1, 146, 240/4)];
+    self.username = [[UITextField alloc] initWithFrame:CGRectMake(180/2, 0, 146, 240/4 - 1)];
+    self.password = [[UITextField alloc] initWithFrame:CGRectMake(180/2, 240/4 + 1, 146, 240/4)];
     
     UIView *splitLine = [[UIView alloc] initWithFrame:CGRectMake(0, 240/4 - 2, 494/2, 2)];
     [splitLine setBackgroundColor:[UIColor colorWithRed:229/255.0 green:229/255.0 blue:229/255.0 alpha:1.0]];
 
-    [username setPlaceholder:@"请输入用户名"];
-    [password setPlaceholder:@"请输入密码"];
+    [self.username setPlaceholder:@"请输入登录账号"];
+//    [self.username becomeFirstResponder];
+    self.username.delegate = self;
+    [self.password setPlaceholder:@"请输入密码"];
+    self.password.secureTextEntry = YES;
+    self.password.delegate = self;
     
-    UIImageView *userLogo = [[UIImageView alloc] initWithFrame:CGRectMake(28/2, 42/2, 35, 28)];
+    UIImageView *userLogo = [[UIImageView alloc] initWithFrame:CGRectMake(28/2, 42/2, 35/1.5, 28/1.5)];
     userLogo.image = [UIImage imageNamed:@"i_login_user.png"];
-    UIImageView *pwLogo = [[UIImageView alloc] initWithFrame:CGRectMake(28/2, 42/2 + 240/4, 35, 28)];
+    UIImageView *pwLogo = [[UIImageView alloc] initWithFrame:CGRectMake(28/2, 42/2 + 240/4, 35/1.5, 28/1.5)];
     pwLogo.image = [UIImage imageNamed:@"i_login_password.png"];
     
-    [inputField addSubview:username];
-    [inputField addSubview:password];
+    [inputField addSubview:self.username];
+    [inputField addSubview:self.password];
     [inputField addSubview:splitLine];
     
     [inputField addSubview:userLogo];
@@ -139,5 +143,16 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+
+#pragma mark - UITextField Delegate Impletation
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    if (textField == self.username) {
+        [self.password becomeFirstResponder];
+    }
+    return YES;
+}
 
 @end

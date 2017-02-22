@@ -125,6 +125,9 @@
 		9183CC3F1E5B44E70064572E /* toolbar_icon_refresh_available06.png in Resources */ = {isa = PBXBuildFile; fileRef = 9183CBD51E5B44E70064572E /* toolbar_icon_refresh_available06.png */; };
 		9183CC401E5B44E70064572E /* toolbar_icon_refresh_available07.png in Resources */ = {isa = PBXBuildFile; fileRef = 9183CBD61E5B44E70064572E /* toolbar_icon_refresh_available07.png */; };
 		9183CC411E5B44E70064572E /* toolbar_icon_refresh_available08.png in Resources */ = {isa = PBXBuildFile; fileRef = 9183CBD71E5B44E70064572E /* toolbar_icon_refresh_available08.png */; };
+		9195D1741E5C5222007B451F /* IMyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9195D1731E5C5222007B451F /* IMyTableViewCell.m */; };
+		9195D1771E5C5232007B451F /* IPublicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9195D1761E5C5232007B451F /* IPublicTableViewCell.m */; };
+		9195D17A1E5D68CB007B451F /* IPublicMissionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9195D1791E5D68CB007B451F /* IPublicMissionView.m */; };
 		91AA2DCE1E59A01100731F9E /* INewestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91AA2DCD1E59A01100731F9E /* INewestTableViewCell.m */; };
 		C52AD1EC0EEBFD048764A742 /* Pods_Inspecting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97B58F74EA11F4E1C0CF0F24 /* Pods_Inspecting.framework */; };
 /* End PBXBuildFile section */
@@ -261,6 +264,12 @@
 		9183CBD51E5B44E70064572E /* toolbar_icon_refresh_available06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = toolbar_icon_refresh_available06.png; path = images/toolbar_icon_refresh_available06.png; sourceTree = "<group>"; };
 		9183CBD61E5B44E70064572E /* toolbar_icon_refresh_available07.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = toolbar_icon_refresh_available07.png; path = images/toolbar_icon_refresh_available07.png; sourceTree = "<group>"; };
 		9183CBD71E5B44E70064572E /* toolbar_icon_refresh_available08.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = toolbar_icon_refresh_available08.png; path = images/toolbar_icon_refresh_available08.png; sourceTree = "<group>"; };
+		9195D1721E5C5222007B451F /* IMyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMyTableViewCell.h; sourceTree = "<group>"; };
+		9195D1731E5C5222007B451F /* IMyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMyTableViewCell.m; sourceTree = "<group>"; };
+		9195D1751E5C5232007B451F /* IPublicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPublicTableViewCell.h; sourceTree = "<group>"; };
+		9195D1761E5C5232007B451F /* IPublicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPublicTableViewCell.m; sourceTree = "<group>"; };
+		9195D1781E5D68CB007B451F /* IPublicMissionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPublicMissionView.h; sourceTree = "<group>"; };
+		9195D1791E5D68CB007B451F /* IPublicMissionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPublicMissionView.m; sourceTree = "<group>"; };
 		91AA2DCC1E59A01100731F9E /* INewestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INewestTableViewCell.h; sourceTree = "<group>"; };
 		91AA2DCD1E59A01100731F9E /* INewestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INewestTableViewCell.m; sourceTree = "<group>"; };
 		97B58F74EA11F4E1C0CF0F24 /* Pods_Inspecting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Inspecting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -360,6 +369,12 @@
 			children = (
 				91AA2DCC1E59A01100731F9E /* INewestTableViewCell.h */,
 				91AA2DCD1E59A01100731F9E /* INewestTableViewCell.m */,
+				9195D1721E5C5222007B451F /* IMyTableViewCell.h */,
+				9195D1731E5C5222007B451F /* IMyTableViewCell.m */,
+				9195D1751E5C5232007B451F /* IPublicTableViewCell.h */,
+				9195D1761E5C5232007B451F /* IPublicTableViewCell.m */,
+				9195D1781E5D68CB007B451F /* IPublicMissionView.h */,
+				9195D1791E5D68CB007B451F /* IPublicMissionView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -736,10 +751,13 @@
 				91831AAC1E54B67500E670B3 /* PublicMissionViewController.m in Sources */,
 				91831A871E53F4CD00E670B3 /* AppDelegate.m in Sources */,
 				917964551E58306E00B5E808 /* UIImage+UIImageEx.m in Sources */,
+				9195D1741E5C5222007B451F /* IMyTableViewCell.m in Sources */,
+				9195D17A1E5D68CB007B451F /* IPublicMissionView.m in Sources */,
 				91831AA31E54989600E670B3 /* IMainViewController.m in Sources */,
 				91831A841E53F4CD00E670B3 /* main.m in Sources */,
 				91831AAF1E54B68400E670B3 /* MyMissionViewController.m in Sources */,
 				91831AB21E54B6A000E670B3 /* UserInfoViewController.m in Sources */,
+				9195D1771E5C5232007B451F /* IPublicTableViewCell.m in Sources */,
 				91831AA61E54B64900E670B3 /* HomeViewController.m in Sources */,
 				91831AA91E54B65A00E670B3 /* LoginViewController.m in Sources */,
 				91831AB51E54C76B00E670B3 /* IMainController.m in Sources */,

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PublicMissionViewController : UIViewController
+@interface PublicMissionViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, strong) UITableView *tableView;
 
 @end

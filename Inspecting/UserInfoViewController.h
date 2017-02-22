@@ -10,4 +10,16 @@
 
 @interface UserInfoViewController : UIViewController
 
+@property (nonatomic, strong) UIImageView *avatar;
+@property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong) UILabel *organLabel;
+@property (nonatomic, strong) UILabel *name;
+@property (nonatomic, strong) UILabel *idType;
+@property (nonatomic, strong) UILabel *idNO;
+@property (nonatomic, strong) UILabel *currentVersion;
+
+- (void)setAvatar:(UIImage *)avatar name:(NSString *)name organ:(NSString *)organ;
+- (void)setIdType:(NSString *)type idNo:(NSString *)idNo;
+- (void)setVersion:(NSString *)version;
+
 @end

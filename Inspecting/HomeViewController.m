@@ -33,30 +33,32 @@
     
     
     
-//    header.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"b_protrait.png"]] ;
-    header.backgroundColor = [UIColor grayColor];
+    header.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"b_protrait.png"]] ;
+//    header.backgroundColor = [UIColor grayColor];
     [self.view addSubview:header];
     
-    UIImageView *avatar = [[UIImageView alloc] initWithFrame:CGRectMake(10, 22, 90, 90)];
-    [avatar.layer setCornerRadius:45.0];
-    avatar.backgroundColor = [UIColor whiteColor];
-    [header addSubview:avatar];
+    self.avatar = [[UIImageView alloc] initWithFrame:CGRectMake(10, 27, 80, 80)];
+    [self.avatar.layer setCornerRadius:40];
+    [self.avatar.layer setMasksToBounds:YES];
+    self.avatar.backgroundColor = [UIColor whiteColor];
+    [header addSubview:self.avatar];
     
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 38, 120, 30)];
-    nameLabel.text = @"姓名：xxx";
-    nameLabel.textColor = [UIColor whiteColor];
-    nameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
-    UILabel *organLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 77, 120, 30)];
-    organLabel.text = @"隶属机构：xxxxxxxx";
-    organLabel.textColor = [UIColor whiteColor];
-    organLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
-    [header addSubview:nameLabel];
-    [header addSubview:organLabel];
+    self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 38, 150, 30)];
+    self.nameLabel.text = @"姓名：xxx";
+    self.nameLabel.textColor = [UIColor whiteColor];
+    self.nameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    self.organLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 77, 150, 30)];
+    self.organLabel.text = @"隶属机构：xxxxxxxx";
+    self.organLabel.textColor = [UIColor whiteColor];
+    self.organLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    [header addSubview:self.nameLabel];
+    [header addSubview:self.organLabel];
     
-    UIImageView *organAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(rScreen.size.width - 10 - 90, 22, 90, 90)];
-    [organAvatar.layer setCornerRadius:45.0];
-    organAvatar.backgroundColor = [UIColor whiteColor];
-    [header addSubview:organAvatar];
+    self.organAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(rScreen.size.width - 10 - 90, 27, 80, 80)];
+    [self.organAvatar.layer setCornerRadius:40];
+    [self.organAvatar.layer setMasksToBounds:YES];
+    self.organAvatar.backgroundColor = [UIColor whiteColor];
+    [header addSubview:self.organAvatar];
     
     UIView *finishedMissionView = [[UIView alloc] initWithFrame:CGRectMake(0, rHeader.origin.y + rHeader.size.height + 270/2, rScreen.size.width/2, 172/2)];
     finishedMissionView.backgroundColor = [UIColor whiteColor];
@@ -68,11 +70,11 @@
     finishedLabel.text = @"已完成任务：";
     finishedLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
     [finishedMissionView addSubview:finishedLabel];
-    UILabel *finishedNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(105, 50, 30, 30)];
-    finishedNumLabel.textColor  = [UIColor colorWithRed:133/255.0 green:198/255.0 blue:103/255.0 alpha:1.0];
-    finishedNumLabel.text = @"66";
-    finishedNumLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
-    [finishedMissionView addSubview:finishedNumLabel];
+    self.finishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(105, 50, 30, 30)];
+    self.finishedLabel.textColor  = [UIColor colorWithRed:133/255.0 green:198/255.0 blue:103/255.0 alpha:1.0];
+    self.finishedLabel.text = @"66";
+    self.finishedLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
+    [finishedMissionView addSubview:self.finishedLabel];
     
     UIView *splitLine = [[UIView alloc] initWithFrame:CGRectMake(rScreen.size.width/2, rHeader.origin.y + rHeader.size.height + 270/2, 1, 172/2)];
     splitLine.backgroundColor = [UIColor colorWithRed:226/255.0 green:226/255.0 blue:221/255.0 alpha:1.0];
@@ -88,11 +90,11 @@
     unfinishedLabel.text = @"未完成任务：";
     unfinishedLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
     [unFinishedMissionView addSubview:unfinishedLabel];
-    UILabel *unfinishedNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(105, 50, 30, 30)];
-    unfinishedNumLabel.textColor = [UIColor colorWithRed:252/255.0 green:7/255.0 blue:1/255.0 alpha:1.0];
-    unfinishedNumLabel.text = @"66";
-    unfinishedNumLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
-    [unFinishedMissionView addSubview:unfinishedNumLabel];
+    self.unfinishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(105, 50, 30, 30)];
+    self.unfinishedLabel.textColor = [UIColor colorWithRed:252/255.0 green:7/255.0 blue:1/255.0 alpha:1.0];
+    self.unfinishedLabel.text = @"66";
+    self.unfinishedLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
+    [unFinishedMissionView addSubview:self.unfinishedLabel];
     
     UILabel *newestLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, finishedMissionView.frame.origin.y + 172/2 + 32/2, rScreen.size.width, 30)];
     newestLabel.text = @"最新任务";
@@ -103,11 +105,31 @@
     
     newestTable.delegate = self;
     newestTable.dataSource = self;
+    
+    [self setAvartar:[UIImage imageNamed:@"i_default_inspector.png"] organAvatar:[UIImage imageNamed:@"i_default_institution.png"]];
+    [self setUsername:@"myName" organname:@"my organization"];
+    [self setFinished:[NSNumber numberWithInt:8] Unfinished:[NSNumber numberWithInt:10]];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void)setAvartar:(UIImage *)avatar organAvatar:(UIImage *)organAvatar {
+    self.avatar.image = avatar;
+    self.organAvatar.image = organAvatar;
+}
+
+- (void)setUsername:(NSString *)username organname:(NSString *)organname {
+    self.nameLabel.text = [NSString stringWithFormat:@"姓名:%@", username];
+    self.organLabel.text = [NSString stringWithFormat:@"机构:%@", organname];
+}
+
+- (void)setFinished:(NSNumber *)finished Unfinished:(NSNumber *)unfinished {
+    self.finishedLabel.text = [NSString stringWithFormat:@"%@", finished];
+    self.unfinishedLabel.text = [NSString stringWithFormat:@"%@", unfinished];
 }
 
 /*
@@ -141,6 +163,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 63.0;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.tabBarController.selectedIndex = 1;
 }
 
 @end

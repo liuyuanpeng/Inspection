@@ -22,6 +22,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         self.missionNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(17, 16, 150, 20)];
         self.missionNameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
