@@ -9,17 +9,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>MMPopupView.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Masonry.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-Inspecting.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Toast.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -27,22 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>A13CC61AAE9E1D34AE3636152A3EE14C</key>
+		<key>301A63E82280893BEFD78E54CD569381</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A1B2168B8DD91555EBB1722C8D6D847A</key>
+		<key>4EAD8F95FDFD39A5329E45C34B9A7641</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>CF671F7E57B92905F1CC91D036D6B4A7</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>D52144DE9D7255DE912490FF5A806573</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -1,0 +1,249 @@
+//
+//  AFNRequestManager.m
+//  Inspecting
+//
+//  Created by liuyuanpeng on 2017/2/22.
+//  Copyright © 2017年 default. All rights reserved.
+//
+
+#import "AFNRequestManager.h"
+
+@implementation AFNRequestManager
+
+
+
++ (AFNRequestManager *)sharedUtil {
+    static dispatch_once_t onceToken;
+    static AFNRequestManager *setSharedInstance;
+    dispatch_once(&onceToken, ^{
+        setSharedInstance = [[AFNRequestManager alloc] init];
+    });
+    return setSharedInstance;
+}
+
++ (void)requestURL:(NSString *)urlString httpMethod:(NSString *)method params:(NSMutableDictionary *)params completation:(void(^)(id result))block {
+    urlString = [BASE_URL stringByAppendingString:urlString];
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    // request string
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:60];
+    [request setHTTPMethod:method];
+    
+    NSMutableString *paramString = [NSMutableString string];
+    NSArray *allKeys = params.allKeys;
+    for (int i = 0; i < params.count; i++) {
+        NSString *key = allKeys[i];
+        NSString *value = params[key];
+        
+        [paramString appendFormat:@"%@=%@", key, value];
+        
+        if (i < params.count - 1) {
+            [paramString appendString:@"&"];
+        }
+    }
+    
+    if ([method isEqualToString:@"GET"]) {
+        NSString *separe = url.query?@"&":@"?";
+        NSString *paramsURL = [NSString stringWithFormat:@"%@%@%@", urlString, separe, paramString];
+        
+        request.URL = [NSURL URLWithString:paramsURL];
+    }
+    else if ([method isEqualToString:@"POST"]) {
+        NSData *bodyData = [paramString dataUsingEncoding:NSUTF8StringEncoding];
+        [request setHTTPBody:bodyData];
+    }
+    else {
+        NSLog(@"request method error");
+        return;
+    }
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (connectionError != nil) {
+            NSLog(@"Networking request failure: %@", connectionError);
+            return;
+        }
+        
+        id result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            // callback
+            block(result);
+        });
+    }];
+}
+
++ (void)requestAFURL:(NSString *)urlString httpMethod:(NSInteger)method params:(id)params succeed:(void(^)(id))succeed failure:(void(^)(NSError*))failure {
+    // set api addresss
+    urlString = [NSString stringWithFormat:@"%@%@", BASE_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+    
+    // create request manager
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+ 
+    // indicate return type
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", nil];
+    
+    // set timeout
+    manager.requestSerializer.timeoutInterval = 30;
+    
+    [manager.requestSerializer setValue:@"fjxm/xunjian" forHTTPHeaderField:@"User-Agent"];
+    
+    // method
+    switch (method) {
+        case METHOD_GET:
+        {
+            [manager GET:urlString parameters:nil                                                                   progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                succeed([AFNRequestManager dictionaryWithJsonString:responseStr]);
+                NSLog(@"request success");
+            }failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                failure(error);
+                NSLog(@"request error");
+            }];
+        }
+            break;
+        case METHOD_POST:
+        {
+            [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                succeed([AFNRequestManager dictionaryWithJsonString:responseStr]);
+                NSLog(@"request success");
+
+            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                failure(error);
+                NSLog(@"request error");
+            }];
+        }
+            
+        default:
+            break;
+    }
+    
+}
+
++ (void)requestAFURL:(NSString *)urlString params:(id)params imageData:(NSData *)imageData succeed:(void (^)(id))succeed failure:(void (^)(NSError *))failure {
+    // set api addresss
+    urlString = [NSString stringWithFormat:@"%@%@", IMG_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+    
+    // create request manager
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    // indicate return type
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", nil];
+    
+    // set timeout
+    manager.requestSerializer.timeoutInterval = 30;
+    
+    [manager.requestSerializer setValue:@"fjxm/xunjian" forHTTPHeaderField:@"User-Agent"];
+    
+    [manager POST:urlString parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"yyyyMMddHHmmss";
+        NSString *str = [formatter stringFromDate:[NSDate date]];
+        NSString *fileName = [NSString stringWithFormat:@"%@.png", str];
+        [formData appendPartWithFileData:imageData name:@"file" fileName:fileName mimeType:@"image/png"];
+    } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        succeed([AFNRequestManager dictionaryWithJsonString:responseStr]);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failure(error);
+    }];
+
+}
+
++ (void)requestAFURL:(NSString *)urlString params:(id)params imageDataArray:(NSArray *)imageDataArray succeed:(void (^)(id))succeed failure:(void (^)(NSError *))failure {
+    // set api addresss
+    urlString = [NSString stringWithFormat:@"%@%@", IMG_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+    
+    // create request manager
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    // indicate return type
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", nil];
+    
+    // set timeout
+    manager.requestSerializer.timeoutInterval = 30;
+    
+    [manager POST:urlString parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        for (int i = 0; i < imageDataArray.count; i++) {
+            NSData *imageData = imageDataArray[i];
+            // rename file
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            formatter.dateFormat = @"yyyyMMddmmss";
+            NSString *str = [formatter stringFromDate:[NSDate date]];
+            NSString *fileName = [NSString stringWithFormat:@"%@.png", str];
+            NSString *name = [NSString stringWithFormat:@"image_%d.png", i];
+            
+            [formData appendPartWithFileData:imageData name:name fileName:fileName mimeType:@"image/png"];
+        }
+    } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        succeed([AFNRequestManager dictionaryWithJsonString:responseStr]);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failure(error);
+    }];
+}
+
+
++ (void)requestAFURL:(NSString *)urlString params:(id)params fileData:(NSData *)fileData succeed:(void (^)(id))succeed failure:(void (^)(NSError *))failure {
+    // set api addresss
+    urlString = [NSString stringWithFormat:@"%@%@", IMG_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+    
+    // create request manager
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    // indicate return type
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", nil];
+    
+    // set timeout
+    manager.requestSerializer.timeoutInterval = 30;
+    
+    [manager POST:urlString parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:fileData name:@"file" fileName:@"audio.MP3" mimeType:@"audio/MP3"];
+    } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        succeed([AFNRequestManager dictionaryWithJsonString:responseStr]);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failure(error);
+    }];
+}
+
++ (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString {
+    if (jsonString == nil) {
+        return nil;
+    }
+    
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+    if (error) {
+        NSLog(@"convert to json dictionary failure: %@", error);
+        return nil;
+    }
+    return dict;
+}
+
++ (NSString *)URLEncryOrDecryString:(NSDictionary *)paramDict isHead:(BOOL)_type {
+    NSArray *keyAll = [paramDict allKeys];
+    NSString *encryString = @"";
+    for (NSString *key in keyAll) {
+        NSString *keyValue = [paramDict valueForKey:key];
+        encryString = [encryString stringByAppendingFormat:@"&"];
+        encryString = [encryString stringByAppendingFormat:@"%@", key];
+        encryString = [encryString stringByAppendingFormat:@""];
+        encryString = [encryString stringByAppendingFormat:@"%@", keyValue];
+    }
+    return encryString;
+}
+
+
+@end

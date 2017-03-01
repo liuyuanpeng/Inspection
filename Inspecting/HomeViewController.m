@@ -8,6 +8,8 @@
 
 #import "HomeViewController.h"
 #import "INewestTableViewCell.h"
+#import "iUser.h"
+#import "AFNRequestManager.h"
 
 @interface HomeViewController ()
 
@@ -31,8 +33,6 @@
     
     UIImageView *header = [[UIImageView alloc] initWithFrame:CGRectMake(0, rHeader.origin.y + rHeader.size.height, rScreen.size.width, 270/2)];
     
-    
-    
     header.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"b_protrait.png"]] ;
 //    header.backgroundColor = [UIColor grayColor];
     [self.view addSubview:header];
@@ -44,11 +44,9 @@
     [header addSubview:self.avatar];
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 38, 150, 30)];
-    self.nameLabel.text = @"姓名：xxx";
     self.nameLabel.textColor = [UIColor whiteColor];
     self.nameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
     self.organLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 77, 150, 30)];
-    self.organLabel.text = @"隶属机构：xxxxxxxx";
     self.organLabel.textColor = [UIColor whiteColor];
     self.organLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
     [header addSubview:self.nameLabel];
@@ -106,9 +104,27 @@
     newestTable.delegate = self;
     newestTable.dataSource = self;
     
-    [self setAvartar:[UIImage imageNamed:@"i_default_inspector.png"] organAvatar:[UIImage imageNamed:@"i_default_institution.png"]];
-    [self setUsername:@"myName" organname:@"my organization"];
-    [self setFinished:[NSNumber numberWithInt:8] Unfinished:[NSNumber numberWithInt:10]];
+    
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    iUser *userInst = [iUser getInstance];
+    [self setAvartar:[userInst.headimg isEqualToString:@""] ? [UIImage imageNamed:@"i_default_inspector.png"] : [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:userInst.headimg]]]organAvatar:[UIImage imageNamed:@"i_default_institution.png"]];
+    [self setUsername:userInst.name organname:userInst.instname];
+    
+    // get mission info
+    NSDictionary *params = @{
+                             @"staffcode":[iUser getInstance].staffcode
+                             };
+    [AFNRequestManager requestAFURL:@"getTaskTotalByStaff.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret valueForKey:@"status"] integerValue]) {
+            [self setFinished:[[ret valueForKey:@"completed"] integerValue] Unfinished:[[ret valueForKey:@"uncompleted"] integerValue]];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -127,9 +143,9 @@
     self.organLabel.text = [NSString stringWithFormat:@"机构:%@", organname];
 }
 
-- (void)setFinished:(NSNumber *)finished Unfinished:(NSNumber *)unfinished {
-    self.finishedLabel.text = [NSString stringWithFormat:@"%@", finished];
-    self.unfinishedLabel.text = [NSString stringWithFormat:@"%@", unfinished];
+- (void)setFinished:(NSInteger)finished Unfinished:(NSInteger)unfinished {
+    self.finishedLabel.text = [NSString stringWithFormat:@"%ld", finished];
+    self.unfinishedLabel.text = [NSString stringWithFormat:@"%ld", unfinished];
 }
 
 /*

@@ -7,9 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <BaiduMapAPI_Map/BMKMapView.h>
+
+@class NoneImageView;
 
 @interface PublicMissionViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) BMKMapView *mapView;
+@property (nonatomic, strong) UIView *missionView;
+@property (nonatomic, strong) NoneImageView *noneZoomin;
+@property (nonatomic, strong) NoneImageView *noneZoomout;
+@property (nonatomic, strong) UIButton *zoomIn;
+@property (nonatomic, strong) UIButton *zoomOut;
 
 @end

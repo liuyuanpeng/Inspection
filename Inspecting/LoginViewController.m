@@ -12,6 +12,11 @@
 #import "MyMissionViewController.h"
 #import "UserInfoViewController.h"
 #import "UIImage+UIImageEx.h"
+#import "AFNRequestManager.h"
+#import "NSString+MD5.h"
+#import "iPhone.h"
+#import <Toast/UIView+Toast.h>
+#import "iUser.h"
 
 @interface LoginViewController ()
 
@@ -48,6 +53,8 @@
     [splitLine setBackgroundColor:[UIColor colorWithRed:229/255.0 green:229/255.0 blue:229/255.0 alpha:1.0]];
 
     [self.username setPlaceholder:@"请输入登录账号"];
+    [self.username setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [self.username setAutocapitalizationType:UITextAutocapitalizationTypeNone];
 //    [self.username becomeFirstResponder];
     self.username.delegate = self;
     [self.password setPlaceholder:@"请输入密码"];
@@ -86,7 +93,53 @@
 
 
 - (IBAction)onLogin:(id)sender {
-    NSLog(@"login action");
+//    NSDictionary *parameters = @{@"batchcode":@"batchcode",@"seq":@12, @"serialnbr":@"dfjkdfj",@"oldfile":@"",@"logo":@"",@"posi":@"", @"inspcntid":@234324};
+//    [AFNRequestManager requestAFURL:@"inspPubTaskPics.json" params:parameters imageData:UIImagePNGRepresentation([UIImage imageNamed:@"i_finished.png"]) succeed:^(id ret)  {
+//        NSLog(@"upload success");
+//    } failure:^(NSError * eror) {
+//        NSLog(@"error");
+//    }];
+//    return;
+    
+    // check username
+    NSString *username = [self.username.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *pwd = [self.password.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *imsi = [iPhone getIMSI];
+    NSString *imei = [iPhone getIMEI];
+//    if (username.length == 0) {
+//        [self.view makeToast:@"请输入用户名!"];
+//        return;
+//    }
+//    else if (pwd.length  == 0) {
+//        [self.view makeToast:@"请输入密码!"];
+//        return;
+//    }
+//    
+    NSDictionary *params = @{
+                             @"acctid": @"fjxmcjh",
+                             @"pwd": [@"1234" md5],
+                             @"imsi": imsi,
+                             @"imei": imei
+                             };
+    [AFNRequestManager requestAFURL:@"loginCheck.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (4 == [[ret valueForKey:@"status"] integerValue]) {
+            [self.view makeToast:[ret valueForKey:@"desc"]];
+        }
+        else if (0 != [[ret valueForKey:@"status"] integerValue]) {
+//            [self onLoginSuccess];
+            [self.view makeToast:[ret valueForKey:@"desc"]];
+        }
+        else {
+            [self onLoginSuccess: [ret valueForKey:@"datas"]];
+        }
+    } failure:^(NSError * error) {
+        NSLog(@"fail:%@", error);
+    }];
+}
+
+- (void) onLoginSuccess:(NSDictionary *)dict {
+    iUser *userInst = [iUser getInstance];
+    [userInst setData:dict];
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 49)];
     backView.backgroundColor = [UIColor colorWithRed:225/255.0 green:64/255.0 blue:67/255.0 alpha:1.0];

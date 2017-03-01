@@ -19,6 +19,6 @@
 
 - (void)setAvartar:(UIImage *)avatar organAvatar:(UIImage *)organAvatar;
 - (void)setUsername:(NSString *)username organname:(NSString *)organname;
-- (void)setFinished:(NSNumber *)finished Unfinished:(NSNumber *)unfinished;
+- (void)setFinished:(NSInteger)finished Unfinished:(NSInteger)unfinished;
 
 @end
