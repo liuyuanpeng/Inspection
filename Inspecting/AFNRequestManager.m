@@ -21,59 +21,6 @@
     return setSharedInstance;
 }
 
-+ (void)requestURL:(NSString *)urlString httpMethod:(NSString *)method params:(NSMutableDictionary *)params completation:(void(^)(id result))block {
-    urlString = [BASE_URL stringByAppendingString:urlString];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    // request string
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setTimeoutInterval:60];
-    [request setHTTPMethod:method];
-    
-    NSMutableString *paramString = [NSMutableString string];
-    NSArray *allKeys = params.allKeys;
-    for (int i = 0; i < params.count; i++) {
-        NSString *key = allKeys[i];
-        NSString *value = params[key];
-        
-        [paramString appendFormat:@"%@=%@", key, value];
-        
-        if (i < params.count - 1) {
-            [paramString appendString:@"&"];
-        }
-    }
-    
-    if ([method isEqualToString:@"GET"]) {
-        NSString *separe = url.query?@"&":@"?";
-        NSString *paramsURL = [NSString stringWithFormat:@"%@%@%@", urlString, separe, paramString];
-        
-        request.URL = [NSURL URLWithString:paramsURL];
-    }
-    else if ([method isEqualToString:@"POST"]) {
-        NSData *bodyData = [paramString dataUsingEncoding:NSUTF8StringEncoding];
-        [request setHTTPBody:bodyData];
-    }
-    else {
-        NSLog(@"request method error");
-        return;
-    }
-    
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        if (connectionError != nil) {
-            NSLog(@"Networking request failure: %@", connectionError);
-            return;
-        }
-        
-        id result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            // callback
-            block(result);
-        });
-    }];
-}
-
 + (void)requestAFURL:(NSString *)urlString httpMethod:(NSInteger)method params:(id)params succeed:(void(^)(id))succeed failure:(void(^)(NSError*))failure {
     // set api addresss
     urlString = [NSString stringWithFormat:@"%@%@", BASE_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];

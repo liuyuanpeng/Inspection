@@ -31,18 +31,6 @@ enum HTTP_METHOD {
  */
 + (AFNRequestManager *)sharedUtil;
 
-
-/**
- IOS's networking request
-
- @param urlString server
- @param method type
- @param params parameters
- @param block block
- */
-+ (void)requestURL:(NSString *)urlString httpMethod:(NSString *)method params:(NSMutableDictionary *)params completation:(void(^)(id result))block;
-
-
 /**
  AFNetworking request
 
