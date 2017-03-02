@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class IPopupView;
+
 @interface UserInfoViewController : UIViewController
 
 @property (nonatomic, strong) UIImageView *avatar;
@@ -17,8 +19,12 @@
 @property (nonatomic, strong) UILabel *idType;
 @property (nonatomic, strong) UILabel *idNO;
 @property (nonatomic, strong) UILabel *currentVersion;
+@property (nonatomic, strong) IPopupView *changePwdView;
+@property (nonatomic, strong) UITextField *oldpwdText;
+@property (nonatomic, strong) UITextField *newpwdText;
+@property (nonatomic, strong) UITextField *newpwdText2;
 
-- (void)setAvatar:(UIImage *)avatar name:(NSString *)name organ:(NSString *)organ;
+- (void)setAvatar:(NSString *)avatar name:(NSString *)name organ:(NSString *)organ;
 - (void)setIdType:(NSString *)type idNo:(NSString *)idNo;
 - (void)setVersion:(NSString *)version;
 

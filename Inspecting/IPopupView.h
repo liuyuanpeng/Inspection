@@ -13,7 +13,6 @@
 @property (nonatomic, weak) UIWindow *window;
 
 - (void) setContentView:(UIView *)view;
-- (void) setContainer:(UIWindow *)window;
 - (void) show;
 - (void) hide;
 

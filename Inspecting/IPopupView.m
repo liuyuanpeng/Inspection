@@ -7,6 +7,7 @@
 //
 
 #import "IPopupView.h"
+#import "AppDelegate.h"
 
 @implementation IPopupView
 
@@ -16,7 +17,7 @@
         CGRect rScreen = [[UIScreen mainScreen] bounds];
         self.frame = CGRectMake(0, 0, rScreen.size.width, rScreen.size.height);
         
-        self.backgroundColor = [UIColor grayColor];
+        self.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
     }
     return self;
 }
@@ -25,12 +26,9 @@
     [self addSubview:view];
 }
 
-- (void)setContainer:(UIWindow *)window {
-    self.window = window;
-}
-
 - (void)show {
-    [self.window addSubview:self];
+    AppDelegate * appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [appDelegate.window addSubview:self];
 }
 
 - (void)hide {

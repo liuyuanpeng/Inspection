@@ -7,6 +7,11 @@
 //
 
 #import "UserInfoViewController.h"
+#import "AFNRequestManager.h"
+#import "iUser.h"
+#import "IPopupView.h"
+#import <Toast/UIView+Toast.h>
+#import "NSString+MD5.h"
 
 @interface UserInfoViewController ()
 
@@ -120,14 +125,96 @@
     [logoutBtn addTarget:self action:@selector(onLogout:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:logoutBtn];
     
-    [self setAvatar:nil name:@"fdskfjk" organ:@"fjdkfjdkfj"];
-    [self setIdType:@"shenfenzheng" idNo:@"350525198808013578"];
     [self setVersion:@"1.0.0"];
+    
+    
+    self.changePwdView = [[IPopupView alloc] init];
+    UIView *changepwd = [[UIView alloc] initWithFrame:CGRectMake(50, rScreen.size.height/2 - 80, rScreen.size.width - 100, 160)];
+    [changepwd.layer setCornerRadius:10.0f];
+    [changepwd.layer setMasksToBounds:YES];
+    [changepwd setBackgroundColor:[UIColor whiteColor]];
+    [self.changePwdView setContentView:changepwd];
+    UILabel *oldpwd = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 30)];
+    oldpwd.text = @"旧密码:";
+    self.oldpwdText = [[UITextField alloc] initWithFrame:CGRectMake(100, 10, changepwd.frame.size.width - 110, 25)];
+    [self.oldpwdText setSecureTextEntry:YES];
+    [self.oldpwdText setBorderStyle:UITextBorderStyleRoundedRect];
+    UILabel *newpwd = [[UILabel alloc] initWithFrame:CGRectMake(10, 40, 100, 30)];
+    newpwd.text = @"新密码:";
+    self.newpwdText = [[UITextField alloc] initWithFrame:CGRectMake(100, 40, changepwd.frame.size.width - 110, 25)];
+    [self.newpwdText setSecureTextEntry:YES];
+    [self.newpwdText setBorderStyle:UITextBorderStyleRoundedRect];
+    UILabel *newpwd2 = [[UILabel alloc] initWithFrame:CGRectMake(10, 70, 100, 30)];
+    newpwd2.text = @"二次确认:";
+    self.newpwdText2 = [[UITextField alloc] initWithFrame:CGRectMake(100, 70, changepwd.frame.size.width - 110, 25)];
+    [self.newpwdText2 setSecureTextEntry:YES];
+    [self.newpwdText2 setBorderStyle:UITextBorderStyleRoundedRect];
+    UIButton *sure = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    sure.frame = CGRectMake(10, 120, 100, 30);
+    [sure setBackgroundImage:[UIImage imageNamed:@"dialog_ok.png"] forState:UIControlStateNormal];
+    [sure addTarget:self action:@selector(onSure:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *cancel = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    cancel.frame = CGRectMake(changepwd.frame.size.width - 20 - 100, 120, 100, 30);
+    [cancel setBackgroundImage:[UIImage imageNamed:@"dialog_cancel.png"] forState:UIControlStateNormal];
+    [cancel addTarget:self action:@selector(onCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [changepwd addSubview:oldpwd];
+    [changepwd addSubview:newpwd];
+    [changepwd addSubview:newpwd2];
+    [changepwd addSubview:sure];
+    [changepwd addSubview:cancel];
+    [changepwd addSubview:self.oldpwdText];
+    [changepwd addSubview:self.newpwdText];
+    [changepwd addSubview:self.newpwdText2];
 }
 
-- (void)setAvatar:(UIImage *)avatar name:(NSString *)name organ:(NSString *)organ {
-    if (avatar) {
-        self.avatar.image = avatar;
+- (IBAction)onSure:(id)sender {
+    if (![self.newpwdText2.text isEqualToString:self.newpwdText.text]) {
+        [self.changePwdView makeToast:@"两次新密码不一样!"];
+        return;
+    }
+    NSDictionary *params = @{
+                             @"staffcode":[iUser getInstance].staffcode,
+                             @"account": [iUser getInstance].account,
+                             @"oldpwd": [self.oldpwdText.text md5],
+                             @"pwd": [self.newpwdText.text md5]
+                             };
+    [AFNRequestManager requestAFURL:@"changePwd.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            [self.changePwdView hide];
+            [self.view makeToast:[ret objectForKey:@"desc"]];
+        }
+        else {
+            [self.changePwdView makeToast:[ret objectForKey:@"desc"]];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
+- (IBAction)onCancel:(id)sender {
+    [self.changePwdView hide];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSDictionary *params = @{
+                             @"staffcode":[iUser getInstance].staffcode
+                             };
+    [AFNRequestManager requestAFURL:@"getUserInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret valueForKey:@"status"] integerValue]) {
+            NSDictionary *userInfo = [ret objectForKey:@"datas"];
+            [self setAvatar:[userInfo objectForKey:@"headimg"] name:[userInfo objectForKey:@"name"] organ:[userInfo objectForKey:@"instname"]];
+            [self setIdType:[userInfo objectForKey:@"idtype"] idNo:[userInfo objectForKey:@"idcode"]];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
+- (void)setAvatar:(NSString *)avatar name:(NSString *)name organ:(NSString *)organ {
+    if (avatar && ![avatar isEqualToString:@""]) {
+        self.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:avatar]]];
     }
     else {
         self.avatar.image = [UIImage imageNamed:@"i_default_inspector.png"];
@@ -147,11 +234,11 @@
 }
 
 - (IBAction)onChangePassword:(id)sender {
-    
+    [self.changePwdView show];
 }
 
 - (IBAction)onLogout:(id)sender {
-    
+    exit(0);
 }
 
 - (void)didReceiveMemoryWarning {
