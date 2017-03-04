@@ -26,7 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:234/255.0 green:230/255.0 blue:221/255.0 alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1.0];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     CGRect rNav = self.navigationController.navigationBar.frame;
@@ -57,7 +57,7 @@
     
     UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView:buttonLocation];
     self.navigationItem.rightBarButtonItem = barItem;
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height - self.tabBarController.tabBar.frame.size.height) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height - self.tabBarController.tabBar.frame.size.height) style:UITableViewStylePlain];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setSeparatorColor:[UIColor clearColor]];
     self.tableView.delegate = self;
@@ -130,7 +130,7 @@
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
                              @"addrcode": [Utils getAddrCode],
-                             @"state": @"001",
+                             @"state": @"",
                              @"keyword": @""
                              };
     
@@ -186,8 +186,30 @@
     [cell.missionView setMissionNO:[missionDict valueForKey:@"batchcode"]  endTime:[missionDict valueForKey:@"enddate"]];
     [cell.missionView setMission:[missionDict valueForKey:@"taskname"] store:[missionDict valueForKey:@"shopname"] business:[missionDict valueForKey:@"merchname"] organ:[missionDict valueForKey:@"instname"] description:[missionDict valueForKey:@"taskdesc"]];
     [cell.missionView setDistance:[NSNumber numberWithFloat:[Utils getDistance:[missionDict valueForKey:@"addrcode"]]]];
-    [cell.missionView setAccepted:(BOOL)([[missionDict valueForKey:@"tasktype"] integerValue]%2)];
+    [cell.missionView setAccepted:[(NSString *)[missionDict objectForKey:@"state"]isEqualToString:@"001"]?NO:YES];
+    cell.missionView.statusButton.tag = indexPath.row;
+    [cell.missionView.statusButton addTarget:self action:@selector(onLockTask:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
+}
+
+#pragma mark - lock task
+- (IBAction)onLockTask:(UIButton *)sender {
+    NSDictionary *missionDict = [[iPublicMission getInstance].missionArray objectAtIndex:sender.tag];
+    NSDictionary *params = @{
+                             @"staffcode": [iUser getInstance].staffcode,
+                             @"addrcode": [Utils getAddrCode],
+                             @"batchcode": [missionDict objectForKey:@"batchcode"],
+                             @"serialnbr": [missionDict objectForKey:@"serialnbr"],
+                             @"flag":[(NSString *)[missionDict objectForKey:@"state"]isEqualToString:@"001"]?@1:@2
+                                 };
+    [AFNRequestManager requestAFURL:@"lockPubTask.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            [missionDict setValue:[[params objectForKey:@"flag"] integerValue] == 1 ? @"001": @"002" forKey:@"state"];
+            [self.tableView reloadData];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
 }
 
 @end

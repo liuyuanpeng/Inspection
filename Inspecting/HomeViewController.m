@@ -10,6 +10,7 @@
 #import "INewestTableViewCell.h"
 #import "iUser.h"
 #import "AFNRequestManager.h"
+#import "iMyTask.h"
 
 @interface HomeViewController ()
 
@@ -20,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithRed:234/255.0 green:230/255.0 blue:221/255.0 alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1.0];
     
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,  rScreen.size.width, 30)];
@@ -74,10 +75,6 @@
     self.finishedLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
     [finishedMissionView addSubview:self.finishedLabel];
     
-    UIView *splitLine = [[UIView alloc] initWithFrame:CGRectMake(rScreen.size.width/2, rHeader.origin.y + rHeader.size.height + 270/2, 1, 172/2)];
-    splitLine.backgroundColor = [UIColor colorWithRed:226/255.0 green:226/255.0 blue:221/255.0 alpha:1.0];
-    [header addSubview:splitLine];
-    
     UIView *unFinishedMissionView = [[UIView alloc] initWithFrame:CGRectMake(rScreen.size.width/2 + 1, rHeader.origin.y + rHeader.size.height + 270/2, rScreen.size.width/2 - 1, 172/2)];
     unFinishedMissionView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:unFinishedMissionView];
@@ -94,15 +91,23 @@
     self.unfinishedLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
     [unFinishedMissionView addSubview:self.unfinishedLabel];
     
+    
+    
+    UIView *splitLine = [[UIView alloc] initWithFrame:CGRectMake(rScreen.size.width/2, rHeader.origin.y + rHeader.size.height + 270/2, 2, 172/2)];
+    splitLine.backgroundColor = [UIColor colorWithRed:226/255.0 green:226/255.0 blue:221/255.0 alpha:1.0];
+    [self.view addSubview:splitLine];
+    
+    
     UILabel *newestLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, finishedMissionView.frame.origin.y + 172/2 + 32/2, rScreen.size.width, 30)];
     newestLabel.text = @"最新任务";
+    newestLabel.font = [UIFont systemFontOfSize:15.0f];
     [self.view addSubview:newestLabel];
     
-    UITableView *newestTable = [[UITableView alloc] initWithFrame:CGRectMake(0, newestLabel.frame.origin.y + 30, rScreen.size.width, rScreen.size.height - self.tabBarController.tabBar.frame.size.height - newestLabel.frame.origin.y - 30)];
-    [self.view addSubview:newestTable];
+    self.newestTable = [[UITableView alloc] initWithFrame:CGRectMake(0, newestLabel.frame.origin.y + 30, rScreen.size.width, rScreen.size.height - self.tabBarController.tabBar.frame.size.height - newestLabel.frame.origin.y - 30)];
+    [self.view addSubview:self.newestTable];
     
-    newestTable.delegate = self;
-    newestTable.dataSource = self;
+    self.newestTable.delegate = self;
+    self.newestTable.dataSource = self;
     
     
     
@@ -111,7 +116,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     iUser *userInst = [iUser getInstance];
-    [self setAvartar:[userInst.headimg isEqualToString:@""] ? [UIImage imageNamed:@"i_default_inspector.png"] : [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:userInst.headimg]]]organAvatar:[UIImage imageNamed:@"i_default_institution.png"]];
+    [self setAvartar:[userInst.headimg isEqualToString:@""] ? [UIImage imageNamed:@"i_default_inspector.png"] : [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, userInst.headimg]]]]organAvatar:[UIImage imageNamed:@"i_default_institution.png"]];
     [self setUsername:userInst.name organname:userInst.instname];
     
     // get mission info
@@ -121,6 +126,13 @@
     [AFNRequestManager requestAFURL:@"getTaskTotalByStaff.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret valueForKey:@"status"] integerValue]) {
             [self setFinished:[[ret valueForKey:@"completed"] integerValue] Unfinished:[[ret valueForKey:@"uncompleted"] integerValue]];
+            self.missionArray = [[NSArray alloc] initWithArray:[ret objectForKey:@"detail"]];
+            if (self.missionArray.count) {
+                NSDictionary *missionDict = [self.missionArray objectAtIndex:0];
+                [iMyTask getInstance].taskname = [NSString stringWithFormat:@"%@", [missionDict objectForKey:@"taskname"]];
+                [iMyTask getInstance].taskcode = [NSString stringWithFormat:@"%@", [missionDict objectForKey:@"taskcode"]];
+            }
+            [self.newestTable reloadData];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
@@ -162,15 +174,19 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    if (self.missionArray) {
+        return self.missionArray.count;
+    }
+    return 0L;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
 // Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *missionDict = [self.missionArray objectAtIndex:indexPath.row];
     INewestTableViewCell *cell = [INewestTableViewCell cellWithTableView:tableView];
-    [cell setName:@"有点意思" code:@"007" finished:16 total:18];
+    [cell setName:[missionDict objectForKey:@"taskname"] code:[missionDict objectForKey:@"taskcode"] finished:0 total:[[missionDict objectForKey:@"uncompleted"]integerValue]];
     return cell;
 }
 
@@ -182,6 +198,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *missionDict = [self.missionArray objectAtIndex:indexPath.row];
+    [iMyTask getInstance].taskname = [NSString stringWithFormat:@"%@", [missionDict objectForKey:@"taskname"]];
+    [iMyTask getInstance].taskcode = [NSString stringWithFormat:@"%@", [missionDict objectForKey:@"taskcode"]];
+    
     self.tabBarController.selectedIndex = 1;
 }
 

@@ -10,10 +10,15 @@
 #import <UIKit/UIKit.h>
 #import <AFNetworking/AFNetworking.h>
 
+//// server
+//#define BASE_URL @"http://120.24.159.160:9500/xunjian/appapi/"
+//// image server
+//#define IMG_URL @"http://120.24.159.160:9500/xunjian/appapi/"
+
 // server
-#define BASE_URL @"http://120.24.159.160:9500/xunjian/appapi/"
+#define BASE_URL @"http://218.5.69.154:9500/xunjian/appapi/"
 // image server
-#define IMG_URL @"http://120.24.159.160:9500/xunjian/appapi/"
+#define IMG_URL @"http://218.5.69.154:9500"
 
 #pragma mark - networking request type
 enum HTTP_METHOD {

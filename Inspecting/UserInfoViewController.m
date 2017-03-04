@@ -22,7 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithRed:234/255.0 green:230/255.0 blue:221/255.0 alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1.0];
     
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     
@@ -214,7 +214,7 @@
 
 - (void)setAvatar:(NSString *)avatar name:(NSString *)name organ:(NSString *)organ {
     if (avatar && ![avatar isEqualToString:@""]) {
-        self.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:avatar]]];
+        self.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, avatar]]]];
     }
     else {
         self.avatar.image = [UIImage imageNamed:@"i_default_inspector.png"];

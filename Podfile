@@ -7,4 +7,5 @@ target 'Inspecting' do
   pod 'AFNetworking','~> 3.1.0'
   pod 'Toast','~> 3.1.0'
   pod 'BaiduMapKit','~> 3.2.1'
+  pod 'RadioButton','~>1.0'
 end

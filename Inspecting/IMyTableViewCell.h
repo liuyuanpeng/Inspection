@@ -23,6 +23,7 @@
 - (void)setName:(NSString *)name typy:(NSString *)type organ:(NSString *)organ;
 - (void)setAddr:(NSString *)addr;
 - (void)setFinished:(BOOL)bFinished;
+- (void)setOrganImg:(NSString *)img;
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 

@@ -73,7 +73,7 @@
 
 + (void)requestAFURL:(NSString *)urlString params:(id)params imageData:(NSData *)imageData succeed:(void (^)(id))succeed failure:(void (^)(NSError *))failure {
     // set api addresss
-    urlString = [NSString stringWithFormat:@"%@%@", IMG_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+    urlString = [NSString stringWithFormat:@"%@%@", BASE_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
     
     // create request manager
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -105,7 +105,7 @@
 
 + (void)requestAFURL:(NSString *)urlString params:(id)params imageDataArray:(NSArray *)imageDataArray succeed:(void (^)(id))succeed failure:(void (^)(NSError *))failure {
     // set api addresss
-    urlString = [NSString stringWithFormat:@"%@%@", IMG_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+    urlString = [NSString stringWithFormat:@"%@%@", BASE_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
     
     // create request manager
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -141,7 +141,7 @@
 
 + (void)requestAFURL:(NSString *)urlString params:(id)params fileData:(NSData *)fileData succeed:(void (^)(id))succeed failure:(void (^)(NSError *))failure {
     // set api addresss
-    urlString = [NSString stringWithFormat:@"%@%@", IMG_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
+    urlString = [NSString stringWithFormat:@"%@%@", BASE_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
     
     // create request manager
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

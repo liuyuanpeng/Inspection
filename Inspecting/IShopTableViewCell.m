@@ -1,20 +1,19 @@
 //
-//  IMyTableViewCell.m
+//  IShopTableViewCell.m
 //  Inspecting
 //
-//  Created by liuyuanpeng on 2017/2/21.
+//  Created by liuyuanpeng on 2017/3/5.
 //  Copyright © 2017年 default. All rights reserved.
 //
 
-#import "IMyTableViewCell.h"
+#import "IShopTableViewCell.h"
 
-@implementation IMyTableViewCell
-
+@implementation IShopTableViewCell
 + (instancetype)cellWithTableView:(UITableView *)tableView {
-    static NSString *cellIdentifier = @"imycell";
-    IMyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    static NSString *cellIdentifier = @"ishopcell";
+    IShopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[IMyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[IShopTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     return cell;
 }
@@ -25,7 +24,7 @@
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         CGRect rScreen = [[UIScreen mainScreen] bounds];
-        self.contentView.backgroundColor = [UIColor colorWithWhite:236.0/255.0 alpha:1.0];
+        self.contentView.backgroundColor = [UIColor colorWithWhite:236/255.0 alpha:1.0];
         
         self.clickView = [[UIView alloc] initWithFrame:CGRectMake(10, 0, rScreen.size.width - 20, 140)];
         self.clickView.backgroundColor = [UIColor whiteColor];
@@ -41,24 +40,30 @@
         self.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
         [self.clickView addSubview:self.titleLabel];
         
-        self.organImageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 30, 70, 70)];
-        [self.organImageView.layer setMasksToBounds:YES];
-        [self.clickView addSubview:self.organImageView];
+        self.shopImageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 30, 70, 70)];
+        [self.shopImageView.layer setMasksToBounds:YES];
+        self.shopImageView.image = [UIImage imageNamed:@"i_store.png"];
+        [self.clickView addSubview:self.shopImageView];
         
         self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 30, rScreen.size.width - 90, fontSize)];
         self.nameLabel.textColor = [UIColor grayColor];
         self.nameLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
         [self.clickView addSubview:self.nameLabel];
         
-        self.typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 60, rScreen.size.width - 90, fontSize)];
-        self.typeLabel.textColor = [UIColor grayColor];
-        self.typeLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
-        [self.clickView addSubview:self.typeLabel];
+        self.codeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 50, rScreen.size.width - 90, fontSize)];
+        self.codeLabel.textColor = [UIColor grayColor];
+        self.codeLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+        [self.clickView addSubview:self.codeLabel];
         
-        self.organLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 90, rScreen.size.width - 90, fontSize)];
-        self.organLabel.textColor = [UIColor grayColor];
-        self.organLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
-        [self.clickView addSubview:self.organLabel];
+        self.merchLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 70, rScreen.size.width - 90, fontSize)];
+        self.merchLabel.textColor = [UIColor grayColor];
+        self.merchLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+        [self.clickView addSubview:self.merchLabel];
+        
+        self.instLabe = [[UILabel alloc] initWithFrame:CGRectMake(80, 90, rScreen.size.width - 90, fontSize)];
+        self.instLabe.textColor = [UIColor grayColor];
+        self.instLabe.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+        [self.clickView addSubview:self.instLabe];
         
         UIImageView *locateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 110, 24, 24)];
         locateImageView.image = [UIImage imageNamed:@"i_location.png"];
@@ -85,14 +90,15 @@
     return nil;
 }
 
-- (void)setMissionNO:(NSString *)missionNO endtime:(NSString *)time {
-    self.titleLabel.text = [NSString stringWithFormat:@"批次号: %@  到期: %@", missionNO, time];
+- (void)setMissionNO:(NSString *)missionNO floatNO:(NSString *)floatnumber {
+    self.titleLabel.text = [NSString stringWithFormat:@"批次号: %@  流水号: %@", missionNO, floatnumber];
 }
 
-- (void)setName:(NSString *)name typy:(NSString *)type organ:(NSString *)organ {
-    self.nameLabel.text = [NSString stringWithFormat:@"名称: %@", name];
-    self.typeLabel.text = [NSString stringWithFormat:@"类型: %@", type];
-    self.organLabel.text = [NSString stringWithFormat:@"隶属: %@", organ];
+- (void)setShop:(NSString *)shop code:(NSString *)code merch:(NSString *)merch inst:(NSString *)inst {
+    self.nameLabel.text = [NSString stringWithFormat:@"名称: %@", shop];
+    self.codeLabel.text = [NSString stringWithFormat:@"编码: %@", code];
+    self.merchLabel.text = [NSString stringWithFormat:@"商户: %@", merch];
+    self.instLabe.text = [NSString stringWithFormat:@"机构: %@", inst];
 }
 
 - (void)setAddr:(NSString *)addr {
@@ -108,12 +114,12 @@
     }
 }
 
-- (void)setOrganImg:(NSString *)img {
+- (void)setShopImg:(NSString *)img {
     if (img && ![img isEqualToString:@""]) {
-        self.organImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:img]]];
+        self.shopImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:img]]];
     }
     else {
-        self.organImageView.image = [UIImage imageNamed:@"i_default_company.png"];
+        self.shopImageView.image = [UIImage imageNamed:@"i_store.png"];
     }
 }
 

@@ -24,24 +24,24 @@
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        self.missionNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(17, 16, 150, 20)];
-        self.missionNameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+        self.missionNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(17, 16, 200, 20)];
+        self.missionNameLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
         self.missionNameLabel.textColor = [UIColor colorWithRed:100/255.0 green:100/255.0 blue:100/255.0 alpha:1.0];
         [self.contentView addSubview:self.missionNameLabel];
         
-        self.missionNOLabel = [[UILabel alloc] initWithFrame:CGRectMake(17, 36, 150, 20)];
-        self.missionNOLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+        self.missionNOLabel = [[UILabel alloc] initWithFrame:CGRectMake(17, 36, 200, 20)];
+        self.missionNOLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
         self.missionNOLabel.textColor = [UIColor colorWithRed:100/255.0 green:100/255.0 blue:100/255.0 alpha:1.0];
         [self.contentView addSubview:self.missionNOLabel];
         
         CGRect rScreen = [[UIScreen mainScreen]bounds];
         
-        UILabel *finishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(rScreen.size.width - 120, 25, 50, 14)];
+        UILabel *finishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(rScreen.size.width - 100, 25, 50, 14)];
         finishedLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
         finishedLabel.text = @"完成度:";
         [self.contentView addSubview:finishedLabel];
         
-        self.completePercentLabel = [[UILabel alloc] initWithFrame:CGRectMake(rScreen.size.width - 70, 25, 40, 14)];
+        self.completePercentLabel = [[UILabel alloc] initWithFrame:CGRectMake(rScreen.size.width - 50, 25, 40, 14)];
         self.completePercentLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
         [self.contentView addSubview:self.completePercentLabel];
     }
