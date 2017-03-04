@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[PublicMissionViewController tableView:cellForRowAtIndexPath:]:PublicMissionViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[iMyTask taskcode]:iMyTask.h">
+      </ContextState>
+      <ContextState
+         contextName = "-[PublicMissionViewController onLockTask:]:PublicMissionViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "__42-[PublicMissionViewController onLockTask:]_block_invoke:PublicMissionViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "__42-[MyMissionViewController viewWillAppear:]_block_invoke:MyMissionViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "+[Utils getAddrCode]:Utils.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[PublicMissionViewController viewWillAppear:]:PublicMissionViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "__37-[HomeViewController viewWillAppear:]_block_invoke:HomeViewController.m">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
