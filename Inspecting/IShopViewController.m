@@ -37,6 +37,7 @@
     [addshopBtn addTarget:self action:@selector(addShop:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView:addshopBtn];
     self.navigationItem.rightBarButtonItem = barItem;
+    
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
 
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -107,6 +108,8 @@
     if (!self.shopDetailViewController) {
         self.shopDetailViewController = [[IShopDetailViewController alloc] init];
     }
+    self.shopDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    self.shopDetailViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:[self.shopArray objectAtIndex:indexPath.row]];
     [self.navigationController pushViewController:self.shopDetailViewController animated:YES];
 }
 

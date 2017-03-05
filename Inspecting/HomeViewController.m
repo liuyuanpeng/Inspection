@@ -11,6 +11,7 @@
 #import "iUser.h"
 #import "AFNRequestManager.h"
 #import "iMyTask.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface HomeViewController ()
 
@@ -46,10 +47,10 @@
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 38, 150, 30)];
     self.nameLabel.textColor = [UIColor whiteColor];
-    self.nameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    self.nameLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
     self.organLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 77, 150, 30)];
     self.organLabel.textColor = [UIColor whiteColor];
-    self.organLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    self.organLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
     [header addSubview:self.nameLabel];
     [header addSubview:self.organLabel];
     
@@ -104,6 +105,7 @@
     [self.view addSubview:newestLabel];
     
     self.newestTable = [[UITableView alloc] initWithFrame:CGRectMake(0, newestLabel.frame.origin.y + 30, rScreen.size.width, rScreen.size.height - self.tabBarController.tabBar.frame.size.height - newestLabel.frame.origin.y - 30)];
+    self.newestTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.newestTable];
     
     self.newestTable.delegate = self;
@@ -116,7 +118,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     iUser *userInst = [iUser getInstance];
-    [self setAvartar:[userInst.headimg isEqualToString:@""] ? [UIImage imageNamed:@"i_default_inspector.png"] : [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, userInst.headimg]]]]organAvatar:[UIImage imageNamed:@"i_default_institution.png"]];
+    [self setAvartar:userInst.headimg organAvatar:@"i_default_institution.png"];
     [self setUsername:userInst.name organname:userInst.instname];
     
     // get mission info
@@ -145,9 +147,9 @@
 }
 
 
-- (void)setAvartar:(UIImage *)avatar organAvatar:(UIImage *)organAvatar {
-    self.avatar.image = avatar;
-    self.organAvatar.image = organAvatar;
+- (void)setAvartar:(NSString *)avatar organAvatar:(NSString *)organAvatar {
+    [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, avatar]] placeholderImage:[UIImage imageNamed:avatar]];
+    self.organAvatar.image = [UIImage imageNamed:organAvatar];
 }
 
 - (void)setUsername:(NSString *)username organname:(NSString *)organname {

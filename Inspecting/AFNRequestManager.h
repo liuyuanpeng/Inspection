@@ -99,4 +99,14 @@ enum HTTP_METHOD {
  @return json string
  */
 + (NSString *)URLEncryOrDecryString:(NSDictionary *)paramDict isHead:(BOOL)_type;
+
+
+/**
+ convert object to json string
+
+ @param infoDict oc-objecdt
+ @return json string
+ */
+
++ (NSString*)convertToJSONData:(id)infoDict;
 @end

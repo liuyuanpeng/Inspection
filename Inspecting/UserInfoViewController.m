@@ -48,11 +48,11 @@
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 38, 150, 30)];
     self.nameLabel.text = @"姓名：xxx";
     self.nameLabel.textColor = [UIColor whiteColor];
-    self.nameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    self.nameLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
     self.organLabel = [[UILabel alloc] initWithFrame:CGRectMake(112, 77, 150, 30)];
     self.organLabel.text = @"隶属机构：xxxxxxxx";
     self.organLabel.textColor = [UIColor whiteColor];
-    self.organLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    self.organLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
     [header addSubview:self.nameLabel];
     [header addSubview:self.organLabel];
     

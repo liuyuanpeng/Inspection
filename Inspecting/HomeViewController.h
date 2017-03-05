@@ -20,7 +20,7 @@
 @property (nonatomic, strong) UITableView *newestTable;
 @property (nonatomic, strong) NSArray *missionArray;
 
-- (void)setAvartar:(UIImage *)avatar organAvatar:(UIImage *)organAvatar;
+- (void)setAvartar:(NSString *)avatar organAvatar:(NSString *)organAvatar;
 - (void)setUsername:(NSString *)username organname:(NSString *)organname;
 - (void)setFinished:(NSInteger)finished Unfinished:(NSInteger)unfinished;
 

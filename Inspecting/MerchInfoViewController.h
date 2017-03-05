@@ -27,10 +27,10 @@
 
 @property (nonatomic, weak) RadioButton *radioButton;
 @property (nonatomic, strong) ITextView *desc;
-@property (nonatomic, strong) UIButton *licencePic;
-@property (nonatomic, strong) UIButton *FacadePic;
-@property (nonatomic, strong) UIButton *signPic;
-@property (nonatomic, strong) UIButton *sitePic;
+@property (nonatomic, strong) UIImageView *licencePic;
+@property (nonatomic, strong) UIImageView *facadePic;
+@property (nonatomic, strong) UIImageView *signPic;
+@property (nonatomic, strong) UIImageView *sitePic;
 
 @property (nonatomic, assign) BOOL bEdit;
 
@@ -42,5 +42,7 @@
 @property (nonatomic, strong) ILogViewController *logViewController;
 @property (nonatomic, strong) IShopViewController *shopViewController;
 @property (nonatomic, strong) ITermViewController *termViewController;
+
+@property (nonatomic, assign) NSInteger curSelPic;
 
 @end

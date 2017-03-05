@@ -1,5 +1,5 @@
 //
-//  INewShopViewController.h
+//  INewTermViewController.h
 //  Inspecting
 //
 //  Created by liuyuanpeng on 2017/3/5.
@@ -11,14 +11,13 @@
 @class ITextView;
 @class RadioButton;
 
-@interface INewShopViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface INewTermViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
-@property (nonatomic, strong) UITextField *shopName;
-@property (nonatomic, strong) UITextField *shopAddr;
+@property (nonatomic, strong) UITextField *termSerialnbr;
+@property (nonatomic, strong) UITextField *termBrand;
+@property (nonatomic, strong) UITextField *termModel;
+@property (nonatomic, strong) UITextField *termType;
 
-@property (nonatomic, strong) UITextField *nameText;
-@property (nonatomic, strong) UITextField *telText;
-@property (nonatomic, strong) UITextField *mailText;
 
 @property (nonatomic, weak) RadioButton *radioButton;
 @property (nonatomic, strong) ITextView *desc;
@@ -27,6 +26,5 @@
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
-
 
 @end

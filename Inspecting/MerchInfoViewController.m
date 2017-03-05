@@ -15,6 +15,9 @@
 #import "ILogViewController.h"
 #import "IShopViewController.h"
 #import "ITermViewController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "Utils.h"
+#import <Toast/UIView+Toast.h>
 
 @interface MerchInfoViewController ()
 
@@ -117,6 +120,7 @@
     
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 10, 100, 30);
+    NSInteger btntag = 1;
     for (NSString *optionTitle in @[@"不存在", @"正常", @"其他情况"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
         btnRect.origin.x += 100;
@@ -127,6 +131,8 @@
         [btn setImage:[UIImage imageNamed:@"checked.png"] forState:UIControlStateSelected];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, 6, 0, 0);
+        btn.tag = btntag;
+        btntag++;
         [resultView addSubview:btn];
         [buttons addObject:btn];
     }
@@ -153,12 +159,33 @@
     photoLabel.font = [UIFont systemFontOfSize:13];
     [resultView addSubview:photoLabel];
     
-    self.licencePic = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.licencePic.frame = CGRectMake(40, 120, 50, 50);
-    [self.licencePic setBackgroundImage:[UIImage imageNamed:@"i_add_yyzz.png"] forState:UIControlStateNormal];
+    self.licencePic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 120, 50, 50)];
+    self.licencePic.image = [UIImage imageNamed:@"i_add_yyzz.png"];
     self.licencePic.tag = 0;
-    [self.licencePic addTarget:self action:@selector(onSelectPic:) forControlEvents:UIControlEventTouchUpInside];
+    self.licencePic.userInteractionEnabled = YES;
+    [self.licencePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
     [resultView addSubview:self.licencePic];
+    
+    self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 120, 50, 50)];
+    self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp.png"];
+    self.facadePic.tag = 1;
+    self.facadePic.userInteractionEnabled = YES;
+    [self.facadePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [resultView addSubview:self.facadePic];
+    
+    self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 120, 50, 50)];
+    self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
+    self.signPic.tag = 2;
+    self.signPic.userInteractionEnabled = YES;
+    [self.signPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [resultView addSubview:self.signPic];
+    
+    self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 120, 50, 50)];
+    self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
+    self.sitePic.tag = 3;
+    self.sitePic.userInteractionEnabled = YES;
+    [self.sitePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [resultView addSubview:self.sitePic];
     
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     commitBtn.frame = CGRectMake(rScreen.size.width/2 - 50, resultView.frame.origin.y + resultView.frame.size.height + 10, 100, 30);
@@ -177,7 +204,26 @@
 }
 
 - (IBAction)onCommit:(id)sender {
-    
+    NSDictionary *datas = @{
+                            @"merchname":@"testname"
+                            };
+    NSDictionary *params = @{
+                             @"staffcode": [iUser getInstance].staffcode,
+                             @"instcode":  [self.taskInfo objectForKey:@"instcode"],
+                             @"merchcode": [self.taskInfo objectForKey:@"merchcode"],
+                             @"batchcode": [self.taskInfo objectForKey:@"batchcode"],
+                             @"addrcode": [Utils getAddrCode],
+                             @"flag":@(self.radioButton.selectedButton.tag),
+                             @"content": self.desc.text,
+                             @"data": [AFNRequestManager convertToJSONData:datas]
+                             };
+    [AFNRequestManager requestAFURL:@"inspMerchInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -194,20 +240,45 @@
             [self.tableView reloadData];
             NSString *imgurl = [NSString stringWithFormat:@"%@", [self.merchInfo objectForKey:@"pic"]];
             if (imgurl && ![imgurl isEqualToString:@""]) {
-                self.merchimg.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, imgurl]]]];
+                [self.merchimg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, imgurl]] placeholderImage:[UIImage imageNamed:@"i_default_company.png"]];
             }
             self.merchname.text = [NSString stringWithFormat:@"名称: %@", [self.merchInfo objectForKey:@"merchname"]];
             self.merchtype.text = [NSString stringWithFormat:@"类型: %@", [self.merchInfo objectForKey:@"merchtypedesc"]];            self.merchcode.text = [NSString stringWithFormat:@"商户编码: %@", [self.merchInfo objectForKey:@"merchcode"]];
             self.merchinst.text = [NSString stringWithFormat:@"隶属: %@", [self.merchInfo objectForKey:@"instname"]];
             
             self.merchAddr.text = [NSString stringWithFormat:@"%@", [self.merchInfo objectForKey:@"addr"]];
+            
+            NSArray *inspresults = [[NSArray alloc] initWithArray:[self.merchInfo objectForKey:@"inspresult"]];
+            for (NSInteger i = 0; i < inspresults.count; i++) {
+                NSDictionary *dict = [inspresults objectAtIndex:i];
+                if (i == 0) {
+                    [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_yyzz.png"]];
+                    [self.radioButton setSelectedWithTag:[[dict objectForKey:@"flag"] integerValue]];
+                    self.desc.text = [NSString stringWithString:[dict objectForKey:@"content"]];
+                }
+                else if (i == 1) {
+                    [self.facadePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_mmzp.png"]];
+                }
+                else if (i == 2) {
+                    [self.signPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_zp.png"]];
+                }
+
+                else if (i == 3) {
+                    [self.sitePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_jycs.png"]];
+                }
+            }
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
     }];
 }
 
-- (IBAction)onSelectPic:(id)sender {
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
+
+- (IBAction)onSelectPic:(UITapGestureRecognizer *)sender {
+    self.curSelPic = [sender view].tag;
     @try {
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
         imagePicker.delegate = self;
@@ -319,6 +390,7 @@
         if (nil == self.termViewController) {
             self.termViewController = [[ITermViewController alloc] init];
         }
+        self.termViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
         [self.navigationController pushViewController:self.termViewController animated:YES];
     }
 }
@@ -330,15 +402,15 @@
     
     [self dismissViewControllerAnimated:YES completion:^{
         NSDictionary *params = @{
-                                 @"batchcode":@"",
-                                 @"oldfile":@"",
-                                 @"logo":@"",
-                                 @"posi":@"",
-                                 @"inspcntid":@1
+                                 @"batchcode":[self.taskInfo objectForKey:@"batchcode"],
+                                 @"inspcntid":@(self.curSelPic)
                                  };
-        [AFNRequestManager requestAFURL:@"inspMerchPics" params:params imageData:UIImageJPEGRepresentation(image, 1.0) succeed:^(NSDictionary *ret) {
+        [AFNRequestManager requestAFURL:@"inspMerchPics.json" params:params imageData:UIImageJPEGRepresentation(image, 1.0) succeed:^(NSDictionary *ret) {
             if (0 == [[ret objectForKey:@"status"] integerValue]) {
-                
+                [self.view makeToast:[ret objectForKey:@"desc"] duration:2 position:CSToastPositionCenter];
+            }
+            else {
+                [self.view makeToast:[ret objectForKey:@"desc"] duration:2 position:CSToastPositionCenter];
             }
         } failure:^(NSError *error) {
             NSLog(@"%@", error);

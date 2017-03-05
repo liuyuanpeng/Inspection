@@ -7,6 +7,7 @@
 //
 
 #import "IMyTableViewCell.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation IMyTableViewCell
 
@@ -109,12 +110,7 @@
 }
 
 - (void)setOrganImg:(NSString *)img {
-    if (img && ![img isEqualToString:@""]) {
-        self.organImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:img]]];
-    }
-    else {
-        self.organImageView.image = [UIImage imageNamed:@"i_default_company.png"];
-    }
+    [self.organImageView sd_setImageWithURL:[NSURL URLWithString:img] placeholderImage:[UIImage imageNamed:@"i_default_company.png"]];
 }
 
 - (void)awakeFromNib {

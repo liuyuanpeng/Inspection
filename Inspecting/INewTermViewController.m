@@ -1,23 +1,23 @@
 //
-//  ITermDetailViewController.m
+//  INewTermViewController.m
 //  Inspecting
 //
 //  Created by liuyuanpeng on 2017/3/5.
 //  Copyright © 2017年 default. All rights reserved.
 //
 
-#import "ITermDetailViewController.h"
-#import "ILogViewController.h"
+#import "INewTermViewController.h"
 #import "ITextView.h"
 #import <RadioButton/RadioButton.h>
 #import "iUser.h"
 #import "AFNRequestManager.h"
+#import <ActionSheetPicker_3_0/ActionSheetPicker.h>
 
-@interface ITermDetailViewController ()
+@interface INewTermViewController ()
 
 @end
 
-@implementation ITermDetailViewController
+@implementation INewTermViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -25,125 +25,75 @@
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     CGRect rNav = self.navigationController.navigationBar.frame;
     
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height - self.tabBarController.tabBar.frame.size.height)];
+    [self.view addSubview:self.scrollView];
+    
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,  rScreen.size.width, 30)];
-    titleLabel.text = @"终端详情";
+    titleLabel.text = @"新增终端";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
-    
-    UIButton *updateLog = [UIButton buttonWithType:UIButtonTypeCustom];
-    updateLog.frame = CGRectMake(0, 0, 24, 24);
-    [updateLog setBackgroundImage:[UIImage imageNamed:@"i_updata.png"] forState:UIControlStateNormal];
-    [updateLog addTarget:self action:@selector(onUpdateLog:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView:updateLog];
-    self.navigationItem.rightBarButtonItem = barItem;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, rNav.origin.y + rNav.size.height + 5, 100, 25)];
+    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5 - rNav.origin.y - rNav.size.height, 100, 25)];
     baseinfoLabel.font = [UIFont systemFontOfSize:13];
     baseinfoLabel.text = @"基本信息";
-    [self.view addSubview:baseinfoLabel];
+    [self.scrollView addSubview:baseinfoLabel];
     
-    UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-    [editBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    editBtn.frame = CGRectMake(rScreen.size.width - 50, rNav.origin.y + rNav.size.height + 5, 40, 20);
-    [editBtn addTarget:self action:@selector(onEdit:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:editBtn];
-    
-    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height + 35, rScreen.size.width, 170)];
+    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, 35 - rNav.origin.y - rNav.size.height, rScreen.size.width, 210)];
     [baseInfoView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:baseInfoView];
+    [self.scrollView addSubview:baseInfoView];
     
-    UILabel *serialLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 55, 20)];
-    serialLabel.textColor = [UIColor darkGrayColor];
+    UILabel *serialLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 55, 15)];
     serialLabel.font = [UIFont systemFontOfSize:12.0f];
-    serialLabel.text = @"终端序列:";
+    serialLabel.text = @"终端序号:";
     [baseInfoView addSubview:serialLabel];
-
     
-    self.termSerialnbr = [[UITextField alloc] initWithFrame:CGRectMake(60, 10, rScreen.size.width - 65, 20)];
-    self.termSerialnbr.textColor = [UIColor darkGrayColor];
-    self.termSerialnbr.font = [UIFont systemFontOfSize:12.0f];
-    self.termSerialnbr.text = @"fddfdff";
-    self.termSerialnbr.delegate = self;
-    [baseInfoView addSubview:self.termSerialnbr];
-    
-    self.termCode = [[UILabel alloc] initWithFrame:CGRectMake(5, 30, rScreen.size.width - 10, 20)];
-    self.termCode.textColor = [UIColor darkGrayColor];
-    self.termCode.font = [UIFont systemFontOfSize:12.0f];
-    self.termCode.text = @"终端编号:";
-    [baseInfoView addSubview:self.termCode];
-    
-    
-    UILabel *brandLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 50, 55, 20)];
-    brandLabel.textColor = [UIColor darkGrayColor];
+    UILabel *brandLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 40, 55, 15)];
     brandLabel.font = [UIFont systemFontOfSize:12.0f];
     brandLabel.text = @"终端品牌:";
     [baseInfoView addSubview:brandLabel];
-
-    self.termBrand = [[UITextField alloc] initWithFrame:CGRectMake(60, 50, rScreen.size.width - 90, 20)];
-    self.termBrand.textColor = [UIColor darkGrayColor];
-    self.termBrand.font = [UIFont systemFontOfSize:12.0f];
-    self.termBrand.text = @"rest";
-    self.termBrand.delegate = self;
-    [baseInfoView addSubview:self.termBrand];
     
-    UILabel *modelLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 70, 55, 20)];
-    modelLabel.textColor = [UIColor darkGrayColor];
+    UILabel *modelLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 70, 55, 15)];
     modelLabel.font = [UIFont systemFontOfSize:12.0f];
     modelLabel.text = @"终端型号:";
     [baseInfoView addSubview:modelLabel];
     
-    self.termModel = [[UITextField alloc] initWithFrame:CGRectMake(60, 70, rScreen.size.width - 90, 20)];
-    self.termModel.textColor = [UIColor darkGrayColor];
-    self.termModel.font = [UIFont systemFontOfSize:12.0f];
-    self.termModel.text  = @"testt";
-    self.termModel.delegate = self;
-    [baseInfoView addSubview:self.termModel];
+    UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 100, 55, 15)];
+    typeLabel.font = [UIFont systemFontOfSize:12.0f];
+    typeLabel.text = @"终端类型:";
+    [baseInfoView addSubview:typeLabel];
     
-    UILabel *typeModel = [[UILabel alloc] initWithFrame:CGRectMake(5, 90, 55, 20)];
-    typeModel.textColor = [UIColor darkGrayColor];
-    typeModel.font = [UIFont systemFontOfSize:12.0f];
-    typeModel.text = @"终端类型:";
-    [baseInfoView addSubview:typeModel];
+    UILabel *shopLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 130, 55, 15)];
+    shopLabel.font = [UIFont systemFontOfSize:12.0f];
+    shopLabel.text = @"所属门店:";
+    [baseInfoView addSubview:shopLabel];
     
-    self.termType = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.termType setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    self.termType.frame = CGRectMake(60, 90, rScreen.size.width - 90, 20);
-    self.termType.titleLabel.font = [UIFont systemFontOfSize:12.0f];
-    self.termType.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.termType setTitle:@"拨号" forState:UIControlStateNormal];
-    [baseInfoView addSubview:self.termType];
+    UILabel *merchLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 160, 55, 15)];
+    merchLabel.font = [UIFont systemFontOfSize:12.0f];
+    merchLabel.text = @"所属商户:";
+    [baseInfoView addSubview:merchLabel];
     
-    self.shopName = [[UILabel alloc] initWithFrame:CGRectMake(5, 110, rScreen.size.width - 10, 20)];
-    self.shopName.textColor = [UIColor darkGrayColor];
-    self.shopName.font = [UIFont systemFontOfSize:12.0f];
-    self.shopName.text = @"所属门店:";
-    [baseInfoView addSubview:self.shopName];
-
-    self.merchName = [[UILabel alloc] initWithFrame:CGRectMake(5, 130, rScreen.size.width - 10, 20)];
-    self.merchName.textColor = [UIColor darkGrayColor];
-    self.merchName.font = [UIFont systemFontOfSize:12.0f];
-    self.merchName.text = @"所属商户:";
-    [baseInfoView addSubview:self.merchName];
-
-    self.instName = [[UILabel alloc] initWithFrame:CGRectMake(5, 150, rScreen.size.width - 10, 20)];
-    self.instName.textColor = [UIColor darkGrayColor];
-    self.instName.font = [UIFont systemFontOfSize:12.0f];
-    self.instName.text = @"所属机构:";
-    [baseInfoView addSubview:self.instName];
-
-    self.bEdit = false;
+    UILabel *instLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 190, 55, 15)];
+    instLabel.font = [UIFont systemFontOfSize:12.0f];
+    instLabel.text = @"所属机构:";
+    [baseInfoView addSubview:instLabel];
+    
+    for (NSInteger i = 1; i <= 6; i++) {
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(5, 30*i, rScreen.size.width - 10, 1)];
+        [view setBackgroundColor:[UIColor lightGrayColor]];
+        [baseInfoView addSubview:view];
+    }
+    
     
     UILabel *resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, baseInfoView.frame.origin.y + baseInfoView.frame.size.height + 5, 100, 25)];
     resultLabel.text = @"巡检结果";
     resultLabel.font = [UIFont systemFontOfSize:13];
-    [self.view addSubview:resultLabel];
+    [self.scrollView addSubview:resultLabel];
     
     UIView *resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 180)];
     [resultView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:resultView];
+    [self.scrollView addSubview:resultView];
     
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 10, 100, 30);
@@ -189,14 +139,14 @@
     self.instPic.tag = 0;
     [self.instPic addTarget:self action:@selector(onSelectPic:) forControlEvents:UIControlEventTouchUpInside];
     [resultView addSubview:self.instPic];
-
+    
     self.serialPic = [UIButton buttonWithType:UIButtonTypeCustom];
     self.serialPic.frame = CGRectMake(100, 120, 50, 50);
     [self.serialPic setBackgroundImage:[UIImage imageNamed:@"i_add_posup.png"] forState:UIControlStateNormal];
     self.serialPic.tag = 1;
     [self.serialPic addTarget:self action:@selector(onSelectPic:) forControlEvents:UIControlEventTouchUpInside];
     [resultView addSubview:self.serialPic];
-
+    
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     commitBtn.frame = CGRectMake(rScreen.size.width/2 - 50, resultView.frame.origin.y + resultView.frame.size.height + 10, 100, 30);
     [commitBtn.layer setCornerRadius:2.0f];
@@ -205,31 +155,19 @@
     [commitBtn setTitle:@"提交" forState:UIControlStateNormal];
     [commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [commitBtn addTarget:self action:@selector(onCommit:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:commitBtn];
+    [self.scrollView addSubview:commitBtn];
     
     self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.indicator setCenter:CGPointMake(rScreen.size.width/2, rScreen.size.height/2)];
     self.indicator.color = [UIColor blueColor];
     [self.view addSubview:self.indicator];
-}
-
-- (IBAction)onCommit:(id)sender {
-    NSDictionary *params = @{
-                             @"staffcode":[iUser getInstance].staffcode
-                             };
+    
+    self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSDictionary *params = @{
-                             @"staffcode": [iUser getInstance].staffcode
-                             };
-    [AFNRequestManager requestAFURL:@"getMerchInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
-        if (0 == [[ret objectForKey:@"status"] integerValue]) {
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@", error);
-    }];
 }
 
 - (IBAction)onSelectPic:(id)sender {
@@ -248,24 +186,12 @@
     }
 }
 
-- (IBAction)onUpdateLog:(id)sender {
-    if (nil == self.logViewController) {
-        self.logViewController = [[ILogViewController alloc] init];
-    }
-    self.logViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    [self.navigationController pushViewController:self.logViewController animated:YES];
+
+
+- (IBAction)onCommit:(id)sender {
+    
 }
 
-- (IBAction)onEdit:(UIButton *)sender {
-    if ([sender.currentTitle isEqualToString:@"编辑"]) {
-        self.bEdit = true;
-        [sender setTitle:@"保存" forState:UIControlStateNormal];
-    }
-    else if ([sender.currentTitle isEqualToString:@"保存"]) {
-        self.bEdit = false;
-        [sender setTitle:@"编辑" forState:UIControlStateNormal];
-    }
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -284,9 +210,10 @@
 
 #pragma mark - UITextFieldDelegate
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    return self.bEdit;
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    return YES;
 }
+
 
 #pragma mark - UIImagePickerControllerDelegate Implementation
 

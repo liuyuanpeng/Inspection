@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ITermViewController : UIViewController
+@class ITermDetailViewController;
+
+@interface ITermViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, strong) NSDictionary *merchInfo;
+@property (nonatomic, strong) NSDictionary *shopInfo;
+@property (nonatomic, strong) NSMutableArray *termArray;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) ITermDetailViewController *termDetailViewController;
 
 @end

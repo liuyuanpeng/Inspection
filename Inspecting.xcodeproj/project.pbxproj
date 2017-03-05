@@ -149,6 +149,8 @@
 		91C78C791E6B30F3009AC9A2 /* IShopDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C781E6B30F3009AC9A2 /* IShopDetailViewController.m */; };
 		91C78C7C1E6B3102009AC9A2 /* ITermDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C7B1E6B3102009AC9A2 /* ITermDetailViewController.m */; };
 		91C78C7F1E6B31C5009AC9A2 /* INewShopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C7E1E6B31C5009AC9A2 /* INewShopViewController.m */; };
+		91C78C821E6B3D01009AC9A2 /* PickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C811E6B3D01009AC9A2 /* PickerView.m */; };
+		91C78C851E6C050B009AC9A2 /* INewTermViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C841E6C050B009AC9A2 /* INewTermViewController.m */; };
 		91F46D131E645D00004491E5 /* IPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F46D121E645D00004491E5 /* IPopupView.m */; };
 		91F46D1C1E6467CC004491E5 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F46D1B1E6467CC004491E5 /* NSString+MD5.m */; };
 		91F46D1E1E646A50004491E5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F46D1D1E646A50004491E5 /* CoreTelephony.framework */; };
@@ -334,6 +336,10 @@
 		91C78C7B1E6B3102009AC9A2 /* ITermDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITermDetailViewController.m; sourceTree = "<group>"; };
 		91C78C7D1E6B31C5009AC9A2 /* INewShopViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INewShopViewController.h; sourceTree = "<group>"; };
 		91C78C7E1E6B31C5009AC9A2 /* INewShopViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INewShopViewController.m; sourceTree = "<group>"; };
+		91C78C801E6B3D01009AC9A2 /* PickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerView.h; sourceTree = "<group>"; };
+		91C78C811E6B3D01009AC9A2 /* PickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerView.m; sourceTree = "<group>"; };
+		91C78C831E6C050B009AC9A2 /* INewTermViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INewTermViewController.h; sourceTree = "<group>"; };
+		91C78C841E6C050B009AC9A2 /* INewTermViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INewTermViewController.m; sourceTree = "<group>"; };
 		91F46D111E645D00004491E5 /* IPopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPopupView.h; sourceTree = "<group>"; };
 		91F46D121E645D00004491E5 /* IPopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPopupView.m; sourceTree = "<group>"; };
 		91F46D1A1E6467CC004491E5 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
@@ -477,6 +483,8 @@
 				91C78C721E6B2D92009AC9A2 /* IShopTableViewCell.m */,
 				91C78C741E6B2D9D009AC9A2 /* ITermTableViewCell.h */,
 				91C78C751E6B2D9D009AC9A2 /* ITermTableViewCell.m */,
+				91C78C801E6B3D01009AC9A2 /* PickerView.h */,
+				91C78C811E6B3D01009AC9A2 /* PickerView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -512,6 +520,8 @@
 				91C78C7B1E6B3102009AC9A2 /* ITermDetailViewController.m */,
 				91C78C7D1E6B31C5009AC9A2 /* INewShopViewController.h */,
 				91C78C7E1E6B31C5009AC9A2 /* INewShopViewController.m */,
+				91C78C831E6C050B009AC9A2 /* INewTermViewController.h */,
+				91C78C841E6C050B009AC9A2 /* INewTermViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -890,8 +900,10 @@
 				91655EAF1E6715FC0031CFE0 /* NoneImageView.m in Sources */,
 				91F46D2B1E657882004491E5 /* iInst.m in Sources */,
 				9195D1841E5DD912007B451F /* AFNRequestManager.m in Sources */,
+				91C78C821E6B3D01009AC9A2 /* PickerView.m in Sources */,
 				91C78C6A1E6B117A009AC9A2 /* IShopViewController.m in Sources */,
 				91831AB21E54B6A000E670B3 /* UserInfoViewController.m in Sources */,
+				91C78C851E6C050B009AC9A2 /* INewTermViewController.m in Sources */,
 				91655EA91E66CC120031CFE0 /* Utils.m in Sources */,
 				91C78C6D1E6B1188009AC9A2 /* ITermViewController.m in Sources */,
 				91C78C7C1E6B3102009AC9A2 /* ITermDetailViewController.m in Sources */,
