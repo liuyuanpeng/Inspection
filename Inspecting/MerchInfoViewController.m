@@ -332,6 +332,9 @@
             UIImage *loadingImg = [UIImage animatedImageWithImages:imageArray duration:10.f];
             for (NSInteger i = 0; i < inspresults.count; i++) {
                 NSDictionary *dict = [inspresults objectAtIndex:i];
+                if ([@"" isEqualToString:[dict objectForKey:@"picuri"]]) {
+                    continue;
+                }
                 if (i == 0) {
                     [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage: loadingImg];
                     [self.radioButton setSelectedWithTag:[[dict objectForKey:@"flag"] integerValue]];
