@@ -26,7 +26,7 @@
     
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,  rScreen.size.width, 30)];
-    titleLabel.text = @"中国人民银行POS终端巡检系统";
+    titleLabel.text = @"POS终端巡检系统";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
@@ -110,9 +110,6 @@
     
     self.newestTable.delegate = self;
     self.newestTable.dataSource = self;
-    
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -148,7 +145,7 @@
 
 
 - (void)setAvartar:(NSString *)avatar organAvatar:(NSString *)organAvatar {
-    [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, avatar]] placeholderImage:[UIImage imageNamed:avatar]];
+    [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, avatar]] placeholderImage:[UIImage imageNamed:@"i_default_inspector.png"]];
     self.organAvatar.image = [UIImage imageNamed:organAvatar];
 }
 

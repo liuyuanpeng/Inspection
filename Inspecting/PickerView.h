@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^complete)(NSString *type);
+typedef void(^complete)(NSDictionary *type);
 
 @interface PickerView : UIView <UITableViewDataSource, UITableViewDelegate>
 
@@ -16,6 +16,7 @@ typedef void(^complete)(NSString *type);
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) complete block;
 @property (nonatomic, assign) NSInteger btnTag;
+@property (nonatomic, strong) NSMutableArray *selBtns;
 
 - (void)setComplete:(complete)block;
 

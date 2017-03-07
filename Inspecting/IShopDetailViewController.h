@@ -27,9 +27,9 @@
 @property (nonatomic, strong) UILabel *instName;
 @property (nonatomic, strong) UITextField *addr;
 
-@property (nonatomic, strong) ITextView *nameTextView;
-@property (nonatomic, strong) ITextView *telTextView;
-@property (nonatomic, strong) ITextView *mailTextView;
+@property (nonatomic, strong) UITextView *nameTextView;
+@property (nonatomic, strong) UITextView *telTextView;
+@property (nonatomic, strong) UITextView *mailTextView;
 
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -53,5 +53,12 @@
 @property (nonatomic, strong) UILabel *resultLabel;
 @property (nonatomic, strong) UIView *resultView;
 @property (nonatomic, strong) UIButton *commitBtn;
+
+@property (nonatomic, assign) NSInteger inspcntid;
+
+@property (nonatomic, strong) NSMutableArray *inspresultArray;
+@property (nonatomic, strong) NSMutableDictionary *userImgDict;
+@property (nonatomic, weak) UIImageView *curSelPic;
+@property (nonatomic, assign) BOOL needupdate;
 
 @end

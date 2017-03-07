@@ -17,6 +17,7 @@
 #import "iPhone.h"
 #import <Toast/UIView+Toast.h>
 #import "iUser.h"
+#import "ITermType.h"
 
 @interface LoginViewController ()
 
@@ -84,6 +85,14 @@
     [button.layer setCornerRadius:3.0];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.view addSubview:button];
+    
+    // load term types
+    ITermType *termtype = [ITermType getInstance];
+    [termtype requestTypes];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning {

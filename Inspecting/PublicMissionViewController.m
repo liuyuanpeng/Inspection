@@ -200,8 +200,8 @@
                              @"addrcode": [Utils getAddrCode],
                              @"batchcode": [missionDict objectForKey:@"batchcode"],
                              @"serialnbr": [missionDict objectForKey:@"serialnbr"],
-                             @"flag":[(NSString *)[missionDict objectForKey:@"state"]isEqualToString:@"001"]?@1:@2
-                                 };
+                             @"flag":@0
+                             };
     [AFNRequestManager requestAFURL:@"lockPubTask.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             [missionDict setValue:[[params objectForKey:@"flag"] integerValue] == 1 ? @"001": @"002" forKey:@"state"];

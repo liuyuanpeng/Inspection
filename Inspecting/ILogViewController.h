@@ -13,6 +13,8 @@
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSDictionary *merchInfo;
+@property (nonatomic, strong) NSDictionary *shopInfo;
+@property (nonatomic, strong) NSDictionary *termInfo;
 @property (nonatomic, strong) NSMutableArray *logInfo;
 @property (nonatomic, strong) NSString *logTime;
 

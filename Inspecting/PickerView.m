@@ -7,6 +7,7 @@
 //
 
 #import "PickerView.h"
+#import "AFNRequestManager.h"
 
 @implementation PickerView
 
@@ -14,8 +15,45 @@
     self = [super initWithFrame:frame];
     if (self != nil) {
         [self initData];
+        self.backgroundColor = [UIColor colorWithWhite:236.0/255.0 alpha:1.0];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(150, 0, frame.size.width - 150, frame.size.height)];
+        self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.tableView.dataSource = self;
+        self.tableView.delegate = self;
+        [self addSubview:self.tableView];
     }
     return self;
+}
+
+- (void)createSelBtns {
+    if (self.selBtns == nil) {
+        self.selBtns = [[NSMutableArray alloc] initWithCapacity:6];
+    }
+    for (NSInteger i= 0; i < self.types.count; i++) {
+        NSDictionary *dict = self.types[i];
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.frame = CGRectMake(0, i*20, 150, 19);
+        [btn setBackgroundColor:[UIColor whiteColor]];
+        btn.tag = i;
+        [btn setTitle:[dict objectForKey:@"bg_cata_name"] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+        [btn addTarget:self action:@selector(onChangeSel:) forControlEvents:UIControlEventTouchUpInside];
+        [self.selBtns addObject:btn];
+        [self addSubview:btn];
+    }
+    [self.selBtns[self.btnTag] setBackgroundColor:[UIColor colorWithRed:234/255.0 green:230/255.0 blue:221/255.0 alpha:1.0]];
+}
+
+- (IBAction)onChangeSel:(UIButton *)sender {
+    if (sender.tag == self.btnTag) {
+        return;
+    }
+    [self.selBtns[self.btnTag] setBackgroundColor:[UIColor whiteColor]];
+    [self.selBtns[sender.tag] setBackgroundColor:[UIColor colorWithRed:234/255.0 green:230/255.0 blue:221/255.0 alpha:1.0]];
+    self.btnTag = sender.tag;
+    [self.tableView reloadData];
 }
 
 - (void)setComplete:(complete)block {
@@ -23,73 +61,16 @@
 }
 
 - (void)initData {
-    self.types = @[@{
-                       @"category":@"餐娱类",
-                       @"types":@[
-                               @"贵重珠宝、首饰，钟表零售",
-                               @"包办伙食，宴会承包商人",
-                               @"就餐场所和餐馆",
-                               @"饮酒场所(酒吧、酒馆、夜总会、鸡尾酒大厅、迪斯科舞厅)",
-                               @"古玩店--出售、维修及还原",
-                               @"古玩复制店",
-                               @"银器店",
-                               @"玻璃器皿和水晶饰品店",
-                               @"工艺美术商店",
-                               @"艺术商和画廊",
-                               @"住宿服务(旅馆、酒店、汽车旅馆、度假村等",
-                               @"分时使用的别墅或度假用房",
-                               @"运动和娱乐露营地",
-                               @"活动房车长及露营场所",
-                               @"按摩店",
-                               @"保健及美容SPA",
-                               @"手表、钟表和首饰维修点",
-                               @"电影和录像创作、发行",
-                               @"歌舞厅",
-                               @"戏剧制片(不含电影)、演出和票务",
-                               @"乐队、文艺表演",
-                               @"台球、撞球场所",
-                               @"保龄球馆",
-                               @"商业体育馆、职业体育俱乐部、运动场和体育推广公司",
-                               @"公共高尔夫球场",
-                               @"大型游戏机和游戏场所",
-                               @"游乐园、马戏团、嘉年华、占卜",
-                               @"会员俱乐部(体育、娱乐、运动等)、乡村俱乐部以及私人高尔夫课程班",
-                               @"水族馆、海洋馆和海豚馆",
-                               @"其他娱乐服务"
-                               ]
-                   },
-                   @{
-                       @"category":@"房车类",
-                       @"types":@[
-                               @"一般承包商 - 住宅与商业楼",
-                               @"活动房车销售商",
-                               @"汽车货车经销商 - 新旧车的销售、服务、维修、零件和出租",
-                               @"汽车货车经销商 - 专门从事旧车的销售、服务、维修、零件及出租",
-                               @"船只销售商",
-                               @"旅行拖车、娱乐用车销售商",
-                               @"摩托车商店和经销商",
-                               @"摩托车商店和经销商",
-                               @"露营、房车销售商",
-                               @"雪车商",
-                               @"汽车、飞行器、农用机车综合经营商",
-                               @"当铺",
-                               @"不动产代理--房地产经纪"
-                               ]
-                       },
-                   @{
-                       @"category":@"批发类",
-                       @"types":@[
-                               @"烟草配送",
-                               @"机动车供应及零配件(批发商)",
-                               @"办公及商务家具(批发商)",
-                               @"建材批发(批发商)",
-                               @"办公、影印及微缩摄影器材(批发商)"
-                               ]
-                       }
-                   
-                   ];
-    
-    self.btnTag = 0L;
+    [AFNRequestManager requestAFURL:@"getMCC.json" httpMethod:METHOD_POST params:nil succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            self.types = [[NSArray alloc] initWithArray:[ret objectForKey:@"datas"]];
+            self.btnTag = 0L;
+            [self createSelBtns];
+            [self.tableView reloadData];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
 }
 
 /*
@@ -110,7 +91,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self setHidden:YES];
-    NSArray *array = [[self.types objectAtIndex:self.btnTag] objectForKey:@"types"];
+    NSArray *array = [[self.types objectAtIndex:self.btnTag] objectForKey:@"mcclst"];
     self.block([array objectAtIndex:indexPath.row]);
 }
 
@@ -120,7 +101,8 @@
     if (nil == self.types) {
         return 0L;
     }
-    return self.types.count;
+    NSArray *array = [[self.types objectAtIndex:self.btnTag] objectForKey:@"mcclst"];
+    return array.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -128,10 +110,12 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        [cell setBackgroundColor:[UIColor colorWithRed:234/255.0 green:230/255.0 blue:221/255.0 alpha:1.0]];
+        cell.textLabel.font = [UIFont systemFontOfSize:11.0f];
     }
     
-    NSArray *array = [[self.types objectAtIndex:self.btnTag] objectForKey:@"types"];
-    cell.textLabel.text = [NSString stringWithString:[array objectAtIndex:indexPath.row]];
+    NSArray *array = [[self.types objectAtIndex:self.btnTag] objectForKey:@"mcclst"];
+    cell.textLabel.text = [NSString stringWithString:[[array objectAtIndex:indexPath.row] objectForKey:@"remark"]];
     return cell;
 }
 

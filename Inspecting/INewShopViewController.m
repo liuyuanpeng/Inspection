@@ -10,6 +10,7 @@
 #import "ITextView.h"
 #import <RadioButton/RadioButton.h>
 #import "iUser.h"
+#import "Utils.h"
 #import "AFNRequestManager.h"
 
 @interface INewShopViewController ()
@@ -42,25 +43,57 @@
     [baseInfoView setBackgroundColor:[UIColor whiteColor]];
     [self.scrollView addSubview:baseInfoView];
     
-    UILabel *serialLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 55, 15)];
-    serialLabel.font = [UIFont systemFontOfSize:12.0f];
-    serialLabel.text = @"门店名称";
-    [baseInfoView addSubview:serialLabel];
+    UILabel *shopLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 55, 15)];
+    shopLabel.font = [UIFont systemFontOfSize:12.0f];
+    shopLabel.text = @"门店名称";
+    [baseInfoView addSubview:shopLabel];
     
-    UILabel *brandLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 40, 55, 15)];
-    brandLabel.font = [UIFont systemFontOfSize:12.0f];
-    brandLabel.text = @"门店地址";
-    [baseInfoView addSubview:brandLabel];
+    self.shopName = [[UITextField alloc] initWithFrame:CGRectMake(60, 10, rScreen.size.width - 65, 15)];
+    [self.shopName setPlaceholder:@"请填写门店名称"];
+    self.shopName.font = [UIFont systemFontOfSize:12.0f];
+    self.shopName.textAlignment = NSTextAlignmentRight;
+    self.shopName.textColor = [UIColor darkGrayColor];
+    [baseInfoView addSubview:self.shopName];
     
-    UILabel *modelLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 70, 55, 15)];
-    modelLabel.font = [UIFont systemFontOfSize:12.0f];
-    modelLabel.text = @"所属商户";
-    [baseInfoView addSubview:modelLabel];
+    UILabel *addrLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 40, 55, 15)];
+    addrLabel.font = [UIFont systemFontOfSize:12.0f];
+    addrLabel.text = @"门店地址";
+    [baseInfoView addSubview:addrLabel];
     
-    UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 100, 55, 15)];
-    typeLabel.font = [UIFont systemFontOfSize:12.0f];
-    typeLabel.text = @"所属机构";
-    [baseInfoView addSubview:typeLabel];
+    UIImageView *addrImgView = [[UIImageView alloc]initWithFrame:CGRectMake(rScreen.size.width - 21, 40, 16, 16)];
+    addrImgView.image = [UIImage imageNamed:@"i_location.png"];
+    [baseInfoView addSubview:addrImgView];
+    
+    self.shopAddr = [[UITextField alloc] initWithFrame:CGRectMake(60, 40, rScreen.size.width - 88, 15)];
+    [self.shopAddr setPlaceholder:@"请填写门店地址"];
+    self.shopAddr.font = [UIFont systemFontOfSize:12.0f];
+    self.shopAddr.textAlignment = NSTextAlignmentRight;
+    self.shopAddr.textColor = [UIColor darkGrayColor];
+    [baseInfoView addSubview:self.shopAddr];
+    
+    UILabel *merchLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 70, 55, 15)];
+    merchLabel.font = [UIFont systemFontOfSize:12.0f];
+    merchLabel.text = @"所属商户";
+    [baseInfoView addSubview:merchLabel];
+    
+    UILabel *merchNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 70, rScreen.size.width - 65, 15)];
+    merchNameLabel.text = [NSString stringWithString:[self.merchInfo objectForKey:@"merchname"]];
+    merchNameLabel.font = [UIFont systemFontOfSize:12.0f];
+    merchNameLabel.textAlignment = NSTextAlignmentRight;
+    merchNameLabel.textColor = [UIColor darkGrayColor];
+    [baseInfoView addSubview:merchNameLabel];
+    
+    UILabel *instLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 100, 55, 15)];
+    instLabel.font = [UIFont systemFontOfSize:12.0f];
+    instLabel.text = @"所属机构";
+    [baseInfoView addSubview:instLabel];
+    
+    UILabel *instNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 100, rScreen.size.width - 65, 15)];
+    instNameLabel.text = [NSString stringWithString:[self.merchInfo objectForKey:@"instname"]];
+    instNameLabel.font = [UIFont systemFontOfSize:12.0f];
+    instNameLabel.textAlignment = NSTextAlignmentRight;
+    instNameLabel.textColor = [UIColor darkGrayColor];
+    [baseInfoView addSubview:instNameLabel];
     
     for (NSInteger i = 1; i <= 3; i++) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(5, 30*i, rScreen.size.width - 10, 1)];
@@ -82,15 +115,36 @@
     nameLabel.text = @"姓名";
     [contactView addSubview:nameLabel];
     
+    self.nameText = [[UITextField alloc] initWithFrame:CGRectMake(60, 10, rScreen.size.width - 65, 15)];
+    [self.nameText setPlaceholder:@"请填写门店联系人"];
+    self.nameText.font = [UIFont systemFontOfSize:12.0f];
+    self.nameText.textAlignment = NSTextAlignmentRight;
+    self.nameText.textColor = [UIColor darkGrayColor];
+    [contactView addSubview:self.nameText];
+    
     UILabel *telLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 40, 55, 15)];
     telLabel.font = [UIFont systemFontOfSize:12.0f];
     telLabel.text = @"电话";
     [contactView addSubview:telLabel];
     
+    self.telText = [[UITextField alloc] initWithFrame:CGRectMake(60, 40, rScreen.size.width - 65, 15)];
+    [self.telText setPlaceholder:@"请填写联系人电话"];
+    self.telText.font = [UIFont systemFontOfSize:12.0f];
+    self.telText.textAlignment = NSTextAlignmentRight;
+    self.telText.textColor = [UIColor darkGrayColor];
+    [contactView addSubview:self.telText];
+    
     UILabel *mailLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 70, 55, 15)];
     mailLabel.font = [UIFont systemFontOfSize:12.0f];
     mailLabel.text = @"邮箱";
     [contactView addSubview:mailLabel];
+    
+    self.mailText = [[UITextField alloc] initWithFrame:CGRectMake(60, 70, rScreen.size.width - 65, 15)];
+    [self.mailText setPlaceholder:@"请填写电子邮箱"];
+    self.mailText.font = [UIFont systemFontOfSize:12.0f];
+    self.mailText.textAlignment = NSTextAlignmentRight;
+    self.mailText.textColor = [UIColor darkGrayColor];
+    [contactView addSubview:self.mailText];
     
     for (NSInteger i = 1; i <= 2; i++) {
         UIView *split = [[UIView alloc] initWithFrame:CGRectMake(5, 30*i, rScreen.size.width - 10, 1)];
@@ -110,6 +164,7 @@
     
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 10, 100, 30);
+    NSInteger btnTag = 1;
     for (NSString *optionTitle in @[@"不存在", @"正常", @"其他情况"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
         btnRect.origin.x += 100;
@@ -121,6 +176,7 @@
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, 6, 0, 0);
         [resultView addSubview:btn];
+        btn.tag = btnTag++;
         [buttons addObject:btn];
     }
     
@@ -146,20 +202,12 @@
     photoLabel.font = [UIFont systemFontOfSize:13];
     [resultView addSubview:photoLabel];
     
-    self.instPic = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.instPic.frame = CGRectMake(40, 120, 50, 50);
-    [self.instPic setBackgroundImage:[UIImage imageNamed:@"i_add_posup.png"] forState:UIControlStateNormal];
-    self.instPic.tag = 0;
-    [self.instPic addTarget:self action:@selector(onSelectPic:) forControlEvents:UIControlEventTouchUpInside];
-    [resultView addSubview:self.instPic];
-    
-    self.serialPic = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.serialPic.frame = CGRectMake(100, 120, 50, 50);
-    [self.serialPic setBackgroundImage:[UIImage imageNamed:@"i_add_posup.png"] forState:UIControlStateNormal];
-    self.serialPic.tag = 1;
-    [self.serialPic addTarget:self action:@selector(onSelectPic:) forControlEvents:UIControlEventTouchUpInside];
-    [resultView addSubview:self.serialPic];
-    
+    self.shopPic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 120, 50, 50)];
+    self.shopPic.userInteractionEnabled = YES;
+    [self.shopPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    self.shopPic.image = [UIImage imageNamed:@"i_add_pic.png"];
+    [resultView addSubview:self.shopPic];
+
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     commitBtn.frame = CGRectMake(rScreen.size.width/2 - 50, resultView.frame.origin.y + resultView.frame.size.height + 10, 100, 30);
     [commitBtn.layer setCornerRadius:2.0f];
@@ -176,11 +224,26 @@
     [self.view addSubview:self.indicator];
     
     self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
-    
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if (!self.needupdate) {
+        return;
+    }
+    self.needupdate = false;
+    self.shopName.text = @"";
+    self.shopAddr.text = @"";
+    self.nameText.text = @"";
+    self.telText.text = @"";
+    self.mailText.text = @"";
+    self.radioButton.selected = YES;
+    self.desc.text = @"";
+    self.shopPic.image = [UIImage imageNamed:@"i_add_pic.png"];
 }
 
 - (IBAction)onSelectPic:(id)sender {
@@ -202,6 +265,33 @@
 
 
 - (IBAction)onCommit:(id)sender {
+    NSDictionary *data = @{
+                           @"shopname":self.shopName.text,
+                           @"people":self.nameText.text,
+                           @"address":self.shopAddr.text,
+                           @"tel":self.telText.text,
+                           @"email":self.mailText.text
+                           };
+    NSDictionary *params = @{
+                             @"staffcode": [iUser getInstance].staffcode,
+                             @"instcode": [self.merchInfo objectForKey:@"instcode"],
+                             @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
+                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                             @"addrcode": [Utils getAddrCode],
+                             @"content": self.desc.text,
+                             @"flag": @(self.radioButton.selectedButton.tag),
+                             @"data": [AFNRequestManager convertToJSONData:data]
+                             };
+    
+    [AFNRequestManager requestAFURL:@"inspNewShopInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            self.shopcode = [NSString stringWithString:[ret objectForKey:@"shopcode"]];
+            self.inspcntid = [[ret objectForKey:@"insp_cnt_id"] integerValue];
+            self.serialnbr = [ret objectForKey:@"serialnbr"];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
     
 }
 
@@ -234,20 +324,8 @@
     UIImage *image= [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
     [self dismissViewControllerAnimated:YES completion:^{
-        NSDictionary *params = @{
-                                 @"batchcode":@"",
-                                 @"oldfile":@"",
-                                 @"logo":@"",
-                                 @"posi":@"",
-                                 @"inspcntid":@1
-                                 };
-        [AFNRequestManager requestAFURL:@"inspMerchPics" params:params imageData:UIImageJPEGRepresentation(image, 1.0) succeed:^(NSDictionary *ret) {
-            if (0 == [[ret objectForKey:@"status"] integerValue]) {
-                
-            }
-        } failure:^(NSError *error) {
-            NSLog(@"%@", error);
-        }];
+        self.shopPic.image = image;
+        self.shopimage = image;
     }];
 }
 

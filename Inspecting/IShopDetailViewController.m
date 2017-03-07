@@ -13,8 +13,10 @@
 #import "INewTermViewController.h"
 #import <RadioButton/RadioButton.h>
 #import "iUser.h"
+#import "Utils.h"
 #import "AFNRequestManager.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <Toast/UIView+Toast.h>
 
 @interface IShopDetailViewController ()
 
@@ -118,41 +120,44 @@
     contactorInfoView.backgroundColor = [UIColor whiteColor];
     [self.scrollView addSubview:contactorInfoView];
     
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 30, 20)];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 30, 15)];
     nameLabel.font = [UIFont systemFontOfSize:12.0f];
     nameLabel.text = @"姓名";
     [contactorInfoView addSubview:nameLabel];
     
-    self.nameTextView = [[ITextView alloc] initWithFrame:CGRectMake(35, 10, rScreen.size.width - 40, 20)];
+    self.nameTextView = [[UITextView alloc] initWithFrame:CGRectMake(35, 5, rScreen.size.width - 40, 20)];
     self.nameTextView.font = [UIFont systemFontOfSize:12.0];
     self.nameTextView.textColor = [UIColor darkGrayColor];
     self.nameTextView.textAlignment = NSTextAlignmentRight;
     self.nameTextView.delegate = self;
+    [self.nameTextView setScrollEnabled:NO];
     [contactorInfoView addSubview:self.nameTextView];
     
-    UILabel *telLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 35, 30, 20)];
+    UILabel *telLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 35, 30, 15)];
     telLabel.font = [UIFont systemFontOfSize:12.0f];
     telLabel.text = @"电话";
     [contactorInfoView addSubview:telLabel];
     
-    self.telTextView = [[ITextView alloc] initWithFrame:CGRectMake(35, 10, rScreen.size.width - 40, 20)];
+    self.telTextView = [[UITextView alloc] initWithFrame:CGRectMake(35, 35, rScreen.size.width - 40, 20)];
     self.telTextView.font = [UIFont systemFontOfSize:12.0];
     self.telTextView.textColor = [UIColor darkGrayColor];
     self.telTextView.textAlignment = NSTextAlignmentRight;
     self.telTextView.delegate = self;
+    [self.telTextView setScrollEnabled:NO];
     [contactorInfoView addSubview:self.telTextView];
 
     
-    UILabel *mailLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 65, 30, 20)];
+    UILabel *mailLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 65, 30, 15)];
     mailLabel.font = [UIFont systemFontOfSize:12.0f];
     mailLabel.text = @"邮箱";
     [contactorInfoView addSubview:mailLabel];
     
-    self.mailTextView = [[ITextView alloc] initWithFrame:CGRectMake(35, 10, rScreen.size.width - 40, 20)];
+    self.mailTextView = [[UITextView alloc] initWithFrame:CGRectMake(35, 65, rScreen.size.width - 40, 20)];
     self.mailTextView.font = [UIFont systemFontOfSize:12.0];
     self.mailTextView.textColor = [UIColor darkGrayColor];
     self.mailTextView.textAlignment = NSTextAlignmentRight;
     self.mailTextView.delegate = self;
+    [self.mailTextView setScrollEnabled:NO];
     [contactorInfoView addSubview:self.mailTextView];
 
     
@@ -194,6 +199,7 @@
     
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 10, 100, 30);
+    NSInteger btnTag = 1;
     for (NSString *optionTitle in @[@"不存在", @"正常", @"其他情况"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
         btnRect.origin.x += 100;
@@ -204,6 +210,8 @@
         [btn setImage:[UIImage imageNamed:@"checked.png"] forState:UIControlStateSelected];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, 6, 0, 0);
+        btn.tag = btnTag;
+        btnTag++;
         [resultView addSubview:btn];
         [buttons addObject:btn];
     }
@@ -239,21 +247,21 @@
     
     self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 120, 50, 50)];
     self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp.png"];
-    self.facadePic.tag = 0;
+    self.facadePic.tag = 1;
     self.facadePic.userInteractionEnabled = YES;
     [self.facadePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
     [resultView addSubview:self.facadePic];
     
     self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 120, 50, 50)];
     self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
-    self.signPic.tag = 0;
+    self.signPic.tag = 2;
     self.signPic.userInteractionEnabled = YES;
     [self.signPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
     [resultView addSubview:self.signPic];
     
     self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 120, 50, 50)];
     self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
-    self.sitePic.tag = 0;
+    self.sitePic.tag = 3;
     self.sitePic.userInteractionEnabled = YES;
     [self.sitePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
     [resultView addSubview:self.sitePic];
@@ -275,6 +283,12 @@
     
     self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
     
+    self.userImgDict = [[NSMutableDictionary alloc] initWithCapacity:4];
+    self.inspresultArray = [[NSMutableArray alloc] initWithCapacity:4];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void)resizeView:(NSInteger) count {
@@ -296,6 +310,20 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    if (!self.needupdate) {
+        return;
+    }
+    self.needupdate = false;
+    [self.userImgDict removeAllObjects];
+    [self.inspresultArray removeAllObjects];
+    self.licencePic.image = [UIImage imageNamed:@"i_add_yyzz.png"];
+    self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp"];
+    self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
+    self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
+    self.radioButton.selected = YES;
+    self.desc.text = @"";
+    
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
                              @"instcode": [self.shopInfo objectForKey:@"instcode"],
@@ -319,6 +347,27 @@
             [self resizeView:termArray.count];
             [self.tableView reloadData];
             
+            NSArray *inspresults = [[NSArray alloc] initWithArray:[self.shopDetail objectForKey:@"inspresult"]];
+            [self.inspresultArray addObjectsFromArray:inspresults];
+            for (NSInteger i = 0; i < inspresults.count; i++) {
+                NSDictionary *dict = [inspresults objectAtIndex:i];
+                if (i == 0) {
+                    [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_yyzz.png"]];
+                    [self.radioButton setSelectedWithTag:[[dict objectForKey:@"flag"] integerValue]];
+                    self.desc.text = [NSString stringWithString:[dict objectForKey:@"content"]];
+                }
+                else if (i == 1) {
+                    [self.facadePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_mmzp.png"]];
+                }
+                else if (i == 2) {
+                    [self.signPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_zp.png"]];
+                }
+                
+                else if (i == 3) {
+                    [self.sitePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_jycs.png"]];
+                }
+            }
+            
             
         }
     } failure:^(NSError *error) {
@@ -327,7 +376,8 @@
     
 }
 
-- (IBAction)onSelectPic:(id)sender {
+- (IBAction)onSelectPic:(UIGestureRecognizer *)sender {
+    self.curSelPic = (UIImageView *)(sender.view);
     @try {
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
         imagePicker.delegate = self;
@@ -347,6 +397,9 @@
     if (nil == self.addTermViewController) {
         self.addTermViewController = [[INewTermViewController alloc] init];
     }
+    self.addTermViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    self.addTermViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
+    [self.addTermViewController setNeedupdate:YES];
     [self.navigationController pushViewController:self.addTermViewController animated:YES];
 }
 
@@ -355,6 +408,7 @@
         self.logViewController = [[ILogViewController alloc] init];
     }
     self.logViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    self.logViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
     [self.navigationController pushViewController:self.logViewController animated:YES];
 }
 
@@ -362,17 +416,44 @@
     if ([sender.currentTitle isEqualToString:@"编辑"]) {
         self.bEdit = true;
         [sender setTitle:@"保存" forState:UIControlStateNormal];
-        [self.addr becomeFirstResponder];
+        [self.shopName becomeFirstResponder];
     }
     else if ([sender.currentTitle isEqualToString:@"保存"]) {
         self.bEdit = false;
         [sender setTitle:@"编辑" forState:UIControlStateNormal];
-        [self.addr resignFirstResponder];
+        [self.view endEditing:YES];
     }
 }
 
 - (IBAction)onCommit:(id)sender {
+    NSDictionary *data = @{
+                           @"shopname": self.shopName.text,
+                           @"people": self.nameTextView.text,
+                           @"address": self.addr.text,
+                           @"tel": self.telTextView.text,
+                           @"email": self.mailTextView.text
+                           };
+    NSDictionary *params = @{
+                             @"staffcode":[iUser getInstance].staffcode,
+                             @"instcode": [self.merchInfo objectForKey:@"instcode"],
+                             @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
+                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                             @"addrcode": [Utils getAddrCode],
+                             @"serialnbr": [self.shopInfo objectForKey:@"serialnbr"],
+                             @"shopcode": [self.shopInfo objectForKey:@"shopcode"],
+                             @"flag":@(self.radioButton.selectedButton.tag),
+                             @"content": self.desc.text,
+                             @"data": [AFNRequestManager convertToJSONData:data]
+                             };
     
+    [AFNRequestManager requestAFURL:@"inspShopInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            [self.view makeToast:[ret objectForKey:@"desc"] duration:2 position:CSToastPositionCenter];
+            self.inspcntid = [[ret objectForKey:@"insp_cnt_id"] integerValue];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
 }
 
 
@@ -444,6 +525,9 @@
         self.termDetailViewController = [[ITermDetailViewController alloc] init];
     }
     self.termDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    self.termDetailViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
+    self.termDetailViewController.termInfo = [[NSDictionary alloc] initWithDictionary:[[self.shopDetail objectForKey:@"termlst"] objectAtIndex:indexPath.row]];
+    [self.termDetailViewController setNeedupdate:YES];
     [self.navigationController pushViewController:self.termDetailViewController animated:YES];
 }
 
@@ -453,20 +537,8 @@
     UIImage *image= [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
     [self dismissViewControllerAnimated:YES completion:^{
-        NSDictionary *params = @{
-                                 @"batchcode":@"",
-                                 @"oldfile":@"",
-                                 @"logo":@"",
-                                 @"posi":@"",
-                                 @"inspcntid":@1
-                                 };
-        [AFNRequestManager requestAFURL:@"inspMerchPics" params:params imageData:UIImageJPEGRepresentation(image, 1.0) succeed:^(NSDictionary *ret) {
-            if (0 == [[ret objectForKey:@"status"] integerValue]) {
-                
-            }
-        } failure:^(NSError *error) {
-            NSLog(@"%@", error);
-        }];
+        self.curSelPic.image = image;
+        [self.userImgDict setObject:image forKey:@(self.curSelPic.tag)];
     }];
 }
 @end

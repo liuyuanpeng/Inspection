@@ -10,4 +10,5 @@ target 'Inspecting' do
   pod 'RadioButton','~>1.0'
   pod 'SDWebImage','~>4.0.0'
   pod 'ActionSheetPicker-3.0','~>2.2.0'
+  pod 'IQKeyboardManager','~>4.0.8'
 end

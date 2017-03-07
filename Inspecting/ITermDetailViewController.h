@@ -25,16 +25,26 @@
 
 @property (nonatomic, weak) RadioButton *radioButton;
 @property (nonatomic, strong) ITextView *desc;
-@property (nonatomic, strong) UIButton *instPic;
-@property (nonatomic, strong) UIButton *serialPic;
+@property (nonatomic, strong) UIImageView *instPic;
+@property (nonatomic, strong) UIImageView *serialPic;
 
 @property (nonatomic, assign) BOOL bEdit;
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
 @property (nonatomic, strong) NSDictionary *merchInfo;
+@property (nonatomic, strong) NSDictionary *shopInfo;
 @property (nonatomic, strong) NSDictionary *termInfo;
 
+@property (nonatomic, strong) NSMutableDictionary *termDetail;
+
 @property (nonatomic, strong) ILogViewController *logViewController;
+
+@property (nonatomic, assign) NSInteger inspcntid;
+
+@property (nonatomic, strong) NSMutableArray *inspresultArray;
+@property (nonatomic, strong) NSMutableDictionary *userImgDict;
+@property (nonatomic, weak) UIImageView *curSelPic;
+@property (nonatomic, assign) BOOL needupdate;
 
 @end

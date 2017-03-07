@@ -169,7 +169,7 @@
 
 - (IBAction)onSure:(id)sender {
     if (![self.newpwdText2.text isEqualToString:self.newpwdText.text]) {
-        [self.changePwdView makeToast:@"两次新密码不一样!"];
+        [self.changePwdView makeToast:@"两次新密码不一样!" duration:2 position:[NSValue valueWithCGPoint:CGPointMake(self.tabBarController.tabBar.frame.size.width/2, self.tabBarController.tabBar.frame.origin.y - 20)]];
         return;
     }
     NSDictionary *params = @{

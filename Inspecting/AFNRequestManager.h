@@ -10,15 +10,15 @@
 #import <UIKit/UIKit.h>
 #import <AFNetworking/AFNetworking.h>
 
-//// server
-//#define BASE_URL @"http://120.24.159.160:9500/xunjian/appapi/"
-//// image server
-//#define IMG_URL @"http://120.24.159.160:9500/xunjian/appapi/"
-
 // server
-#define BASE_URL @"http://218.5.69.154:9500/xunjian/appapi/"
+#define BASE_URL @"http://120.24.159.160:9500/xunjian/appapi/"
 // image server
-#define IMG_URL @"http://218.5.69.154:9500"
+#define IMG_URL @"http://120.24.159.160:9500"
+
+//// server
+//#define BASE_URL @"http://218.5.69.154:9500/xunjian/appapi/"
+//// image server
+//#define IMG_URL @"http://218.5.69.154:9500"
 
 #pragma mark - networking request type
 enum HTTP_METHOD {
@@ -45,7 +45,7 @@ enum HTTP_METHOD {
  @param succeed block
  @param failure block
  */
-+ (void)requestAFURL:(NSString *)urlString httpMethod:(NSInteger)method params:(id)params succeed:(void(^)(id))succeed failure:(void(^)(NSError*))failure;
++ (void)requestAFURL:(NSString *)urlString httpMethod:(NSInteger)method params:(id)params succeed:(void(^)(NSDictionary *ret))succeed failure:(void(^)(NSError* error))failure;
 
 
 /**

@@ -11,7 +11,11 @@
 #import "ITextView.h"
 #import <RadioButton/RadioButton.h>
 #import "iUser.h"
+#import "Utils.h"
+#import "ITermType.h"
 #import "AFNRequestManager.h"
+#import <ActionSheetPicker_3_0/ActionSheetPicker.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface ITermDetailViewController ()
 
@@ -51,58 +55,58 @@
     [editBtn addTarget:self action:@selector(onEdit:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:editBtn];
     
-    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height + 35, rScreen.size.width, 170)];
+    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height + 35, rScreen.size.width, 165)];
     [baseInfoView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:baseInfoView];
     
-    UILabel *serialLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 55, 20)];
+    UILabel *serialLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 55, 15)];
     serialLabel.textColor = [UIColor darkGrayColor];
     serialLabel.font = [UIFont systemFontOfSize:12.0f];
     serialLabel.text = @"终端序列:";
     [baseInfoView addSubview:serialLabel];
 
     
-    self.termSerialnbr = [[UITextField alloc] initWithFrame:CGRectMake(60, 10, rScreen.size.width - 65, 20)];
+    self.termSerialnbr = [[UITextField alloc] initWithFrame:CGRectMake(60, 5, rScreen.size.width - 65, 15)];
     self.termSerialnbr.textColor = [UIColor darkGrayColor];
     self.termSerialnbr.font = [UIFont systemFontOfSize:12.0f];
-    self.termSerialnbr.text = @"fddfdff";
+    self.termSerialnbr.text = [NSString stringWithString:[self.termInfo objectForKey:@"serialnbr"]];
     self.termSerialnbr.delegate = self;
     [baseInfoView addSubview:self.termSerialnbr];
     
-    self.termCode = [[UILabel alloc] initWithFrame:CGRectMake(5, 30, rScreen.size.width - 10, 20)];
+    self.termCode = [[UILabel alloc] initWithFrame:CGRectMake(5, 25, rScreen.size.width - 10, 15)];
     self.termCode.textColor = [UIColor darkGrayColor];
     self.termCode.font = [UIFont systemFontOfSize:12.0f];
-    self.termCode.text = @"终端编号:";
+    self.termCode.text = [NSString stringWithFormat:@"终端编号:%@", [self.termInfo objectForKey:@"termcode"]];
     [baseInfoView addSubview:self.termCode];
     
     
-    UILabel *brandLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 50, 55, 20)];
+    UILabel *brandLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 45, 55, 15)];
     brandLabel.textColor = [UIColor darkGrayColor];
     brandLabel.font = [UIFont systemFontOfSize:12.0f];
     brandLabel.text = @"终端品牌:";
     [baseInfoView addSubview:brandLabel];
 
-    self.termBrand = [[UITextField alloc] initWithFrame:CGRectMake(60, 50, rScreen.size.width - 90, 20)];
+    self.termBrand = [[UITextField alloc] initWithFrame:CGRectMake(60, 45, rScreen.size.width - 90, 15)];
     self.termBrand.textColor = [UIColor darkGrayColor];
     self.termBrand.font = [UIFont systemFontOfSize:12.0f];
     self.termBrand.text = @"rest";
     self.termBrand.delegate = self;
     [baseInfoView addSubview:self.termBrand];
     
-    UILabel *modelLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 70, 55, 20)];
+    UILabel *modelLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 65, 55, 15)];
     modelLabel.textColor = [UIColor darkGrayColor];
     modelLabel.font = [UIFont systemFontOfSize:12.0f];
     modelLabel.text = @"终端型号:";
     [baseInfoView addSubview:modelLabel];
     
-    self.termModel = [[UITextField alloc] initWithFrame:CGRectMake(60, 70, rScreen.size.width - 90, 20)];
+    self.termModel = [[UITextField alloc] initWithFrame:CGRectMake(60, 65, rScreen.size.width - 90, 15)];
     self.termModel.textColor = [UIColor darkGrayColor];
     self.termModel.font = [UIFont systemFontOfSize:12.0f];
     self.termModel.text  = @"testt";
     self.termModel.delegate = self;
     [baseInfoView addSubview:self.termModel];
     
-    UILabel *typeModel = [[UILabel alloc] initWithFrame:CGRectMake(5, 90, 55, 20)];
+    UILabel *typeModel = [[UILabel alloc] initWithFrame:CGRectMake(5, 85, 55, 15)];
     typeModel.textColor = [UIColor darkGrayColor];
     typeModel.font = [UIFont systemFontOfSize:12.0f];
     typeModel.text = @"终端类型:";
@@ -110,28 +114,30 @@
     
     self.termType = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.termType setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    self.termType.frame = CGRectMake(60, 90, rScreen.size.width - 90, 20);
+    self.termType.frame = CGRectMake(60, 85, rScreen.size.width - 90, 15);
     self.termType.titleLabel.font = [UIFont systemFontOfSize:12.0f];
     self.termType.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.termType setTitle:@"拨号" forState:UIControlStateNormal];
+    [self.termType setTitle:@"拨号POS" forState:UIControlStateNormal];
+    [self.termType addTarget:self action:@selector(onSelectType:) forControlEvents:UIControlEventTouchUpInside];
+    self.termType.tag = 0;
     [baseInfoView addSubview:self.termType];
     
-    self.shopName = [[UILabel alloc] initWithFrame:CGRectMake(5, 110, rScreen.size.width - 10, 20)];
+    self.shopName = [[UILabel alloc] initWithFrame:CGRectMake(5, 105, rScreen.size.width - 10, 15)];
     self.shopName.textColor = [UIColor darkGrayColor];
     self.shopName.font = [UIFont systemFontOfSize:12.0f];
-    self.shopName.text = @"所属门店:";
+    self.shopName.text = [NSString stringWithFormat:@"所属门店:%@", self.shopInfo ? [self.shopInfo objectForKey:@"shopname"] : [self.termInfo objectForKey:@"shopname"]];
     [baseInfoView addSubview:self.shopName];
 
-    self.merchName = [[UILabel alloc] initWithFrame:CGRectMake(5, 130, rScreen.size.width - 10, 20)];
+    self.merchName = [[UILabel alloc] initWithFrame:CGRectMake(5, 125, rScreen.size.width - 10, 15)];
     self.merchName.textColor = [UIColor darkGrayColor];
     self.merchName.font = [UIFont systemFontOfSize:12.0f];
-    self.merchName.text = @"所属商户:";
+    self.merchName.text = [NSString stringWithFormat:@"所属商户:%@", [self.merchInfo objectForKey:@"merchname"]];
     [baseInfoView addSubview:self.merchName];
 
-    self.instName = [[UILabel alloc] initWithFrame:CGRectMake(5, 150, rScreen.size.width - 10, 20)];
+    self.instName = [[UILabel alloc] initWithFrame:CGRectMake(5, 145, rScreen.size.width - 10, 15)];
     self.instName.textColor = [UIColor darkGrayColor];
     self.instName.font = [UIFont systemFontOfSize:12.0f];
-    self.instName.text = @"所属机构:";
+    self.instName.text = [NSString stringWithFormat:@"所属机构:%@", [self.merchInfo objectForKey:@"instname"]];
     [baseInfoView addSubview:self.instName];
 
     self.bEdit = false;
@@ -147,6 +153,7 @@
     
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 10, 100, 30);
+    NSInteger btnTag = 1;
     for (NSString *optionTitle in @[@"不存在", @"正常", @"其他情况"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
         btnRect.origin.x += 100;
@@ -158,6 +165,8 @@
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, 6, 0, 0);
         [resultView addSubview:btn];
+        btn.tag = btnTag;
+        btnTag++;
         [buttons addObject:btn];
     }
     
@@ -183,18 +192,16 @@
     photoLabel.font = [UIFont systemFontOfSize:13];
     [resultView addSubview:photoLabel];
     
-    self.instPic = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.instPic.frame = CGRectMake(40, 120, 50, 50);
-    [self.instPic setBackgroundImage:[UIImage imageNamed:@"i_add_posup.png"] forState:UIControlStateNormal];
+    self.instPic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 120, 50, 50)];
     self.instPic.tag = 0;
-    [self.instPic addTarget:self action:@selector(onSelectPic:) forControlEvents:UIControlEventTouchUpInside];
+    self.instPic.userInteractionEnabled = YES;
+    [self.instPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
     [resultView addSubview:self.instPic];
-
-    self.serialPic = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.serialPic.frame = CGRectMake(100, 120, 50, 50);
-    [self.serialPic setBackgroundImage:[UIImage imageNamed:@"i_add_posup.png"] forState:UIControlStateNormal];
+    
+    self.serialPic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 120, 50, 50)];
     self.serialPic.tag = 1;
-    [self.serialPic addTarget:self action:@selector(onSelectPic:) forControlEvents:UIControlEventTouchUpInside];
+    self.serialPic.userInteractionEnabled = YES;
+    [self.serialPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
     [resultView addSubview:self.serialPic];
 
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -211,28 +218,122 @@
     [self.indicator setCenter:CGPointMake(rScreen.size.width/2, rScreen.size.height/2)];
     self.indicator.color = [UIColor blueColor];
     [self.view addSubview:self.indicator];
+    
+    self.inspresultArray = [[NSMutableArray alloc] initWithCapacity:2];
+    self.userImgDict = [[NSMutableDictionary alloc] initWithCapacity:2];
+}
+
+- (IBAction)onSelectType:(UIButton *)sender {
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:7];
+    for (NSDictionary *dict in [ITermType getInstance].types) {
+        [array addObject:[dict objectForKey:@"remark"]];
+    }
+    
+    [ActionSheetStringPicker showPickerWithTitle:@"请选择终端类型" rows:array initialSelection:sender.tag doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
+        sender.tag = selectedIndex;
+        [sender setTitle:selectedValue forState:UIControlStateNormal];
+    } cancelBlock:^(ActionSheetStringPicker *picker) {
+        NSLog(@"cancel");
+    } origin:sender];
 }
 
 - (IBAction)onCommit:(id)sender {
-    NSDictionary *params = @{
-                             @"staffcode":[iUser getInstance].staffcode
+    NSDictionary *data = @{
+                             @"termname":self.termSerialnbr.text,
+                             @"termband":self.termBrand.text,
+                             @"termtype":[[[ITermType getInstance].types objectAtIndex:self.termType.tag] objectForKey:@"term_type"],
+                             @"termmode":self.termModel.text
                              };
+    NSDictionary *params = @{
+                             @"staffcode": [iUser getInstance].staffcode,
+                             @"instcode": [self.merchInfo objectForKey:@"instcode"],
+                             @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
+                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                             @"addrcode": [Utils getAddrCode],
+                             @"serialnbr": [self.termInfo objectForKey:@"serialnbr"],
+                             @"seq":@1,
+                             @"content": self.desc.text,
+                             @"shopcode": self.shopInfo ? [self.shopInfo objectForKey:@"shopcode"] : [self.termInfo objectForKey:@"shopcode"],
+                             @"termcode": [self.termInfo objectForKey:@"termcode"],
+                             @"flag": @(self.radioButton.selectedButton.tag),
+                             @"content": self.desc.text,
+                             @"data": [AFNRequestManager convertToJSONData:data]
+                             };
+    
+    [AFNRequestManager requestAFURL:@"inspTermInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    if (!self.needupdate) {
+        return;
+    }
+    self.needupdate = false;
+    [self.userImgDict removeAllObjects];
+    [self.inspresultArray removeAllObjects];
+    self.instPic.image = [UIImage imageNamed:@"i_add_posup.png"];
+    self.serialPic.image = [UIImage imageNamed:@"i_add_posdown.png"];
+    self.radioButton.selected = YES;
+    self.desc.text = @"";
+
     NSDictionary *params = @{
-                             @"staffcode": [iUser getInstance].staffcode
+                             @"staffcode": [iUser getInstance].staffcode,
+                             @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
+                             @"instcode": [self.merchInfo objectForKey:@"instcode"],
+                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                             @"termcode": [self.termInfo objectForKey:@"termcode"],
+                             @"shopcode": self.shopInfo ? [self.shopInfo objectForKey:@"shopcode"] :[self.termInfo objectForKey:@"shopcode"]
                              };
-    [AFNRequestManager requestAFURL:@"getMerchInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+    [AFNRequestManager requestAFURL:@"getTermInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            if (nil == self.termDetail) {
+                self.termDetail = [[NSMutableDictionary alloc] initWithCapacity:6];
+            }
+            [self.termDetail removeAllObjects];
+            [self.termDetail setDictionary:[ret objectForKey:@"datas"]];
+            for (NSInteger i = 0; i < [ITermType getInstance].types.count; i++) {
+                NSDictionary *dict = [[ITermType getInstance].types objectAtIndex:i];
+                if ([(NSString *)[dict objectForKey:@"term_type"] isEqualToString:[self.termDetail objectForKey:@"termtype"]]) {
+                    self.termType.tag = i;
+                    break;
+                }
+            }
+            [self.termType setTitle:[self.termDetail objectForKey:@"termtypedesc"] forState:UIControlStateNormal];
+            self.termSerialnbr.text = [NSString stringWithString:[self.termDetail objectForKey:@"termname"]];
+            self.termCode.text = [NSString stringWithFormat:@"终端编号:%@",[self.termDetail objectForKey:@"termcode"]];
+            self.termModel.text = [NSString stringWithString:[self.termDetail objectForKey:@"termmode"]];
+            self.termBrand.text = [NSString stringWithString:[self.termDetail objectForKey:@"termband"]];
+            
+            NSArray *inspresults = [[NSArray alloc] initWithArray:[self.termDetail objectForKey:@"inspresult"]];
+            [self.inspresultArray addObjectsFromArray:inspresults];
+            for (NSInteger i = 0; i < inspresults.count; i++) {
+                NSDictionary *dict = [inspresults objectAtIndex:i];
+                if (i == 0) {
+                    [self.instPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_posup.png"]];
+                    [self.radioButton setSelectedWithTag:[[dict objectForKey:@"flag"] integerValue]];
+                    self.desc.text = [NSString stringWithString:[dict objectForKey:@"content"]];
+                }
+                else if (i == 1) {
+                    [self.serialPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_posdown.png"]];
+                }
+            }
+
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
     }];
 }
 
-- (IBAction)onSelectPic:(id)sender {
+- (IBAction)onSelectPic:(UIGestureRecognizer *)sender {
+    self.curSelPic = (UIImageView *)(sender.view);
     @try {
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
         imagePicker.delegate = self;
@@ -253,6 +354,10 @@
         self.logViewController = [[ILogViewController alloc] init];
     }
     self.logViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    self.logViewController.termInfo = [[NSDictionary alloc] initWithDictionary:self.termInfo];
+    if (self.shopInfo) {
+        self.logViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
+    }
     [self.navigationController pushViewController:self.logViewController animated:YES];
 }
 
@@ -294,20 +399,8 @@
     UIImage *image= [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
     [self dismissViewControllerAnimated:YES completion:^{
-        NSDictionary *params = @{
-                                 @"batchcode":@"",
-                                 @"oldfile":@"",
-                                 @"logo":@"",
-                                 @"posi":@"",
-                                 @"inspcntid":@1
-                                 };
-        [AFNRequestManager requestAFURL:@"inspMerchPics" params:params imageData:UIImageJPEGRepresentation(image, 1.0) succeed:^(NSDictionary *ret) {
-            if (0 == [[ret objectForKey:@"status"] integerValue]) {
-                
-            }
-        } failure:^(NSError *error) {
-            NSLog(@"%@", error);
-        }];
+        self.curSelPic.image = image;
+        [self.userImgDict setObject:image forKey:@(self.curSelPic.tag)];
     }];
 }
 

@@ -22,11 +22,17 @@
 
 @property (nonatomic, weak) RadioButton *radioButton;
 @property (nonatomic, strong) ITextView *desc;
-@property (nonatomic, strong) UIButton *instPic;
-@property (nonatomic, strong) UIButton *serialPic;
+@property (nonatomic, strong) UIImageView *shopPic;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
+@property (nonatomic, strong) NSDictionary *merchInfo;
 
+@property (nonatomic, strong) NSString *shopcode;
+@property (nonatomic, assign) NSInteger inspcntid;
+@property (nonatomic, strong) NSString *serialnbr;
+
+@property (nonatomic, strong) UIImage *shopimage;
+@property (nonatomic, assign) BOOL needupdate;
 @end

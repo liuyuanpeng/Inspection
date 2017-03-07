@@ -78,6 +78,8 @@
     if (nil == self.addShopViewController) {
         self.addShopViewController = [[INewShopViewController alloc] init];
     }
+    self.addShopViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    [self.addShopViewController setNeedupdate:YES];
     [self.navigationController pushViewController:self.addShopViewController animated:YES];
 }
 
@@ -110,6 +112,7 @@
     }
     self.shopDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
     self.shopDetailViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:[self.shopArray objectAtIndex:indexPath.row]];
+    [self.shopDetailViewController setNeedupdate:YES];
     [self.navigationController pushViewController:self.shopDetailViewController animated:YES];
 }
 

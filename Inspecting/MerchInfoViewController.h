@@ -13,11 +13,12 @@
 @class ILogViewController;
 @class IShopViewController;
 @class ITermViewController;
+@class PickerView;
 
 @interface MerchInfoViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UIImageView *merchimg;
-@property (nonatomic, strong) UILabel *merchname;
+@property (nonatomic, strong) UITextField *merchname;
 @property (nonatomic, strong) UILabel *merchtype;
 @property (nonatomic, strong) UILabel *merchcode;
 @property (nonatomic, strong) UILabel *merchinst;
@@ -31,18 +32,27 @@
 @property (nonatomic, strong) UIImageView *facadePic;
 @property (nonatomic, strong) UIImageView *signPic;
 @property (nonatomic, strong) UIImageView *sitePic;
-
+ 
 @property (nonatomic, assign) BOOL bEdit;
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
 @property (nonatomic, strong) NSDictionary *taskInfo;
-@property (nonatomic, strong) NSDictionary *merchInfo;
+@property (nonatomic, strong) NSMutableDictionary *merchInfo;
 
 @property (nonatomic, strong) ILogViewController *logViewController;
 @property (nonatomic, strong) IShopViewController *shopViewController;
 @property (nonatomic, strong) ITermViewController *termViewController;
+@property (nonatomic, strong) PickerView *pickerView;
 
-@property (nonatomic, assign) NSInteger curSelPic;
+@property (nonatomic, weak) UIImageView *curSelPic;
+@property (nonatomic, assign) NSInteger insp_cnt_id;
 
+@property (nonatomic, strong) NSMutableArray *imgArray;
+@property (nonatomic, strong) UIButton *editBtn;
+
+@property (nonatomic, strong) NSMutableArray *inspresultArray;
+@property (nonatomic, strong) NSMutableDictionary *userImgDict;
+
+@property (nonatomic, assign) BOOL bNeedUpdate;
 @end

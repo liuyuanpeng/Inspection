@@ -25,7 +25,7 @@
     CGRect rNav = self.navigationController.navigationBar.frame;
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,  rScreen.size.width, 30)];
-    titleLabel.text = @"终端列表";
+    titleLabel.text = @"变更日志";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
@@ -41,49 +41,166 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSDictionary *params = @{
-                             @"staffcode": [iUser getInstance].staffcode,
-                             @"instcode": [self.merchInfo objectForKey:@"instcode"],
-                             @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
-                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"]
-                             };
-    [AFNRequestManager requestAFURL:@"inspMerchLog.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
-        if (0 == [[ret objectForKey:@"status"] integerValue]) {
-            NSDictionary *datas = [ret valueForKey:@"datas"];
-            self.logTime = [NSString stringWithFormat:@"巡检时间:%@", [datas objectForKey:@"insptime"]];
-            if (self.logInfo == nil) {
-                self.logInfo = [[NSMutableArray alloc] init];
+    if (self.termInfo != nil) {
+        NSDictionary *params = @{
+                                 @"staffcode": [iUser getInstance].staffcode,
+                                 @"instcode": [self.merchInfo objectForKey:@"instcode"],
+                                 @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
+                                 @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                                 @"shopcode": self.shopInfo ? [self.shopInfo objectForKey:@"shopcode"] : [self.termInfo objectForKey:@"shopcode"],
+                                 @"termcode": [self.termInfo objectForKey:@"termcode"]
+                                 };
+        [AFNRequestManager requestAFURL:@"inspTermLog.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                NSDictionary *datas = [ret valueForKey:@"datas"];
+                self.logTime = [NSString stringWithFormat:@"巡检时间:%@", [datas objectForKey:@"insptime"]];
+                if (self.logInfo == nil) {
+                    self.logInfo = [[NSMutableArray alloc] init];
+                }
+                [self.logInfo removeAllObjects];
+                if (![[datas objectForKey:@"stermname"] isEqualToString:[datas objectForKey:@"ttermname"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"终端序列",
+                                              @"old": [datas objectForKey:@"stermname"],
+                                              @"cur": [datas objectForKey:@"ttermname"]
+                                              }];
+                }
+                if (![[datas objectForKey:@"stermmode"] isEqualToString:[datas objectForKey:@"ttermmode"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"终端型号",
+                                              @"old": [datas objectForKey:@"stermmode"],
+                                              @"cur": [datas objectForKey:@"ttermmode"]
+                                              }];
+                }
+                if (![[datas objectForKey:@"stermband"] isEqualToString:[datas objectForKey:@"ttermband"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"终端品牌",
+                                              @"old": [datas objectForKey:@"stermband"],
+                                              @"cur": [datas objectForKey:@"ttermband"]
+                                              }];
+                }
+                if (![[datas objectForKey:@"stermtypedesc"] isEqualToString:[datas objectForKey:@"ttermtypedesc"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"终端类型",
+                                              @"old": [datas objectForKey:@"stermtypedesc"],
+                                              @"cur": [datas objectForKey:@"ttermtypedesc"]
+                                              }];
+                }
+                [self.tableView reloadData];
             }
-            [self.logInfo removeAllObjects];
-            if (![[datas objectForKey:@"smerchname"] isEqualToString:[datas objectForKey:@"tmerchname"]]) {
-                [self.logInfo addObject:@{
-                                                   @"title": @"商户名称",
-                                                   @"old": [datas objectForKey:@"smerchname"],
-                                                   @"cur": [datas objectForKey:@"tmerchname"]
-                                                   }];
+            else {
+                [self.view makeToast:[ret objectForKey:@"desc"]];
             }
-            if (![[datas objectForKey:@"saddress"] isEqualToString:[datas objectForKey:@"taddress"]]) {
-                [self.logInfo addObject:@{
-                                                   @"title": @"商户地址",
-                                                   @"old": [datas objectForKey:@"saddress"],
-                                                   @"cur": [datas objectForKey:@"taddress"]
-                                                   }];
+        } failure:^(NSError *error) {
+            NSLog(@"%@", error);
+        }];
+        
+    }
+    else if (self.shopInfo != nil) {
+        NSDictionary *params = @{
+                                 @"staffcode": [iUser getInstance].staffcode,
+                                 @"instcode": [self.merchInfo objectForKey:@"instcode"],
+                                 @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
+                                 @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                                 @"shopcode": [self.shopInfo objectForKey:@"shopcode"]
+                                 };
+        [AFNRequestManager requestAFURL:@"inspShopLog.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                NSDictionary *datas = [ret valueForKey:@"datas"];
+                self.logTime = [NSString stringWithFormat:@"巡检时间:%@", [datas objectForKey:@"insptime"]];
+                if (self.logInfo == nil) {
+                    self.logInfo = [[NSMutableArray alloc] init];
+                }
+                [self.logInfo removeAllObjects];
+                if (![[datas objectForKey:@"sshopename"] isEqualToString:[datas objectForKey:@"tshopname"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"门店名称",
+                                              @"old": [datas objectForKey:@"sshopname"],
+                                              @"cur": [datas objectForKey:@"tshopname"]
+                                              }];
+                }
+                if (![[datas objectForKey:@"saddress"] isEqualToString:[datas objectForKey:@"taddress"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"门店地址",
+                                              @"old": [datas objectForKey:@"saddress"],
+                                              @"cur": [datas objectForKey:@"taddress"]
+                                              }];
+                }
+                if (![[datas objectForKey:@"speople"] isEqualToString:[datas objectForKey:@"tpeople"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"姓名",
+                                              @"old": [datas objectForKey:@"speople"],
+                                              @"cur": [datas objectForKey:@"tpeople"]
+                                              }];
+                }
+                if (![[datas objectForKey:@"stel"] isEqualToString:[datas objectForKey:@"ttel"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"电话",
+                                              @"old": [datas objectForKey:@"stel"],
+                                              @"cur": [datas objectForKey:@"ttel"]
+                                              }];
+                }
+                if (![[datas objectForKey:@"semail"] isEqualToString:[datas objectForKey:@"temail"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"邮箱",
+                                              @"old": [datas objectForKey:@"semail"],
+                                              @"cur": [datas objectForKey:@"temail"]
+                                              }];
+                }
+                [self.tableView reloadData];
             }
-            if (![[datas objectForKey:@"smcc"] isEqualToString:[datas objectForKey:@"tmcc"]]) {
-                [self.logInfo addObject:@{
-                                                   @"title": @"商户类型",
-                                                   @"old": [datas objectForKey:@"smcc"],
-                                                   @"cur": [datas objectForKey:@"tmcc"]
-                                                   }];
+            else {
+                [self.view makeToast:[ret objectForKey:@"desc"]];
             }
-            [self.tableView reloadData];
-        }
-        else {
-            [self.view makeToast:[ret objectForKey:@"desc"]];
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@", error);
-    }];
+        } failure:^(NSError *error) {
+            NSLog(@"%@", error);
+        }];
+    }
+    else {
+        NSDictionary *params = @{
+                                 @"staffcode": [iUser getInstance].staffcode,
+                                 @"instcode": [self.merchInfo objectForKey:@"instcode"],
+                                 @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
+                                 @"batchcode": [self.merchInfo objectForKey:@"batchcode"]
+                                 };
+        [AFNRequestManager requestAFURL:@"inspMerchLog.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                NSDictionary *datas = [ret valueForKey:@"datas"];
+                self.logTime = [NSString stringWithFormat:@"巡检时间:%@", [datas objectForKey:@"insptime"]];
+                if (self.logInfo == nil) {
+                    self.logInfo = [[NSMutableArray alloc] init];
+                }
+                [self.logInfo removeAllObjects];
+                if (![[datas objectForKey:@"smerchname"] isEqualToString:[datas objectForKey:@"tmerchname"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"商户名称",
+                                              @"old": [datas objectForKey:@"smerchname"],
+                                              @"cur": [datas objectForKey:@"tmerchname"]
+                                              }];
+                }
+                if (![[datas objectForKey:@"saddress"] isEqualToString:[datas objectForKey:@"taddress"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"商户地址",
+                                              @"old": [datas objectForKey:@"saddress"],
+                                              @"cur": [datas objectForKey:@"taddress"]
+                                              }];
+                }
+                if (![[datas objectForKey:@"smcc"] isEqualToString:[datas objectForKey:@"tmcc"]]) {
+                    [self.logInfo addObject:@{
+                                              @"title": @"商户类型",
+                                              @"old": [datas objectForKey:@"smcc"],
+                                              @"cur": [datas objectForKey:@"tmcc"]
+                                              }];
+                }
+                [self.tableView reloadData];
+            }
+            else {
+                [self.view makeToast:[ret objectForKey:@"desc"]];
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@", error);
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

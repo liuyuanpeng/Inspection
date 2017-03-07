@@ -13,7 +13,7 @@
 
 + (NSString *)getAddrCode {
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-    return [NSString stringWithFormat:@"%f,%f",[user doubleForKey:@"latitude"], [user doubleForKey:@"longtitude"]];
+    return [NSString stringWithFormat:@"%.5f,%.5f",[user doubleForKey:@"latitude"], [user doubleForKey:@"longtitude"]];
 }
 
 + (double) getDistance:(NSString *)addrcode {

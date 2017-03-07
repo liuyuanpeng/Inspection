@@ -95,6 +95,8 @@
         self.termDetailViewController = [[ITermDetailViewController alloc] init];
     }
     self.termDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    self.termDetailViewController.termInfo = [[NSDictionary alloc] initWithDictionary:[self.termArray objectAtIndex:indexPath.row]];
+    [self.termDetailViewController setNeedupdate:YES];
     [self.navigationController pushViewController:self.termDetailViewController animated:YES];
 }
 

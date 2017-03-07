@@ -95,7 +95,10 @@
     [cancelBtn.layer setMasksToBounds:YES];
     [cancelBtn addTarget:self action:@selector(onCancelAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.searchView addSubview:cancelBtn];
-    
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -194,6 +197,7 @@
     }
     NSDictionary *merchInfo = [self.myTaskArray objectAtIndex:indexPath.row];
     self.merchInfoViewController.taskInfo = [[NSDictionary alloc] initWithDictionary:merchInfo];
+    [self.merchInfoViewController setBNeedUpdate:YES];
     [self.navigationController pushViewController:self.merchInfoViewController animated:NO];
 }
 

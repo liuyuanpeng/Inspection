@@ -20,14 +20,13 @@
     });
     return setSharedInstance;
 }
-
-+ (void)requestAFURL:(NSString *)urlString httpMethod:(NSInteger)method params:(id)params succeed:(void(^)(id))succeed failure:(void(^)(NSError*))failure {
++ (void)requestAFURL:(NSString *)urlString httpMethod:(NSInteger)method params:(id)params succeed:(void (^)(NSDictionary *ret))succeed failure:(void (^)(NSError * error))failure {
     // set api addresss
     urlString = [NSString stringWithFormat:@"%@%@", BASE_URL, [urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
     
     // create request manager
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
- 
+    
     // indicate return type
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
@@ -58,7 +57,7 @@
                 NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
                 succeed([AFNRequestManager dictionaryWithJsonString:responseStr]);
                 NSLog(@"request success");
-
+                
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                 failure(error);
                 NSLog(@"request error");
@@ -68,7 +67,7 @@
         default:
             break;
     }
-    
+
 }
 
 + (void)requestAFURL:(NSString *)urlString params:(id)params imageData:(NSData *)imageData succeed:(void (^)(id))succeed failure:(void (^)(NSError *))failure {
