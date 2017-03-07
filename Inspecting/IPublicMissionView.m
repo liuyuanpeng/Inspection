@@ -73,7 +73,7 @@
     self.missionLabel.text = [NSString stringWithFormat:@"任务名称: %@", mission];
     self.storeLabel.text = [NSString stringWithFormat:@"门店名称: %@", store];
     self.businessLabel.text = [NSString stringWithFormat:@"隶属商户: %@", business];
-    self.organLabel.text = [NSString stringWithFormat:@"隶属结构: %@", organ];
+    self.organLabel.text = [NSString stringWithFormat:@"隶属机构: %@", organ];
     self.descLabel.text = [NSString stringWithFormat:@"任务描述: %@", desc];
 }
 
@@ -84,9 +84,11 @@
 - (void)setAccepted:(BOOL)bAccepted {
     if (bAccepted) {
         [self.statusButton setBackgroundImage:[UIImage imageNamed:@"i_botton_picked.png"] forState:UIControlStateNormal];
+        self.statusButton.tag = 1;
     }
     else {
         [self.statusButton setBackgroundImage:[UIImage imageNamed:@"i_botton_pick.png"] forState:UIControlStateNormal];
+        self.statusButton.tag = 2;
     }
 }
 

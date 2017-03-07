@@ -51,7 +51,7 @@
 - (void)setName:(NSString *)name code:(NSString *)code finished:(NSInteger)finished total:(NSInteger)total {
     self.missionNameLabel.text = [NSString stringWithFormat:@"任务名称: %@", name];
     self.missionNOLabel.text = [NSString stringWithFormat:@"任务批次: %@", code];
-    self.completePercentLabel.text = [NSString stringWithFormat:@"%ld/%ld", finished, total];
+    self.completePercentLabel.text = [NSString stringWithFormat:@"%ld/%ld", (long)finished, (long)total];
     if (finished == total) {
         self.completePercentLabel.textColor = [UIColor colorWithRed:133/255.0 green:198/255.0 blue:103/255.0 alpha:1.0];
     }

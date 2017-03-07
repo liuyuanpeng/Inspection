@@ -16,6 +16,7 @@
 #import "IShopViewController.h"
 #import "ITermViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIImage+GIF.h>
 #import "Utils.h"
 #import <Toast/UIView+Toast.h>
 #import "PickerView.h"
@@ -240,6 +241,27 @@
 }
 
 - (IBAction)onCommit:(id)sender {
+    for (NSInteger i = 0; i < 4; i++) {
+        if (self.inspresultArray.count > i) {
+            NSDictionary *dict = [self.inspresultArray objectAtIndex:i];
+            NSString *oldFile = @"";
+            if (dict) {
+                oldFile = [NSString stringWithString:[dict objectForKey:@"picuri"]];
+            }
+            if ([oldFile isEqualToString:@""]) {
+                if ([self.userImgDict objectForKey:@(i)] == nil) {
+                    [self.view makeToast:@"请先上传图片!"];
+                    return;
+                }
+            }
+        }
+        else {
+            if ([self.userImgDict objectForKey:@(i)] == nil) {
+                [self.view makeToast:@"请先上传图片!"];
+                return;
+            }
+        }
+    }
     NSDictionary *datas = @{
                             @"merchname":self.merchname.text,
                             @"mcc":[self.merchInfo objectForKey:@"merchtype"],
@@ -255,9 +277,12 @@
                              @"content": self.desc.text,
                              @"data": [AFNRequestManager convertToJSONData:datas]
                              };
+    [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
     [AFNRequestManager requestAFURL:@"inspMerchInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.insp_cnt_id = [[ret objectForKey:@"insp_cnt_id"] integerValue];
+            [self uploadImages:0];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
@@ -300,22 +325,27 @@
             
             NSArray *inspresults = [[NSArray alloc] initWithArray:[self.merchInfo objectForKey:@"inspresult"]];
             [self.inspresultArray addObjectsFromArray:inspresults];
+            NSMutableArray *imageArray = [[NSMutableArray alloc] initWithCapacity:12];
+            for (int i = 1; i <= 12; i++) {
+                [imageArray addObject:[UIImage imageNamed:[NSString stringWithFormat:@"loading%d", i]]];
+            }
+            UIImage *loadingImg = [UIImage animatedImageWithImages:imageArray duration:10.f];
             for (NSInteger i = 0; i < inspresults.count; i++) {
                 NSDictionary *dict = [inspresults objectAtIndex:i];
                 if (i == 0) {
-                    [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_yyzz.png"]];
+                    [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage: loadingImg];
                     [self.radioButton setSelectedWithTag:[[dict objectForKey:@"flag"] integerValue]];
                     self.desc.text = [NSString stringWithString:[dict objectForKey:@"content"]];
                 }
                 else if (i == 1) {
-                    [self.facadePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_mmzp.png"]];
+                    [self.facadePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:loadingImg];
                 }
                 else if (i == 2) {
-                    [self.signPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_zp.png"]];
+                    [self.signPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:loadingImg];
                 }
 
                 else if (i == 3) {
-                    [self.sitePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_jycs.png"]];
+                    [self.sitePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:loadingImg];
                 }
             }
         }
@@ -366,6 +396,55 @@
         self.bEdit = false;
         [sender setTitle:@"编辑" forState:UIControlStateNormal];
         [self.view endEditing:YES];
+    }
+}
+
+- (void)uploadImgOK {
+    self.view.userInteractionEnabled = YES;
+    [self.indicator stopAnimating];
+}
+
+- (void) uploadImages:(NSInteger)index {
+    if (index >= 4) {
+        [self uploadImgOK];
+        return;
+    }
+    
+    
+    NSString *oldFile = @"";
+    UIImage *img = [self.userImgDict objectForKey:@(index)];
+    
+    if (self.inspresultArray.count > index && img == nil) {
+        NSDictionary *dict = [self.inspresultArray objectAtIndex:index];
+        if (dict) {
+            oldFile = [NSString stringWithString:[dict objectForKey:@"picuri"]];
+        }
+    }
+    NSDictionary *params = @{
+                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                             @"inspcntid": @(self.insp_cnt_id),
+                             @"oldfile":oldFile,
+                             @"logo": index == 1 ? @"yes" : @"",
+                             @"posi": [NSString stringWithFormat:@"%ld", (long)index]
+                             };
+    index++;
+    if (img) {
+        [AFNRequestManager requestAFURL:@"inspMerchPics.json" params:params imageData:UIImageJPEGRepresentation(img, 1.0) succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                [self uploadImages:(index)];
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+    }
+    else {
+        [AFNRequestManager requestAFURL:@"inspMerchPics.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                [self uploadImages:index];
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@", error);
+        }];
     }
 }
 

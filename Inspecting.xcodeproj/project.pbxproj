@@ -152,6 +152,7 @@
 		91C78C821E6B3D01009AC9A2 /* PickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C811E6B3D01009AC9A2 /* PickerView.m */; };
 		91C78C851E6C050B009AC9A2 /* INewTermViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C841E6C050B009AC9A2 /* INewTermViewController.m */; };
 		91CDD62E1E6D9AF000ECAF58 /* ITermType.m in Sources */ = {isa = PBXBuildFile; fileRef = 91CDD62D1E6D9AF000ECAF58 /* ITermType.m */; };
+		91CDD6321E6EF25B00ECAF58 /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 91CDD6311E6EF25B00ECAF58 /* loading.gif */; };
 		91F46D131E645D00004491E5 /* IPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F46D121E645D00004491E5 /* IPopupView.m */; };
 		91F46D1C1E6467CC004491E5 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F46D1B1E6467CC004491E5 /* NSString+MD5.m */; };
 		91F46D1E1E646A50004491E5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F46D1D1E646A50004491E5 /* CoreTelephony.framework */; };
@@ -343,6 +344,7 @@
 		91C78C841E6C050B009AC9A2 /* INewTermViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INewTermViewController.m; sourceTree = "<group>"; };
 		91CDD62C1E6D9AF000ECAF58 /* ITermType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITermType.h; sourceTree = "<group>"; };
 		91CDD62D1E6D9AF000ECAF58 /* ITermType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITermType.m; sourceTree = "<group>"; };
+		91CDD6311E6EF25B00ECAF58 /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = loading.gif; path = images/loading.gif; sourceTree = "<group>"; };
 		91F46D111E645D00004491E5 /* IPopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPopupView.h; sourceTree = "<group>"; };
 		91F46D121E645D00004491E5 /* IPopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPopupView.m; sourceTree = "<group>"; };
 		91F46D1A1E6467CC004491E5 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
@@ -534,6 +536,7 @@
 		9183CB6D1E5B44450064572E /* images */ = {
 			isa = PBXGroup;
 			children = (
+				91CDD6311E6EF25B00ECAF58 /* loading.gif */,
 				91C78C541E680165009AC9A2 /* checked.png */,
 				91C78C551E680165009AC9A2 /* checked@2x.png */,
 				91C78C561E680165009AC9A2 /* unchecked.png */,
@@ -792,6 +795,7 @@
 				9183CBE61E5B44E70064572E /* Icon_road_green_arrow.png in Resources */,
 				9183CBEB1E5B44E70064572E /* Icon_start.png in Resources */,
 				9183CBFF1E5B44E70064572E /* i_add_posup.png in Resources */,
+				91CDD6321E6EF25B00ECAF58 /* loading.gif in Resources */,
 				9183CBF61E5B44E70064572E /* main_icon_zoomout.png in Resources */,
 				9183CC2E1E5B44E70064572E /* loading6.png in Resources */,
 				9183CBD91E5B44E70064572E /* Icon_end.png in Resources */,

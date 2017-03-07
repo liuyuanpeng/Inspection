@@ -123,10 +123,7 @@
     [self.mapView setZoomLevel:currentZoomLevel];
 }
 
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    // get all missions
+- (void) updateMissions {
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
                              @"addrcode": [Utils getAddrCode],
@@ -143,6 +140,14 @@
     }failure:^(NSError *error) {
         NSLog(@"%@", error);
     }];
+
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // get all missions
+    [self updateMissions];
 }
 
 - (void)createAnnotation {
@@ -186,7 +191,7 @@
     [cell.missionView setMissionNO:[missionDict valueForKey:@"batchcode"]  endTime:[missionDict valueForKey:@"enddate"]];
     [cell.missionView setMission:[missionDict valueForKey:@"taskname"] store:[missionDict valueForKey:@"shopname"] business:[missionDict valueForKey:@"merchname"] organ:[missionDict valueForKey:@"instname"] description:[missionDict valueForKey:@"taskdesc"]];
     [cell.missionView setDistance:[NSNumber numberWithFloat:[Utils getDistance:[missionDict valueForKey:@"addrcode"]]]];
-    [cell.missionView setAccepted:[(NSString *)[missionDict objectForKey:@"state"]isEqualToString:@"001"]?NO:YES];
+    [cell.missionView setAccepted:[(NSString *)[missionDict objectForKey:@"opstaff"]isEqualToString:[iUser getInstance].staffcode]?YES:NO];
     cell.missionView.statusButton.tag = indexPath.row;
     [cell.missionView.statusButton addTarget:self action:@selector(onLockTask:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
@@ -200,12 +205,11 @@
                              @"addrcode": [Utils getAddrCode],
                              @"batchcode": [missionDict objectForKey:@"batchcode"],
                              @"serialnbr": [missionDict objectForKey:@"serialnbr"],
-                             @"flag":@0
+                             @"flag":@(sender.tag)
                              };
     [AFNRequestManager requestAFURL:@"lockPubTask.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
-            [missionDict setValue:[[params objectForKey:@"flag"] integerValue] == 1 ? @"001": @"002" forKey:@"state"];
-            [self.tableView reloadData];
+            [self updateMissions];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);

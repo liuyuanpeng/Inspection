@@ -59,6 +59,7 @@
     
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 45, 100, 30);
+    NSInteger btnTag = 1;
     for (NSString *optionTitle in @[@"已完成", @"未完成", @"全部"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
         btnRect.origin.x += 100;
@@ -70,6 +71,7 @@
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, 6, 0, 0);
         [self.searchView addSubview:btn];
+        btn.tag = btnTag++;
         [buttons addObject:btn];
     }
     
@@ -143,21 +145,33 @@
 }
 
 - (IBAction)onSearch:(id)sender {
-    if ([self hideSeachView:NO]) {
-        
-    }
+    [self hideSeachView:NO];
 }
 
 - (IBAction)onSearchAction:(id)sender {
+    NSString *state = @"";
+    switch (self.radioButtons.selectedButton.tag) {
+        case 1:
+            state = @"002";
+            break;
+            
+        case 2:
+            state = @"001";
+            break;
+            
+        default:
+            break;
+    }
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
-                             @"batchcode": @"batchcode",
-                             @"state": @"0",
+                             @"batchcode":[iMyTask getInstance].taskcode,
+                             @"state": state,
                              @"keyword": self.keywordText.text
                              };
     [AFNRequestManager requestAFURL:@"getMyTaskList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
-            
+            self.myTaskArray = [[NSArray alloc] initWithArray:[ret objectForKey:@"detail"]];
+            [self.tableview reloadData];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);

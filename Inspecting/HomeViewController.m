@@ -155,8 +155,8 @@
 }
 
 - (void)setFinished:(NSInteger)finished Unfinished:(NSInteger)unfinished {
-    self.finishedLabel.text = [NSString stringWithFormat:@"%ld", finished];
-    self.unfinishedLabel.text = [NSString stringWithFormat:@"%ld", unfinished];
+    self.finishedLabel.text = [NSString stringWithFormat:@"%ld", (long)finished];
+    self.unfinishedLabel.text = [NSString stringWithFormat:@"%ld", (long)unfinished];
 }
 
 /*
