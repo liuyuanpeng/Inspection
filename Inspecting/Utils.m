@@ -7,13 +7,17 @@
 //
 
 #import "Utils.h"
-#import <BaiduMapAPI_Utils/BMKGeometry.h>
 
 @implementation Utils
 
 + (NSString *)getAddrCode {
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     return [NSString stringWithFormat:@"%.5f,%.5f",[user doubleForKey:@"latitude"], [user doubleForKey:@"longtitude"]];
+}
+
++ (CLLocationCoordinate2D) getMyLocation {
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    return CLLocationCoordinate2DMake([user doubleForKey:@"latitude"], [user doubleForKey:@"longtitude"]);
 }
 
 + (double) getDistance:(NSString *)addrcode {

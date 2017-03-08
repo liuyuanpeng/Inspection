@@ -162,6 +162,8 @@
     MyMissionViewController *myMissionViewController = [[MyMissionViewController alloc] init];
     UserInfoViewController *userInfoViewController = [[UserInfoViewController alloc] init];
     
+    homeViewController.myMissionViewController = myMissionViewController;
+    
     UINavigationController *navHome = [[UINavigationController alloc] initWithRootViewController:homeViewController];
     [navHome.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics: UIBarMetricsDefault];
     [navHome.navigationBar setBackgroundColor:[UIColor colorWithRed:225/255.0 green:64/255.0 blue:67/255.0 alpha:1.0]];

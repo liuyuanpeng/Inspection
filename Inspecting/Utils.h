@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <BaiduMapAPI_Utils/BMKGeometry.h>
 
 @interface Utils : NSObject
 
 + (NSString *)getAddrCode;
 + (double) getDistance:(NSString *)addrcode;
++ (CLLocationCoordinate2D) getMyLocation;
 
 @end

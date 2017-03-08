@@ -153,6 +153,7 @@
 		91C78C851E6C050B009AC9A2 /* INewTermViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C841E6C050B009AC9A2 /* INewTermViewController.m */; };
 		91CDD62E1E6D9AF000ECAF58 /* ITermType.m in Sources */ = {isa = PBXBuildFile; fileRef = 91CDD62D1E6D9AF000ECAF58 /* ITermType.m */; };
 		91CDD6321E6EF25B00ECAF58 /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 91CDD6311E6EF25B00ECAF58 /* loading.gif */; };
+		91CDD6351E7033B800ECAF58 /* IMission.m in Sources */ = {isa = PBXBuildFile; fileRef = 91CDD6341E7033B800ECAF58 /* IMission.m */; };
 		91F46D131E645D00004491E5 /* IPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F46D121E645D00004491E5 /* IPopupView.m */; };
 		91F46D1C1E6467CC004491E5 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F46D1B1E6467CC004491E5 /* NSString+MD5.m */; };
 		91F46D1E1E646A50004491E5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F46D1D1E646A50004491E5 /* CoreTelephony.framework */; };
@@ -345,6 +346,8 @@
 		91CDD62C1E6D9AF000ECAF58 /* ITermType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITermType.h; sourceTree = "<group>"; };
 		91CDD62D1E6D9AF000ECAF58 /* ITermType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITermType.m; sourceTree = "<group>"; };
 		91CDD6311E6EF25B00ECAF58 /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = loading.gif; path = images/loading.gif; sourceTree = "<group>"; };
+		91CDD6331E7033B800ECAF58 /* IMission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMission.h; sourceTree = "<group>"; };
+		91CDD6341E7033B800ECAF58 /* IMission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMission.m; sourceTree = "<group>"; };
 		91F46D111E645D00004491E5 /* IPopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPopupView.h; sourceTree = "<group>"; };
 		91F46D121E645D00004491E5 /* IPopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPopupView.m; sourceTree = "<group>"; };
 		91F46D1A1E6467CC004491E5 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
@@ -465,6 +468,8 @@
 				91C78C601E682C4C009AC9A2 /* iMyTask.m */,
 				91CDD62C1E6D9AF000ECAF58 /* ITermType.h */,
 				91CDD62D1E6D9AF000ECAF58 /* ITermType.m */,
+				91CDD6331E7033B800ECAF58 /* IMission.h */,
+				91CDD6341E7033B800ECAF58 /* IMission.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -895,6 +900,7 @@
 			files = (
 				91831AAC1E54B67500E670B3 /* PublicMissionViewController.m in Sources */,
 				91C78C641E69B55F009AC9A2 /* ITextView.m in Sources */,
+				91CDD6351E7033B800ECAF58 /* IMission.m in Sources */,
 				91831A871E53F4CD00E670B3 /* AppDelegate.mm in Sources */,
 				917964551E58306E00B5E808 /* UIImage+UIImageEx.m in Sources */,
 				91655EAC1E66DEAB0031CFE0 /* iPublicMission.m in Sources */,

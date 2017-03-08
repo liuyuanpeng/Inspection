@@ -25,8 +25,7 @@
 @implementation PublicMissionViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1.0];
+    [super viewDidLoad];    self.view.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1.0];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     CGRect rNav = self.navigationController.navigationBar.frame;
@@ -36,6 +35,11 @@
     self.mapView = [[BMKMapView alloc] initWithFrame:rView];
     self.mapView.delegate = nil;
     self.mapView.zoomEnabled = YES;
+    self.mapView.showMapScaleBar = YES;
+    self.mapView.showsUserLocation = YES;
+    self.mapView.showMapPoi = YES;
+    [self.mapView setCenterCoordinate: [Utils getMyLocation]];
+    self.mapView.zoomLevel = 16.0f;
     
     self.missionView = [[UIView alloc] initWithFrame:rView];
     self.missionView.backgroundColor = [UIColor clearColor];
@@ -191,7 +195,16 @@
     [cell.missionView setMissionNO:[missionDict valueForKey:@"batchcode"]  endTime:[missionDict valueForKey:@"enddate"]];
     [cell.missionView setMission:[missionDict valueForKey:@"taskname"] store:[missionDict valueForKey:@"shopname"] business:[missionDict valueForKey:@"merchname"] organ:[missionDict valueForKey:@"instname"] description:[missionDict valueForKey:@"taskdesc"]];
     [cell.missionView setDistance:[NSNumber numberWithFloat:[Utils getDistance:[missionDict valueForKey:@"addrcode"]]]];
-    [cell.missionView setAccepted:[(NSString *)[missionDict objectForKey:@"opstaff"]isEqualToString:[iUser getInstance].staffcode]?YES:NO];
+    [cell.missionView.statusButton setHidden:NO];
+    if ([@"" isEqualToString:[missionDict objectForKey:@"opstaff"]]) {
+        [cell.missionView setAccepted:NO];
+    }
+    else if ([(NSString *)[missionDict objectForKey:@"opstaff"]isEqualToString:[iUser getInstance].staffcode]) {
+        [cell.missionView setAccepted:YES];
+    }
+    else {
+        [cell.missionView.statusButton setHidden:YES];
+    }
     cell.missionView.statusButton.tag = indexPath.row;
     [cell.missionView.statusButton addTarget:self action:@selector(onLockTask:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
@@ -205,7 +218,7 @@
                              @"addrcode": [Utils getAddrCode],
                              @"batchcode": [missionDict objectForKey:@"batchcode"],
                              @"serialnbr": [missionDict objectForKey:@"serialnbr"],
-                             @"flag":@(sender.tag)
+                             @"flag": [@"" isEqualToString: [missionDict objectForKey:@"opstaff"]] ? @"1" : @"2"
                              };
     [AFNRequestManager requestAFURL:@"lockPubTask.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {

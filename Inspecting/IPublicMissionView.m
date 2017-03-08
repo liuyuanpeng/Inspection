@@ -84,11 +84,9 @@
 - (void)setAccepted:(BOOL)bAccepted {
     if (bAccepted) {
         [self.statusButton setBackgroundImage:[UIImage imageNamed:@"i_botton_picked.png"] forState:UIControlStateNormal];
-        self.statusButton.tag = 1;
     }
     else {
         [self.statusButton setBackgroundImage:[UIImage imageNamed:@"i_botton_pick.png"] forState:UIControlStateNormal];
-        self.statusButton.tag = 2;
     }
 }
 

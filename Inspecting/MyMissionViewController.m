@@ -12,7 +12,7 @@
 #import "iUser.h"
 #import "AFNRequestManager.h"
 #import "MerchInfoViewController.h"
-#import "iMyTask.h"
+#import "IMission.h"
 
 @interface MyMissionViewController ()
 
@@ -97,32 +97,52 @@
     [cancelBtn.layer setMasksToBounds:YES];
     [cancelBtn addTarget:self action:@selector(onCancelAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.searchView addSubview:cancelBtn];
+    
+    self.myTaskArray = [[NSMutableArray alloc] init];
 }
+
+- (void)showTabBar
+
+{
+    if (self.tabBarController.tabBar.hidden == NO)
+    {
+        return;
+    }
+    UIView *contentView;
+    if ([[self.tabBarController.view.subviews objectAtIndex:0] isKindOfClass:[UITabBar class]])
+        
+        contentView = [self.tabBarController.view.subviews objectAtIndex:1];
+    
+    else
+        
+        contentView = [self.tabBarController.view.subviews objectAtIndex:0];
+    contentView.frame = CGRectMake(contentView.bounds.origin.x, contentView.bounds.origin.y,  contentView.bounds.size.width, contentView.bounds.size.height - self.tabBarController.tabBar.frame.size.height);
+    self.tabBarController.tabBar.hidden = NO;
+    
+}
+
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
 }
 
+- (void)filter004:(NSArray *)array{
+    for (NSDictionary *dict in array) {
+        if ([@"004" isEqualToString: [dict objectForKey:@"state"]]) {
+            continue;
+        }
+        [self.myTaskArray addObject:dict];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (![iMyTask getInstance].taskcode) {
-        NSLog(@"Params error!");
+    [self showTabBar];
+    if (![IMission getInstance].needupdate) {
         return;
     }
-    NSDictionary *params = @{
-                             @"staffcode": [iUser getInstance].staffcode,
-                             @"batchcode": [iMyTask getInstance].taskcode,
-                             @"state":@"",
-                             @"keyword":@""
-                             };
-    [AFNRequestManager requestAFURL:@"getMyTaskList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
-        if (0 == [[ret objectForKey:@"status"] integerValue]) {
-            self.myTaskArray = [[NSArray alloc] initWithArray:[ret objectForKey:@"detail"]];
-            [self.tableview reloadData];
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@", error);
-    }];
+    [self getCurMission];
+    [IMission getInstance].needupdate = NO;
 }
 
 - (BOOL)hideSeachView:(BOOL)bHide {
@@ -162,21 +182,8 @@
         default:
             break;
     }
-    NSDictionary *params = @{
-                             @"staffcode": [iUser getInstance].staffcode,
-                             @"batchcode":[iMyTask getInstance].taskcode,
-                             @"state": state,
-                             @"keyword": self.keywordText.text
-                             };
-    [AFNRequestManager requestAFURL:@"getMyTaskList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
-        if (0 == [[ret objectForKey:@"status"] integerValue]) {
-            self.myTaskArray = [[NSArray alloc] initWithArray:[ret objectForKey:@"detail"]];
-            [self.tableview reloadData];
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@", error);
-    }];
-    [self hideSeachView:YES];
+    [self searchMissionWithState:state keyword:self.keywordText.text];
+    
 }
 
 - (IBAction)onCancelAction:(id)sender {
@@ -233,6 +240,98 @@
     [cell setFinished:[(NSString *)[dict objectForKey:@"state"] isEqualToString:@"001"] ? NO: YES];
     [cell setOrganImg:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"pic"]]];
     return cell;
+}
+
+#pragma mark - getallmissions
+- (void) getMission {
+    if ([IMission getInstance].curSel == -1) {
+        [self getAllMission];
+    }
+    else {
+        [self getCurMission];
+    }
+}
+- (void)getAllMission {
+    [self.myTaskArray removeAllObjects];
+    [self requestMission:0 recursive:YES];
+}
+
+- (void)getCurMission {
+    [self.myTaskArray removeAllObjects];
+    [self requestMission:[IMission getInstance].curSel recursive:NO];
+}
+
+- (void)requestMission:(NSInteger)index recursive:(BOOL)bRecursive{
+    if (index >= [IMission getInstance].missions.count) {
+        if (bRecursive) {
+            [self.tableview reloadData];
+        }
+        return;
+    }
+    NSDictionary *taskInfo = [[IMission getInstance].missions objectAtIndex:index];
+    NSDictionary *params = @{
+                             @"staffcode": [iUser getInstance].staffcode,
+                             @"batchcode": [taskInfo objectForKey:@"taskcode"],
+                             @"state":@"",
+                             @"keyword":@""
+                             };
+    index++;
+    [AFNRequestManager requestAFURL:@"getMyTaskList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            [self filter004:[ret objectForKey:@"detail"]];
+            if (bRecursive) {
+                [self requestMission:(index) recursive:YES];
+            }
+            else {
+                [self.tableview reloadData];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
+- (void)searchMissionWithState:(NSString *)state keyword:(NSString *)keyword {
+    [self.myTaskArray removeAllObjects];
+    if ([IMission getInstance].curSel == -1) {
+        [self requestMission:0 recursive:YES withState:state keyword:keyword];
+    }
+    else {
+        [self requestMission:[IMission getInstance].curSel recursive:NO withState:state keyword:keyword];
+    }
+}
+
+- (void)requestMission:(NSInteger)index recursive:(BOOL)bRecursive withState:(NSString *)state keyword:(NSString *)keyword{
+    if (index >= [IMission getInstance].missions.count) {
+        if (bRecursive) {
+            
+            [self hideSeachView:YES];
+            [self.tableview reloadData];
+        }
+        return;
+    }
+    NSDictionary *taskInfo = [[IMission getInstance].missions objectAtIndex:index];
+    NSDictionary *params = @{
+                             @"staffcode": [iUser getInstance].staffcode,
+                             @"batchcode": [taskInfo objectForKey:@"taskcode"],
+                             @"state":state,
+                             @"keyword":keyword
+                             };
+    index++;
+    [AFNRequestManager requestAFURL:@"getMyTaskList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            [self filter004:[ret objectForKey:@"detail"]];
+            if (bRecursive) {
+                [self requestMission:(index) recursive:YES withState:state keyword:keyword] ;
+            }
+            else {
+                [self hideSeachView:YES];
+                [self.tableview reloadData];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
 }
 
 @end

@@ -10,8 +10,9 @@
 #import "INewestTableViewCell.h"
 #import "iUser.h"
 #import "AFNRequestManager.h"
-#import "iMyTask.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "IMission.h"
+#import "MyMissionViewController.h"
 
 @interface HomeViewController ()
 
@@ -21,9 +22,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.tabBarController.delegate = self;
     self.view.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1.0];
-    
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,  rScreen.size.width, 30)];
     titleLabel.text = @"POS终端巡检系统";
@@ -125,12 +125,8 @@
     [AFNRequestManager requestAFURL:@"getTaskTotalByStaff.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret valueForKey:@"status"] integerValue]) {
             [self setFinished:[[ret valueForKey:@"completed"] integerValue] Unfinished:[[ret valueForKey:@"uncompleted"] integerValue]];
-            self.missionArray = [[NSArray alloc] initWithArray:[ret objectForKey:@"detail"]];
-            if (self.missionArray.count) {
-                NSDictionary *missionDict = [self.missionArray objectAtIndex:0];
-                [iMyTask getInstance].taskname = [NSString stringWithFormat:@"%@", [missionDict objectForKey:@"taskname"]];
-                [iMyTask getInstance].taskcode = [NSString stringWithFormat:@"%@", [missionDict objectForKey:@"taskcode"]];
-            }
+            [[IMission getInstance].missions removeAllObjects];
+            [[IMission getInstance].missions addObjectsFromArray:[ret objectForKey:@"detail"]];
             [self.newestTable reloadData];
         }
     } failure:^(NSError *error) {
@@ -173,17 +169,14 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.missionArray) {
-        return self.missionArray.count;
-    }
-    return 0L;
+    return [IMission getInstance].missions.count;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
 // Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *missionDict = [self.missionArray objectAtIndex:indexPath.row];
+    NSDictionary *missionDict = [[IMission getInstance].missions objectAtIndex:indexPath.row];
     INewestTableViewCell *cell = [INewestTableViewCell cellWithTableView:tableView];
     [cell setName:[missionDict objectForKey:@"taskname"] code:[missionDict objectForKey:@"taskcode"] finished:0 total:[[missionDict objectForKey:@"uncompleted"]integerValue]];
     return cell;
@@ -197,11 +190,16 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *missionDict = [self.missionArray objectAtIndex:indexPath.row];
-    [iMyTask getInstance].taskname = [NSString stringWithFormat:@"%@", [missionDict objectForKey:@"taskname"]];
-    [iMyTask getInstance].taskcode = [NSString stringWithFormat:@"%@", [missionDict objectForKey:@"taskcode"]];
-    
+    [IMission getInstance].curSel = indexPath.row;
+    [IMission getInstance].needupdate = YES;
     self.tabBarController.selectedIndex = 1;
 }
 
+#pragma mark - UITabBarControllerDelegate Implementation
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    if (tabBarController.selectedIndex == 1) {
+        [IMission getInstance].curSel = -1;
+        [self.myMissionViewController getMission];
+    }
+}
 @end

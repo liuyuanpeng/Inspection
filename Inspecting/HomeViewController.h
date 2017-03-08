@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HomeViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@class MyMissionViewController;
+
+@interface HomeViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate>
 
 @property (nonatomic, strong) UIImageView *avatar;
 @property (nonatomic, strong) UIImageView *organAvatar;
@@ -16,10 +18,9 @@
 @property (nonatomic, strong) UILabel *organLabel;
 @property (nonatomic, strong) UILabel *finishedLabel;
 @property (nonatomic, strong) UILabel *unfinishedLabel;
+@property (nonatomic, weak) MyMissionViewController *myMissionViewController;
 
 @property (nonatomic, strong) UITableView *newestTable;
-@property (nonatomic, strong) NSArray *missionArray;
-
 - (void)setAvartar:(NSString *)avatar organAvatar:(NSString *)organAvatar;
 - (void)setUsername:(NSString *)username organname:(NSString *)organname;
 - (void)setFinished:(NSInteger)finished Unfinished:(NSInteger)unfinished;

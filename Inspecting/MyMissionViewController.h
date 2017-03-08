@@ -13,12 +13,14 @@
 
 @interface MyMissionViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) UITableView *tableview;
+@property (atomic, strong) UITableView *tableview;
 @property (nonatomic, strong) UIView *searchView;
 @property (nonatomic, strong) UITextField *keywordText;
 @property (nonatomic, weak) RadioButton *radioButtons;
 @property (nonatomic, strong) MerchInfoViewController *merchInfoViewController;
 
-@property (nonatomic, strong) NSArray *myTaskArray;
+@property (nonatomic, strong) NSMutableArray *myTaskArray;
+
+- (void)getMission;
 
 @end
