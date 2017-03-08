@@ -16,7 +16,6 @@
 #import "IShopViewController.h"
 #import "ITermViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
-#import <SDWebImage/UIImage+GIF.h>
 #import "Utils.h"
 #import <Toast/UIView+Toast.h>
 #import "PickerView.h"
@@ -228,8 +227,15 @@
     
     self.userImgDict = [[NSMutableDictionary alloc] initWithCapacity:4];
     self.inspresultArray = [[NSMutableArray alloc] initWithCapacity:4];
+    
+    NSMutableArray *imageArray = [[NSMutableArray alloc] initWithCapacity:12];
+    for (int i = 1; i <= 12; i++) {
+        [imageArray addObject:[UIImage imageNamed:[NSString stringWithFormat:@"loading%d", i]]];
+    }
+    self.loadingImage = [UIImage animatedImageWithImages:imageArray duration:10.f];
+    self.needupdate = YES;
 }
-	
+
 - (void)hideTabBar {
     if (self.tabBarController.tabBar.hidden == YES) {
         return;
@@ -305,11 +311,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self hideTabBar];
-    if (!self.bNeedUpdate) {
+    if (!self.needupdate) {
+        self.needupdate = YES;
         return;
     }
-    self.bNeedUpdate = false;
+    [self hideTabBar];
     [self.userImgDict removeAllObjects];
     [self.inspresultArray removeAllObjects];
     self.licencePic.image = [UIImage imageNamed:@"i_add_yyzz.png"];
@@ -330,7 +336,7 @@
             [self.tableView reloadData];
             NSString *imgurl = [NSString stringWithFormat:@"%@", [self.merchInfo objectForKey:@"pic"]];
             if (imgurl && ![imgurl isEqualToString:@""]) {
-                [self.merchimg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, imgurl]] placeholderImage:[UIImage imageNamed:@"i_default_company.png"]];
+                [self.merchimg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, imgurl]] placeholderImage:self.loadingImage];
             }
             self.merchname.text = [NSString stringWithString: [self.merchInfo objectForKey:@"merchname"]];
             self.merchtype.text = [NSString stringWithString: [self.merchInfo objectForKey:@"merchtypedesc"]];
@@ -340,30 +346,25 @@
             
             NSArray *inspresults = [[NSArray alloc] initWithArray:[self.merchInfo objectForKey:@"inspresult"]];
             [self.inspresultArray addObjectsFromArray:inspresults];
-            NSMutableArray *imageArray = [[NSMutableArray alloc] initWithCapacity:12];
-            for (int i = 1; i <= 12; i++) {
-                [imageArray addObject:[UIImage imageNamed:[NSString stringWithFormat:@"loading%d", i]]];
-            }
-            UIImage *loadingImg = [UIImage animatedImageWithImages:imageArray duration:10.f];
             for (NSInteger i = 0; i < inspresults.count; i++) {
                 NSDictionary *dict = [inspresults objectAtIndex:i];
                 if ([@"" isEqualToString:[dict objectForKey:@"picuri"]]) {
                     continue;
                 }
                 if (i == 0) {
-                    [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage: loadingImg];
+                    [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage: self.loadingImage];
                     [self.radioButton setSelectedWithTag:[[dict objectForKey:@"flag"] integerValue]];
                     self.desc.text = [NSString stringWithString:[dict objectForKey:@"content"]];
                 }
                 else if (i == 1) {
-                    [self.facadePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:loadingImg];
+                    [self.facadePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
                 }
                 else if (i == 2) {
-                    [self.signPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:loadingImg];
+                    [self.signPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
                 }
 
                 else if (i == 3) {
-                    [self.sitePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:loadingImg];
+                    [self.sitePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
                 }
             }
         }
@@ -381,7 +382,7 @@
         imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         imagePicker.allowsEditing = YES;
         [self presentViewController:imagePicker animated:YES completion:^{
-            NSLog(@"complete");
+            self.needupdate = NO;
         }];
 
     } @catch (NSException *exception) {
@@ -428,7 +429,6 @@
         return;
     }
     
-    
     NSString *oldFile = @"";
     UIImage *img = [self.userImgDict objectForKey:@(index)];
     
@@ -447,7 +447,7 @@
                              };
     index++;
     if (img) {
-        [AFNRequestManager requestAFURL:@"inspMerchPics.json" params:params imageData:UIImageJPEGRepresentation(img, 1.0) succeed:^(NSDictionary *ret) {
+        [AFNRequestManager requestAFURL:@"inspMerchPics.json" params:params imageData:UIImageJPEGRepresentation(img, 0.5) succeed:^(NSDictionary *ret) {
             if (0 == [[ret objectForKey:@"status"] integerValue]) {
                 [self uploadImages:(index)];
             }

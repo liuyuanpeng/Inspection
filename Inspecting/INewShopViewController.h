@@ -22,7 +22,11 @@
 
 @property (nonatomic, weak) RadioButton *radioButton;
 @property (nonatomic, strong) ITextView *desc;
-@property (nonatomic, strong) UIImageView *shopPic;
+@property (nonatomic, strong) UIImageView *licencePic;
+@property (nonatomic, strong) UIImageView *facadePic;
+@property (nonatomic, strong) UIImageView *signPic;
+@property (nonatomic, strong) UIImageView *sitePic;
+
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
@@ -33,6 +37,9 @@
 @property (nonatomic, assign) NSInteger inspcntid;
 @property (nonatomic, strong) NSString *serialnbr;
 
-@property (nonatomic, strong) UIImage *shopimage;
+@property (nonatomic, weak) UIImageView *curSelPic;
+
+@property (nonatomic, strong) NSMutableArray *inspresultArray;
+@property (nonatomic, strong) NSMutableDictionary *userImgDict;
 @property (nonatomic, assign) BOOL needupdate;
 @end

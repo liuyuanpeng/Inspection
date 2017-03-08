@@ -54,5 +54,6 @@
 @property (nonatomic, strong) NSMutableArray *inspresultArray;
 @property (nonatomic, strong) NSMutableDictionary *userImgDict;
 
-@property (nonatomic, assign) BOOL bNeedUpdate;
+@property (nonatomic, assign) BOOL needupdate;
+@property (nonatomic, strong) UIImage *loadingImage;
 @end

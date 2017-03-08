@@ -59,6 +59,7 @@
 @property (nonatomic, strong) NSMutableArray *inspresultArray;
 @property (nonatomic, strong) NSMutableDictionary *userImgDict;
 @property (nonatomic, weak) UIImageView *curSelPic;
-@property (nonatomic, assign) BOOL needupdate;
 
+@property (nonatomic, strong) UIImage *loadingImage;
+@property (nonatomic, assign) BOOL needupdate;
 @end

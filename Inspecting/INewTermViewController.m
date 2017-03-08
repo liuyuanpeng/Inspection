@@ -14,6 +14,8 @@
 #import "AFNRequestManager.h"
 #import <ActionSheetPicker_3_0/ActionSheetPicker.h>
 #import "ITermType.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <Toast/UIView+Toast.h>
 
 @interface INewTermViewController ()
 
@@ -192,11 +194,17 @@
     photoLabel.font = [UIFont systemFontOfSize:13];
     [resultView addSubview:photoLabel];
     
-    self.termPic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 120, 50, 50)];
-    self.termPic.userInteractionEnabled = YES;
-    [self.termPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
-    self.termPic.image = [UIImage imageNamed:@"i_add_pic.png"];
-    [resultView addSubview:self.termPic];
+    self.instPic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 120, 50, 50)];
+    self.instPic.tag = 0;
+    self.instPic.userInteractionEnabled = YES;
+    [self.instPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [resultView addSubview:self.instPic];
+    
+    self.serialPic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 120, 50, 50)];
+    self.serialPic.tag = 1;
+    self.serialPic.userInteractionEnabled = YES;
+    [self.serialPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [resultView addSubview:self.serialPic];
     
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     commitBtn.frame = CGRectMake(rScreen.size.width/2 - 50, resultView.frame.origin.y + resultView.frame.size.height + 10, 100, 30);
@@ -215,6 +223,10 @@
     
     self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
     
+    self.userImgDict = [[NSMutableDictionary alloc]initWithCapacity:2];
+    
+    self.needupdate = YES;
+    
 }
 
 - (IBAction)onScrollViewClicked:(id)sender {
@@ -223,17 +235,19 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    if (self.needupdate) {
-        self.termSerialnbr.text = @"";
-        self.termModel.text = @"";
-        self.termBrand.text = @"";
-        [self.termType setTitle:[[[ITermType getInstance].types objectAtIndex:0] objectForKey:@"remark"] forState:UIControlStateNormal];
-        [self.radioButton setSelected:YES];
-        self.desc.text = @"";
-        self.termPic.image = [UIImage imageNamed:@"i_add_pic.png"];
-        self.needupdate = false;
+    if (!self.needupdate) {
+        self.needupdate = YES;
+        return;
     }
+    self.termSerialnbr.text = @"";
+    self.termModel.text = @"";
+    self.termBrand.text = @"";
+    [self.termType setTitle:[[[ITermType getInstance].types objectAtIndex:0] objectForKey:@"remark"] forState:UIControlStateNormal];
+    [self.radioButton setSelected:YES];
+    self.desc.text = @"";
+    [self.userImgDict removeAllObjects];
+    self.instPic.image = [UIImage imageNamed:@"i_add_posup.png"];
+    self.serialPic.image = [UIImage imageNamed:@"i_add_posdown.png"];
 }
 
 - (IBAction)onSelectType:(UIButton *)sender {
@@ -249,7 +263,8 @@
     } origin:sender];
 }
 
-- (IBAction)onSelectPic:(id)sender {
+- (IBAction)onSelectPic:(UIGestureRecognizer *)sender {
+    self.curSelPic = (UIImageView *)(sender.view);
     @try {
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
         imagePicker.delegate = self;
@@ -257,7 +272,7 @@
         imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         imagePicker.allowsEditing = YES;
         [self presentViewController:imagePicker animated:YES completion:^{
-            NSLog(@"complete");
+            self.needupdate = NO;
         }];
         
     } @catch (NSException *exception) {
@@ -268,6 +283,14 @@
 
 
 - (IBAction)onCommit:(id)sender {
+    
+    for (NSInteger i = 0; i < 2; i++) {
+        if ([self.userImgDict objectForKey:@(i)] == nil) {
+            [self.view makeToast:@"请先上传图片!"];
+            return;
+        }
+    }
+    
     NSDictionary *data = @{
                            @"termtype": [[[ITermType getInstance].types objectAtIndex:self.termType.tag] objectForKey:@"term_type"],
                            @"termmode": self.termModel.text,
@@ -288,13 +311,21 @@
                              @"serialnbr":serialnbr,
                              @"data": [AFNRequestManager convertToJSONData:data]
                              };
+    
+    [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
+    
     [AFNRequestManager requestAFURL:@"inspNewTermInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.inspcntid = [[ret objectForKey:@"insp_cnt_id"] integerValue];
             self.snseq = [[ret objectForKey:@"snseq"] integerValue];
             self.termcode = [NSString stringWithString:[ret objectForKey:@"termcode"]];
+            [self uploadImages:0];
         }
     } failure:^(NSError *error) {
+        [self.indicator stopAnimating];
+        self.view.userInteractionEnabled = YES;
+        [self.view makeToast:@"新建终端失败!"];
         NSLog(@"%@", error);
     }];
 }
@@ -328,10 +359,63 @@
     UIImage *image= [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
     [self dismissViewControllerAnimated:YES completion:^{
-        self.termPic.image = image;
-        self.termimage = image;
+        [self.userImgDict setObject:image forKey:@(self.curSelPic.tag)];
+        self.curSelPic.image = image;
     }];
 }
 
+- (void)uploadImgOK {
+    [self.view makeToast:@"新建终端成功!" duration:2 position:CSToastPositionBottom title:nil image:nil style:[[CSToastStyle alloc] initWithDefaultStyle] completion:^(BOOL didTap) {
+        [self.navigationController popViewControllerAnimated:YES];
+        self.view.userInteractionEnabled = YES;
+        [self.indicator stopAnimating];
+    }];
+}
+
+- (void)uploadImgFail {
+    self.view.userInteractionEnabled = YES;
+    [self.indicator stopAnimating];
+    [self.view makeToast:@"上传图片失败!"];
+}
+
+- (void) uploadImages:(NSInteger)index {
+    if (index >= 2) {
+        [self uploadImgOK];
+        return;
+    }
+    
+    NSString *oldFile = @"";
+    UIImage *img = [self.userImgDict objectForKey:@(index)];
+    NSDictionary *params = @{
+                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                             @"inspcntid": @(self.inspcntid),
+                             @"serialnbr": self.termcode,
+                             @"seq":@(self.snseq),
+                             @"oldfile":oldFile,
+                             @"logo": @"",
+                             @"posi": [NSString stringWithFormat:@"%ld", (long)index]
+                             };
+    index++;
+    if (img) {
+        [AFNRequestManager requestAFURL:@"inspTermPics.json" params:params imageData:UIImageJPEGRepresentation(img, 0.5) succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                [self uploadImages:(index)];
+            }
+        } failure:^(NSError *error) {
+            [self uploadImgFail];
+            NSLog(@"%@",error);
+        }];
+    }
+    else {
+        [AFNRequestManager requestAFURL:@"inspTermPics.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                [self uploadImages:index];
+            }
+        } failure:^(NSError *error) {
+            [self uploadImgFail];
+            NSLog(@"%@", error);
+        }];
+    }
+}
 
 @end

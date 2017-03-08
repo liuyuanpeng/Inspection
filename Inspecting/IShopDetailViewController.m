@@ -285,6 +285,14 @@
     
     self.userImgDict = [[NSMutableDictionary alloc] initWithCapacity:4];
     self.inspresultArray = [[NSMutableArray alloc] initWithCapacity:4];
+    NSMutableArray *imageArray = [[NSMutableArray alloc] initWithCapacity:12];
+    for (int i = 1; i <= 12; i++) {
+        [imageArray addObject:[UIImage imageNamed:[NSString stringWithFormat:@"loading%d", i]]];
+    }
+    self.loadingImage = [UIImage animatedImageWithImages:imageArray duration:10.f];
+    
+    self.needupdate = YES;
+
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -310,11 +318,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     if (!self.needupdate) {
+        self.needupdate = YES;
         return;
     }
-    self.needupdate = false;
     [self.userImgDict removeAllObjects];
     [self.inspresultArray removeAllObjects];
     self.licencePic.image = [UIImage imageNamed:@"i_add_yyzz.png"];
@@ -334,7 +341,9 @@
     [AFNRequestManager requestAFURL:@"getShopInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.shopDetail = [[NSDictionary alloc] initWithDictionary:[ret objectForKey:@"datas"]];
-            [self.shopImg sd_setImageWithURL:[NSURL URLWithString:[self.shopDetail objectForKey:@"pic"]] placeholderImage:[UIImage imageNamed:@"i_store.png"]];
+            if (![@"" isEqualToString:[self.shopDetail objectForKey:@"pic"]]) {
+                [self.shopImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [self.shopDetail objectForKey:@"pic"]]] placeholderImage:self.loadingImage];
+            }
             self.shopName.text = [NSString stringWithString:[self.shopDetail objectForKey:@"shopname"]];
             self.shopCode.text = [NSString stringWithFormat:@"门店编码:%@",[self.shopDetail objectForKey:@"shopcode"]];
             self.merchName.text  =[NSString stringWithFormat:@"商户名称:%@", [self.merchInfo objectForKey:@"merchname"]];
@@ -351,24 +360,25 @@
             [self.inspresultArray addObjectsFromArray:inspresults];
             for (NSInteger i = 0; i < inspresults.count; i++) {
                 NSDictionary *dict = [inspresults objectAtIndex:i];
+                if ([@"" isEqualToString:[dict objectForKey:@"picuri"]]) {
+                    continue;
+                }
                 if (i == 0) {
-                    [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_yyzz.png"]];
+                    [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage: self.loadingImage];
                     [self.radioButton setSelectedWithTag:[[dict objectForKey:@"flag"] integerValue]];
                     self.desc.text = [NSString stringWithString:[dict objectForKey:@"content"]];
                 }
                 else if (i == 1) {
-                    [self.facadePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_mmzp.png"]];
+                    [self.facadePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
                 }
                 else if (i == 2) {
-                    [self.signPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_zp.png"]];
+                    [self.signPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
                 }
                 
                 else if (i == 3) {
-                    [self.sitePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:[UIImage imageNamed:@"i_add_jycs.png"]];
+                    [self.sitePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
                 }
             }
-            
-            
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
@@ -385,7 +395,7 @@
         imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         imagePicker.allowsEditing = YES;
         [self presentViewController:imagePicker animated:YES completion:^{
-            NSLog(@"complete");
+            self.needupdate = NO;
         }];
         
     } @catch (NSException *exception) {
@@ -399,7 +409,6 @@
     }
     self.addTermViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
     self.addTermViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
-    [self.addTermViewController setNeedupdate:YES];
     [self.navigationController pushViewController:self.addTermViewController animated:YES];
 }
 
@@ -426,6 +435,28 @@
 }
 
 - (IBAction)onCommit:(id)sender {
+    
+    for (NSInteger i = 0; i < 4; i++) {
+        if (self.inspresultArray.count > i) {
+            NSDictionary *dict = [self.inspresultArray objectAtIndex:i];
+            NSString *oldFile = @"";
+            if (dict) {
+                oldFile = [NSString stringWithString:[dict objectForKey:@"picuri"]];
+            }
+            if ([oldFile isEqualToString:@""]) {
+                if ([self.userImgDict objectForKey:@(i)] == nil) {
+                    [self.view makeToast:@"请先上传图片!"];
+                    return;
+                }
+            }
+        }
+        else {
+            if ([self.userImgDict objectForKey:@(i)] == nil) {
+                [self.view makeToast:@"请先上传图片!"];
+                return;
+            }
+        }
+    }
     NSDictionary *data = @{
                            @"shopname": self.shopName.text,
                            @"people": self.nameTextView.text,
@@ -445,11 +476,12 @@
                              @"content": self.desc.text,
                              @"data": [AFNRequestManager convertToJSONData:data]
                              };
-    
+    [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
     [AFNRequestManager requestAFURL:@"inspShopInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
-            [self.view makeToast:[ret objectForKey:@"desc"] duration:2 position:CSToastPositionCenter];
             self.inspcntid = [[ret objectForKey:@"insp_cnt_id"] integerValue];
+            [self uploadImages:0];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
@@ -527,7 +559,6 @@
     self.termDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
     self.termDetailViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
     self.termDetailViewController.termInfo = [[NSDictionary alloc] initWithDictionary:[[self.shopDetail objectForKey:@"termlst"] objectAtIndex:indexPath.row]];
-    [self.termDetailViewController setNeedupdate:YES];
     [self.navigationController pushViewController:self.termDetailViewController animated:YES];
 }
 
@@ -541,4 +572,55 @@
         [self.userImgDict setObject:image forKey:@(self.curSelPic.tag)];
     }];
 }
+
+- (void)uploadImgOK {
+    self.view.userInteractionEnabled = YES;
+    [self.indicator stopAnimating];
+}
+
+- (void) uploadImages:(NSInteger)index {
+    if (index >= 4) {
+        [self uploadImgOK];
+        return;
+    }
+    
+    
+    NSString *oldFile = @"";
+    UIImage *img = [self.userImgDict objectForKey:@(index)];
+    
+    if (self.inspresultArray.count > index && img == nil) {
+        NSDictionary *dict = [self.inspresultArray objectAtIndex:index];
+        if (dict) {
+            oldFile = [NSString stringWithString:[dict objectForKey:@"picuri"]];
+        }
+    }
+    NSDictionary *params = @{
+                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                             @"inspcntid": @(self.inspcntid),
+                             @"serialnbr": [self.shopDetail objectForKey:@"shopcode"],
+                             @"oldfile":oldFile,
+                             @"logo": index == 1 ? @"yes" : @"",
+                             @"posi": [NSString stringWithFormat:@"%ld", (long)index]
+                             };
+    index++;
+    if (img) {
+        [AFNRequestManager requestAFURL:@"inspShopPics.json" params:params imageData:UIImageJPEGRepresentation(img, 0.5) succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                [self uploadImages:(index)];
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+    }
+    else {
+        [AFNRequestManager requestAFURL:@"inspShopPics.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                [self uploadImages:index];
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@", error);
+        }];
+    }
+}
+
 @end

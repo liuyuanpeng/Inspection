@@ -26,6 +26,5 @@
 - (void)setShop:(NSString *)shop code:(NSString *)code merch:(NSString *)merch inst:(NSString *)inst;
 - (void)setAddr:(NSString *)addr;
 - (void)setFinished:(BOOL)bFinished;
-- (void)setShopImg:(NSString *)img;
 
 @end

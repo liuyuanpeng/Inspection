@@ -12,6 +12,7 @@
 #import "iUser.h"
 #import "AFNRequestManager.h"
 #import "INewShopViewController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface IShopViewController ()
 
@@ -49,6 +50,11 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:self.tableView];
+    NSMutableArray *imageArray = [[NSMutableArray alloc] initWithCapacity:12];
+    for (int i = 1; i <= 12; i++) {
+        [imageArray addObject:[UIImage imageNamed:[NSString stringWithFormat:@"loading%d", i]]];
+    }
+    self.loadingImage = [UIImage animatedImageWithImages:imageArray duration:10.f];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -79,7 +85,6 @@
         self.addShopViewController = [[INewShopViewController alloc] init];
     }
     self.addShopViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    [self.addShopViewController setNeedupdate:YES];
     [self.navigationController pushViewController:self.addShopViewController animated:YES];
 }
 
@@ -112,7 +117,6 @@
     }
     self.shopDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
     self.shopDetailViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:[self.shopArray objectAtIndex:indexPath.row]];
-    [self.shopDetailViewController setNeedupdate:YES];
     [self.navigationController pushViewController:self.shopDetailViewController animated:YES];
 }
 
@@ -136,6 +140,9 @@
     }
     else {
         [cell setFinished:YES];
+    }
+    if (![@"" isEqualToString: [dict objectForKey:@"pic"]]) {
+        [cell.shopImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"pic"]]] placeholderImage:self.loadingImage];
     }
     return cell;
 }

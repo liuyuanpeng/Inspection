@@ -218,7 +218,6 @@
     }
     NSDictionary *merchInfo = [self.myTaskArray objectAtIndex:indexPath.row];
     self.merchInfoViewController.taskInfo = [[NSDictionary alloc] initWithDictionary:merchInfo];
-    [self.merchInfoViewController setBNeedUpdate:YES];
     [self.navigationController pushViewController:self.merchInfoViewController animated:NO];
 }
 

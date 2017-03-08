@@ -7,6 +7,7 @@
 //
 
 #import "IShopTableViewCell.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation IShopTableViewCell
 + (instancetype)cellWithTableView:(UITableView *)tableView {
@@ -111,15 +112,6 @@
     }
     else {
         self.markImageView.image = [UIImage imageNamed:@"a_unfinished.png"];
-    }
-}
-
-- (void)setShopImg:(NSString *)img {
-    if (img && ![img isEqualToString:@""]) {
-        self.shopImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:img]]];
-    }
-    else {
-        self.shopImageView.image = [UIImage imageNamed:@"i_store.png"];
     }
 }
 

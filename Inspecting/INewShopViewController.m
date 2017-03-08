@@ -12,6 +12,7 @@
 #import "iUser.h"
 #import "Utils.h"
 #import "AFNRequestManager.h"
+#import <Toast/UIView+Toast.h>
 
 @interface INewShopViewController ()
 
@@ -202,11 +203,33 @@
     photoLabel.font = [UIFont systemFontOfSize:13];
     [resultView addSubview:photoLabel];
     
-    self.shopPic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 120, 50, 50)];
-    self.shopPic.userInteractionEnabled = YES;
-    [self.shopPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
-    self.shopPic.image = [UIImage imageNamed:@"i_add_pic.png"];
-    [resultView addSubview:self.shopPic];
+    self.licencePic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 120, 50, 50)];
+    self.licencePic.image = [UIImage imageNamed:@"i_add_yyzz.png"];
+    self.licencePic.tag = 0;
+    self.licencePic.userInteractionEnabled = YES;
+    [self.licencePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [resultView addSubview:self.licencePic];
+    
+    self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 120, 50, 50)];
+    self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp.png"];
+    self.facadePic.tag = 1;
+    self.facadePic.userInteractionEnabled = YES;
+    [self.facadePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [resultView addSubview:self.facadePic];
+    
+    self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 120, 50, 50)];
+    self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
+    self.signPic.tag = 2;
+    self.signPic.userInteractionEnabled = YES;
+    [self.signPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [resultView addSubview:self.signPic];
+    
+    self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 120, 50, 50)];
+    self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
+    self.sitePic.tag = 3;
+    self.sitePic.userInteractionEnabled = YES;
+    [self.sitePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [resultView addSubview:self.sitePic];
 
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     commitBtn.frame = CGRectMake(rScreen.size.width/2 - 50, resultView.frame.origin.y + resultView.frame.size.height + 10, 100, 30);
@@ -224,6 +247,12 @@
     [self.view addSubview:self.indicator];
     
     self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
+    
+    self.userImgDict = [[NSMutableDictionary alloc] initWithCapacity:4];
+    self.inspresultArray = [[NSMutableArray alloc] initWithCapacity:4];
+    
+    self.needupdate = YES;
+
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -233,9 +262,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (!self.needupdate) {
+        self.needupdate = YES;
         return;
     }
-    self.needupdate = false;
     self.shopName.text = @"";
     self.shopAddr.text = @"";
     self.nameText.text = @"";
@@ -243,10 +272,14 @@
     self.mailText.text = @"";
     self.radioButton.selected = YES;
     self.desc.text = @"";
-    self.shopPic.image = [UIImage imageNamed:@"i_add_pic.png"];
+    self.licencePic.image = [UIImage imageNamed:@"i_add_yyzz.png"];
+    self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp"];
+    self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
+    self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
 }
 
-- (IBAction)onSelectPic:(id)sender {
+- (IBAction)onSelectPic:(UIGestureRecognizer *)sender {
+    self.curSelPic = (UIImageView *)(sender.view);
     @try {
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
         imagePicker.delegate = self;
@@ -254,7 +287,7 @@
         imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         imagePicker.allowsEditing = YES;
         [self presentViewController:imagePicker animated:YES completion:^{
-            NSLog(@"complete");
+            self.needupdate = NO;
         }];
         
     } @catch (NSException *exception) {
@@ -262,9 +295,29 @@
     }
 }
 
-
-
 - (IBAction)onCommit:(id)sender {
+    for (NSInteger i = 0; i < 4; i++) {
+        if (self.inspresultArray.count > i) {
+            NSDictionary *dict = [self.inspresultArray objectAtIndex:i];
+            NSString *oldFile = @"";
+            if (dict) {
+                oldFile = [NSString stringWithString:[dict objectForKey:@"picuri"]];
+            }
+            if ([oldFile isEqualToString:@""]) {
+                if ([self.userImgDict objectForKey:@(i)] == nil) {
+                    [self.view makeToast:@"请先上传图片!"];
+                    return;
+                }
+            }
+        }
+        else {
+            if ([self.userImgDict objectForKey:@(i)] == nil) {
+                [self.view makeToast:@"请先上传图片!"];
+                return;
+            }
+        }
+    }
+
     NSDictionary *data = @{
                            @"shopname":self.shopName.text,
                            @"people":self.nameText.text,
@@ -283,11 +336,15 @@
                              @"data": [AFNRequestManager convertToJSONData:data]
                              };
     
+    [self.indicator startAnimating];
+    self.view.userInteractionEnabled = NO;
+    
     [AFNRequestManager requestAFURL:@"inspNewShopInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.shopcode = [NSString stringWithString:[ret objectForKey:@"shopcode"]];
             self.inspcntid = [[ret objectForKey:@"insp_cnt_id"] integerValue];
             self.serialnbr = [ret objectForKey:@"serialnbr"];
+            [self uploadImages:0];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
@@ -324,9 +381,70 @@
     UIImage *image= [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
     [self dismissViewControllerAnimated:YES completion:^{
-        self.shopPic.image = image;
-        self.shopimage = image;
+        [self.userImgDict setObject:image forKey:@(self.curSelPic.tag)];
+        self.curSelPic.image = image;
+    }];}
+
+#pragma mark - uploadImage 
+- (void)uploadImgOK {
+    [self.view makeToast:@"新建门店成功!" duration:2 position:CSToastPositionBottom title:nil image:nil style:[[CSToastStyle alloc] initWithDefaultStyle] completion:^(BOOL didTap) {
+        [self.navigationController popViewControllerAnimated:YES];
+        self.view.userInteractionEnabled = YES;
+        [self.indicator stopAnimating];
     }];
+}
+
+- (void)uploadImgFail {
+    self.view.userInteractionEnabled = YES;
+    [self.indicator stopAnimating];
+    [self.view makeToast:@"上传图片失败!"];
+}
+
+- (void) uploadImages:(NSInteger)index {
+    if (index >= 4) {
+        [self uploadImgOK];
+        return;
+    }
+    
+    
+    NSString *oldFile = @"";
+    UIImage *img = [self.userImgDict objectForKey:@(index)];
+    
+    if (self.inspresultArray.count > index && img == nil) {
+        NSDictionary *dict = [self.inspresultArray objectAtIndex:index];
+        if (dict) {
+            oldFile = [NSString stringWithString:[dict objectForKey:@"picuri"]];
+        }
+    }
+    NSDictionary *params = @{
+                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                             @"inspcntid": @(self.inspcntid),
+                             @"serialnbr": self.serialnbr,
+                             @"oldfile":oldFile,
+                             @"logo": index == 1 ? @"yes" : @"",
+                             @"posi": [NSString stringWithFormat:@"%ld", (long)index]
+                             };
+    index++;
+    if (img) {
+        [AFNRequestManager requestAFURL:@"inspShopPics.json" params:params imageData:UIImageJPEGRepresentation(img, 0.5) succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                [self uploadImages:(index)];
+            }
+        } failure:^(NSError *error) {
+            [self uploadImgFail];
+            NSLog(@"%@",error);
+        }];
+    }
+    else {
+        [AFNRequestManager requestAFURL:@"inspShopPics.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                [self uploadImages:index];
+            }
+        } failure:^(NSError *error) {
+            [self uploadImgFail];
+            NSLog(@"%@", error);
+        }];
+    }
 }
 
 

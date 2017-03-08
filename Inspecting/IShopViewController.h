@@ -18,5 +18,6 @@
 @property (nonatomic, strong) INewShopViewController *addShopViewController;
 @property (nonatomic, strong) NSMutableArray *shopArray;
 @property (nonatomic, strong) NSDictionary *merchInfo;
+@property (nonatomic, strong) UIImage *loadingImage;
 
 @end
