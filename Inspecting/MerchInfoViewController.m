@@ -374,6 +374,10 @@
 }
 
 - (IBAction)onSelectPic:(UITapGestureRecognizer *)sender {
+    if (![Utils cameraAccess]) {
+        [self.view makeToast:@"请先打开相机的使用权限!"];
+        return;
+    }
     self.curSelPic = (UIImageView *)sender.view;
     @try {
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];

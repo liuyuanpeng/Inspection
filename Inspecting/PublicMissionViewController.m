@@ -14,6 +14,7 @@
 #import "Utils.h"
 #import "iPublicMission.h"
 #import "NoneImageView.h"
+#import <Toast/UIView+Toast.h>
 
 #define MAX_ZOOM_LEVEL 18
 #define MIN_ZOOM_LEVEL 3
@@ -92,8 +93,13 @@
 }
 
 - (IBAction)onLocate:(id)sender {
-    [self.missionView setHidden:!self.missionView.isHidden];
-    [self.mapView setHidden:!self.mapView.isHidden];
+    if ([Utils locationAccess]) {
+        [self.missionView setHidden:!self.missionView.isHidden];
+        [self.mapView setHidden:!self.mapView.isHidden];
+    }
+    else {
+        [self.view makeToast:@"请先开启定位服务!"];
+    }
 }
 
 - (IBAction)onZoomIn:(id)sender {

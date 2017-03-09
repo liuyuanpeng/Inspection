@@ -7,8 +7,23 @@
 //
 
 #import "Utils.h"
+#import <AVFoundation/AVCaptureDevice.h>
+#import <AVFoundation/AVMediaFormat.h>
 
 @implementation Utils
+
++ (BOOL)cameraAccess {
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
+    {
+        return NO;
+    }
+    return YES;
+}
+
++ (BOOL)locationAccess {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"locationAccess"];
+}
 
 + (NSString *)getAddrCode {
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];

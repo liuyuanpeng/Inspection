@@ -26,9 +26,11 @@
     self.mapManager = [[BMKMapManager alloc]init];
     BOOL ret = [self.mapManager start:BMKKey generalDelegate:nil];
     if (!ret) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"locationAccess"];
         NSLog(@"baidu map manager opend failure.");
     }
     else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"locationAccess"];
         self.locService = [[BMKLocationService alloc] init];
         self.locService.delegate = self;
         

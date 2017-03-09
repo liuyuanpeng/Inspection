@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inspecting/IShopDetailViewController.m"
-            timestampString = "510686031.041994"
+            timestampString = "510723632.545593"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "621"
-            endingLineNumber = "621"
+            startingLineNumber = "625"
+            endingLineNumber = "625"
             landmarkName = "-uploadImages:"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inspecting/INewShopViewController.m"
-            timestampString = "510686031.041994"
+            timestampString = "510723632.545593"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "347"
-            endingLineNumber = "347"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
             landmarkName = "-onCommit:"
             landmarkType = "7">
          </BreakpointContent>

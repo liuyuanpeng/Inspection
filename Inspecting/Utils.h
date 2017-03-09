@@ -14,5 +14,7 @@
 + (NSString *)getAddrCode;
 + (double) getDistance:(NSString *)addrcode;
 + (CLLocationCoordinate2D) getMyLocation;
++ (BOOL)cameraAccess;
++ (BOOL)locationAccess;
 
 @end
