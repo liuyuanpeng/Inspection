@@ -134,6 +134,7 @@
 		9195D1841E5DD912007B451F /* AFNRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9195D1831E5DD912007B451F /* AFNRequestManager.m */; };
 		91AA2DCE1E59A01100731F9E /* INewestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91AA2DCD1E59A01100731F9E /* INewestTableViewCell.m */; };
 		91B707B81E758EFE006E76AA /* IAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 91B707B71E758EFE006E76AA /* IAnnotation.m */; };
+		91B707BB1E75A90F006E76AA /* RSA.m in Sources */ = {isa = PBXBuildFile; fileRef = 91B707BA1E75A90F006E76AA /* RSA.m */; };
 		91C78C581E680165009AC9A2 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 91C78C541E680165009AC9A2 /* checked.png */; };
 		91C78C591E680165009AC9A2 /* checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 91C78C551E680165009AC9A2 /* checked@2x.png */; };
 		91C78C5A1E680165009AC9A2 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 91C78C561E680165009AC9A2 /* unchecked.png */; };
@@ -314,6 +315,8 @@
 		91AA2DCD1E59A01100731F9E /* INewestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INewestTableViewCell.m; sourceTree = "<group>"; };
 		91B707B61E758EFE006E76AA /* IAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAnnotation.h; sourceTree = "<group>"; };
 		91B707B71E758EFE006E76AA /* IAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAnnotation.m; sourceTree = "<group>"; };
+		91B707B91E75A90F006E76AA /* RSA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSA.h; sourceTree = "<group>"; };
+		91B707BA1E75A90F006E76AA /* RSA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSA.m; sourceTree = "<group>"; };
 		91C78C541E680165009AC9A2 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checked.png; path = images/checked.png; sourceTree = "<group>"; };
 		91C78C551E680165009AC9A2 /* checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checked@2x.png"; path = "images/checked@2x.png"; sourceTree = "<group>"; };
 		91C78C561E680165009AC9A2 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unchecked.png; path = images/unchecked.png; sourceTree = "<group>"; };
@@ -401,6 +404,8 @@
 				91F46D211E646BC0004491E5 /* iPhone.m */,
 				91655EA71E66CC120031CFE0 /* Utils.h */,
 				91655EA81E66CC120031CFE0 /* Utils.m */,
+				91B707B91E75A90F006E76AA /* RSA.h */,
+				91B707BA1E75A90F006E76AA /* RSA.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -937,6 +942,7 @@
 				91831AB51E54C76B00E670B3 /* IMainController.m in Sources */,
 				91AA2DCE1E59A01100731F9E /* INewestTableViewCell.m in Sources */,
 				91C78C701E6B15F0009AC9A2 /* ILogTableViewCell.m in Sources */,
+				91B707BB1E75A90F006E76AA /* RSA.m in Sources */,
 				91F46D131E645D00004491E5 /* IPopupView.m in Sources */,
 				91CDD62E1E6D9AF000ECAF58 /* ITermType.m in Sources */,
 				91C78C5E1E68070E009AC9A2 /* MerchInfoViewController.m in Sources */,
