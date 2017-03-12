@@ -15,6 +15,9 @@
 #import "iPublicMission.h"
 #import "NoneImageView.h"
 #import <Toast/UIView+Toast.h>
+#import "AppDelegate.h"
+#import "IAnnotation.h"
+#import "IPopupView.h"
 
 #define MAX_ZOOM_LEVEL 18
 #define MIN_ZOOM_LEVEL 3
@@ -34,13 +37,25 @@
     CGRect rView =CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height - self.tabBarController.tabBar.frame.size.height);
     
     self.mapView = [[BMKMapView alloc] initWithFrame:rView];
-    self.mapView.delegate = nil;
+    self.mapView.delegate = self;
     self.mapView.zoomEnabled = YES;
     self.mapView.showMapScaleBar = YES;
-    self.mapView.showsUserLocation = YES;
+    [self.mapView setShowsUserLocation:YES];
     self.mapView.showMapPoi = YES;
     [self.mapView setCenterCoordinate: [Utils getMyLocation]];
     self.mapView.zoomLevel = 16.0f;
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDelegate.mapView = self.mapView;
+    [self.mapView updateLocationData:appDelegate.userLocation];
+    
+    
+    BMKLocationViewDisplayParam *param =  [[BMKLocationViewDisplayParam alloc] init];
+    param.isRotateAngleValid = NO;
+    param.isAccuracyCircleShow = NO;
+    param.locationViewOffsetX = 0;
+    param.locationViewOffsetY = 0;
+    [self.mapView updateLocationViewWithParam:param];
+
     
     self.missionView = [[UIView alloc] initWithFrame:rView];
     self.missionView.backgroundColor = [UIColor clearColor];
@@ -84,12 +99,46 @@
     [self.mapView addSubview:self.zoomIn];
     [self.mapView addSubview:self.zoomOut];
     
-    self.noneZoomin = [[NoneImageView alloc] initWithFrame:self.zoomIn.frame];
-    self.noneZoomout = [[NoneImageView alloc] initWithFrame:self.zoomOut.frame];
+    self.noneZoomin = [[NoneImageView alloc] init];
+    self.noneZoomout = [[NoneImageView alloc] init];
+    self.noneZoomout.frame = CGRectMake(rMap.size.width - 55, rMap.size.height - 55, 30, 30);
+    self.noneZoomin.frame = CGRectMake(rMap.size.width - 55, rMap.size.height - 95, 30, 30);
     self.noneZoomin.image = [UIImage imageNamed:@"main_icon_zoomin.png"];
     self.noneZoomout.image = [UIImage imageNamed:@"main_icon_zoomout.png"];
     [self.mapView addSubview:self.noneZoomout];
     [self.mapView addSubview:self.noneZoomin];
+    self.annotations = [[NSMutableArray alloc] init];
+    
+    self.popupView = [[IPopupView alloc] init];
+    IPublicMissionView *publicMissionView = [[IPublicMissionView alloc] init];
+    publicMissionView.frame = CGRectMake(10, rScreen.size.height/2 - 70, rScreen.size.width - 20, 140);
+    self.popupView.contentView = publicMissionView;
+    [publicMissionView.statusButton addTarget:self action:@selector(onLockTask:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (double)getRandom {
+    return (arc4random()%10)/100.0 - 0.05;
+}
+
+- (void)recreateAnnotation {
+    if (self.annotations.count > 0) {
+        [self.mapView removeAnnotations:self.annotations];
+    }
+    
+    NSArray *missionArray = [iPublicMission getInstance].missionArray;
+    for (NSInteger i = 0; i < missionArray.count; i++) {
+        NSDictionary *dict = [missionArray objectAtIndex:i];
+        IAnnotation *annotation=[[IAnnotation alloc]init];
+        annotation.tag = i;
+        NSArray *array = [[dict objectForKey:@"addrcode"] componentsSeparatedByString:@","];
+        if (array.count != 2) {
+            array = [[Utils getAddrCode] componentsSeparatedByString:@","];
+        }
+        annotation.coordinate = CLLocationCoordinate2DMake([[array objectAtIndex:0] doubleValue] + [self getRandom], [[array objectAtIndex:1] doubleValue] + [self getRandom]);
+        [self.annotations addObject:annotation];
+        [self.mapView addAnnotation:annotation];
+
+    }
 }
 
 - (IBAction)onLocate:(id)sender {
@@ -98,7 +147,7 @@
         [self.mapView setHidden:!self.mapView.isHidden];
     }
     else {
-        [self.view makeToast:@"请先开启定位服务!"];
+        [self.view makeToast:@"请先开启定位服务!" duration:2 position:CSToastPositionCenter];
     }
 }
 
@@ -144,6 +193,7 @@
     [AFNRequestManager requestAFURL:@"getPubTaskList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret valueForKey:@"status"] integerValue]) {
             [[iPublicMission getInstance] setData:[ret valueForKey:@"detail"]];
+            [self recreateAnnotation];
             [self.tableView reloadData];
         }
         NSLog(@"%@", ret);
@@ -229,10 +279,60 @@
     [AFNRequestManager requestAFURL:@"lockPubTask.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             [self updateMissions];
+            [self.popupView hide];
+            [self.view makeToast:@"请求处理成功!" duration:2 position:CSToastPositionCenter];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
     }];
+}
+
+#pragma mark - BMKMapViewDelegate
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id<BMKAnnotation>)annotation {
+    if ([annotation isKindOfClass:[BMKUserLocation class]]) {
+        // 我的位置
+        return nil;
+    }
+    BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"iannotation_view"];
+    newAnnotationView.paopaoView = nil;
+    newAnnotationView.annotation = annotation;
+    IAnnotation *iAnnotation = annotation;
+    NSDictionary *missionDict = [[iPublicMission getInstance].missionArray objectAtIndex:iAnnotation.tag];
+    if ([@"" isEqualToString:[missionDict objectForKey:@"opstaff"]]) {
+        newAnnotationView.image = [UIImage imageNamed:@"i_map_unlock.png"];
+    }
+    else {
+        newAnnotationView.image = [UIImage imageNamed:@"i_map_locked.png"];
+    }
+    newAnnotationView.userInteractionEnabled = YES;
+    newAnnotationView.tag = iAnnotation.tag;
+    [newAnnotationView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onAnnotationClick:)]];
+    return newAnnotationView;
+    
+}
+
+#pragma mark - Annotation Clicked
+- (IBAction)onAnnotationClick:(UIGestureRecognizer *)sender {
+    BMKPinAnnotationView *annotation = (BMKPinAnnotationView *)sender.view;
+    IPublicMissionView *missionView = (IPublicMissionView *)self.popupView.contentView;
+    missionView.statusButton.tag = annotation.tag;
+    
+    NSDictionary *missionDict = [[iPublicMission getInstance].missionArray objectAtIndex:annotation.tag];
+    [missionView setMissionNO:[missionDict valueForKey:@"batchcode"]  endTime:[missionDict valueForKey:@"enddate"]];
+    [missionView setMission:[missionDict valueForKey:@"taskname"] store:[missionDict valueForKey:@"shopname"] business:[missionDict valueForKey:@"merchname"] organ:[missionDict valueForKey:@"instname"] description:[missionDict valueForKey:@"taskdesc"]];
+    [missionView setDistance:[NSNumber numberWithFloat:[Utils getDistance:[missionDict valueForKey:@"addrcode"]]]];
+    [missionView.statusButton setHidden:NO];
+    if ([@"" isEqualToString:[missionDict objectForKey:@"opstaff"]]) {
+        [missionView setAccepted:NO];
+    }
+    else if ([(NSString *)[missionDict objectForKey:@"opstaff"]isEqualToString:[iUser getInstance].staffcode]) {
+        [missionView setAccepted:YES];
+    }
+    else {
+        [missionView.statusButton setHidden:YES];
+    }
+    
+    [self.popupView show];
 }
 
 @end

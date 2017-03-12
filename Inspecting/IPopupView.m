@@ -18,21 +18,40 @@
         self.frame = CGRectMake(0, 0, rScreen.size.width, rScreen.size.height);
         
         self.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        self.isHidden = YES;
+        self.userInteractionEnabled = YES;
+        [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTaped:)]];
     }
     return self;
 }
 
-- (void)setContentView:(UIView *)view {
-    [self addSubview:view];
+- (IBAction)onTaped:(id)sender {
+    [self hide];
+}
+
+- (void)setContentView:(UIView *)contentView {
+    if (self.subviews.count == 1) {
+        [self.subviews[0] removeFromSuperview];
+    }
+    _contentView = contentView;
+    [self addSubview:contentView];
 }
 
 - (void)show {
+    if (!self.isHidden) {
+        return;
+    }
     AppDelegate * appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     [appDelegate.window addSubview:self];
+    self.isHidden = NO;
 }
 
 - (void)hide {
+    if (self.isHidden) {
+        return;
+    }
     [self removeFromSuperview];
+    self.isHidden = YES;
 }
 
 /*

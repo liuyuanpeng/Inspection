@@ -28,6 +28,8 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) BMKMapManager *mapManager;
 @property (strong, nonatomic) BMKLocationService *locService;
+@property (weak, nonatomic) BMKMapView *mapView;
+@property (strong, nonatomic) BMKUserLocation *userLocation;
 
 
 @end

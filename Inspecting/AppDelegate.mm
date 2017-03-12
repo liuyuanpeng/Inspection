@@ -81,6 +81,10 @@
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation {
     [[NSUserDefaults standardUserDefaults] setDouble:userLocation.location.coordinate.latitude forKey:@"latitude"];
     [[NSUserDefaults standardUserDefaults] setDouble:userLocation.location.coordinate.longitude forKey:@"longtitude"];
+    self.userLocation = userLocation;
+    if (self.mapView) {
+        [self.mapView updateLocationData:userLocation];
+    }
 }
 
 @end

@@ -12,8 +12,10 @@
 
 @property (nonatomic, weak) UIWindow *window;
 
-- (void) setContentView:(UIView *)view;
+@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, assign) BOOL isHidden;
+
+- (void)setContentView:(UIView *)contentView;
 - (void) show;
 - (void) hide;
-
 @end
