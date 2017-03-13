@@ -14,7 +14,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>DACircularProgress.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>IQKeyboardManager.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>MBProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>PYPhotoBrowser.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -42,22 +57,37 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>5D961B1B04A9116C632F32FE42333568</key>
+		<key>17CEAD1B3EC4E80098DF5F8AA00BE966</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7E1EAE2F73E31D178E1B53688F2479BE</key>
+		<key>41FA54D12162DAD51D02FC58A2CD5034</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8DB5C9830301468BAE4C005836EF3A60</key>
+		<key>6EB0A8B8E0FCCFF34A893B070A412443</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7C7345F23D894200B8E945EE6E81108E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7FDFC86539A5F82E69A2C9641089D1F9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>965699190112DDBD9B7864D091660DBC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A7A937D884197A04039CC68FA54888BA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -72,7 +102,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F76A67398E0BC65F744E8BF7FA48BF05</key>
+		<key>FD0BB855479016576185A7C56C07FB05</key>
 		<dict>
 			<key>primary</key>
 			<true/>

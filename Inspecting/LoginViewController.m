@@ -18,6 +18,7 @@
 #import <Toast/UIView+Toast.h>
 #import "iUser.h"
 #import "ITermType.h"
+#import "IVersion.h"
 
 @interface LoginViewController ()
 
@@ -89,6 +90,7 @@
     // load term types
     ITermType *termtype = [ITermType getInstance];
     [termtype requestTypes];
+    [IVersion getInstance];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

@@ -17,6 +17,7 @@
 #import <ActionSheetPicker_3_0/ActionSheetPicker.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Toast/UIView+Toast.h>
+#import <PYPhotoBrowser/PYPhotoBrowser.h>
 
 @interface ITermDetailViewController ()
 
@@ -197,12 +198,14 @@
     self.instPic.tag = 0;
     self.instPic.userInteractionEnabled = YES;
     [self.instPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.instPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.instPic];
     
     self.serialPic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 120, 50, 50)];
     self.serialPic.tag = 1;
     self.serialPic.userInteractionEnabled = YES;
     [self.serialPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.serialPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.serialPic];
 
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -389,6 +392,24 @@
         NSLog(@"%@", exception);
     }
 }
+
+- (IBAction)onImgPreview:(UIGestureRecognizer *)sender {
+    if (sender.state != UIGestureRecognizerStateBegan) {
+        return;
+    }
+    UIImageView *imgView = (UIImageView *)(sender.view);
+    self.curSelPic = imgView;
+    UIImage *image = imgView.image;
+    if ([image isEqual:[UIImage imageNamed:@"i_add_posup.png"]] ||
+        [image isEqual:[UIImage imageNamed:@"i_add_posdown.png"]]) {
+        return;
+    }
+    
+    PYPhotoBrowseView *photoBroseView = [[PYPhotoBrowseView alloc] init];
+    photoBroseView.sourceImgageViews = @[imgView];
+    [photoBroseView show];
+}
+
 
 - (IBAction)onUpdateLog:(id)sender {
     if (nil == self.logViewController) {

@@ -19,6 +19,7 @@
 #import "Utils.h"
 #import <Toast/UIView+Toast.h>
 #import "PickerView.h"
+#import <PYPhotoBrowser/PYPhotoBrowser.h>
 
 @interface MerchInfoViewController ()
 
@@ -178,6 +179,7 @@
     self.licencePic.tag = 0;
     self.licencePic.userInteractionEnabled = YES;
     [self.licencePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.licencePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.licencePic];
     
     self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 120, 50, 50)];
@@ -185,6 +187,7 @@
     self.facadePic.tag = 1;
     self.facadePic.userInteractionEnabled = YES;
     [self.facadePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.facadePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.facadePic];
     
     self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 120, 50, 50)];
@@ -192,6 +195,7 @@
     self.signPic.tag = 2;
     self.signPic.userInteractionEnabled = YES;
     [self.signPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.signPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.signPic];
     
     self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 120, 50, 50)];
@@ -199,6 +203,7 @@
     self.sitePic.tag = 3;
     self.sitePic.userInteractionEnabled = YES;
     [self.sitePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.sitePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.sitePic];
     
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -392,6 +397,25 @@
     } @catch (NSException *exception) {
         NSLog(@"%@", exception);
     }
+}
+
+- (IBAction)onImgPreview:(UIGestureRecognizer *)sender {
+    if (sender.state != UIGestureRecognizerStateBegan) {
+        return;
+    }
+    UIImageView *imgView = (UIImageView *)(sender.view);
+    self.curSelPic = imgView;
+    UIImage *image = imgView.image;
+    if ([image isEqual:[UIImage imageNamed:@"i_add_yyzz.png"]] ||
+        [image isEqual:[UIImage imageNamed:@"i_add_mmzp.png"]] ||
+        [image isEqual:[UIImage imageNamed:@"i_add_zp.png"]] ||
+        [image isEqual:[UIImage imageNamed:@"i_add_jycs.png"]]) {
+        return;
+    }
+    
+    PYPhotoBrowseView *photoBroseView = [[PYPhotoBrowseView alloc] init];
+    photoBroseView.sourceImgageViews = @[imgView];
+    [photoBroseView show];
 }
 
 - (IBAction)onUpdateLog:(id)sender {

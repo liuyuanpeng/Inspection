@@ -12,6 +12,7 @@
 #import "IPopupView.h"
 #import <Toast/UIView+Toast.h>
 #import "NSString+MD5.h"
+#import "IVersion.h"
 
 @interface UserInfoViewController ()
 
@@ -124,9 +125,13 @@
     logoutBtn.titleLabel.font = [UIFont systemFontOfSize:fontSize];
     [logoutBtn addTarget:self action:@selector(onLogout:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:logoutBtn];
-    
-    [self setVersion:@"1.0.0"];
-    
+    NSString *version = [IVersion getInstance].version;
+    if (version) {
+        [self setVersion:version];
+    }
+    else {
+        [self setVersion:@"1.0.0"];
+    }
     
     self.changePwdView = [[IPopupView alloc] init];
     UIView *changepwd = [[UIView alloc] initWithFrame:CGRectMake(50, rScreen.size.height/2 - 80, rScreen.size.width - 100, 160)];
