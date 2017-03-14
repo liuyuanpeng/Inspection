@@ -12,4 +12,6 @@ target 'Inspecting' do
   pod 'IQKeyboardManager','~>4.0.8'
   pod 'SDWebImage','~>3.8.2' 
   pod 'PYPhotoBrowser','~>1.2.5'
+  pod 'GTMBase64'
+  pod 'RSAEncrypt', '~> 1.1.0'
 end

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <BaiduMapAPI_Search/BMKGeocodeSearch.h>
 
 @class ITextView;
 @class RadioButton;
@@ -14,7 +15,7 @@
 @class ITermDetailViewController;
 @class INewTermViewController;
 
-@interface IShopDetailViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextViewDelegate>
+@interface IShopDetailViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextViewDelegate, BMKGeoCodeSearchDelegate>
 
 @property (nonatomic, strong) NSDictionary *merchInfo;
 @property (nonatomic, strong) NSDictionary *shopInfo;

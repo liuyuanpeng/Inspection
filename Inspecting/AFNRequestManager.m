@@ -7,6 +7,7 @@
 //
 
 #import "AFNRequestManager.h"
+#import "RSAEncryptor.h"
 
 @implementation AFNRequestManager
 
@@ -36,6 +37,24 @@
     manager.requestSerializer.timeoutInterval = 30;
     
     [manager.requestSerializer setValue:@"fjxm/xunjian" forHTTPHeaderField:@"User-Agent"];
+    
+    // encrypt params
+    
+//    NSMutableDictionary *RSAParams = [[NSMutableDictionary alloc] init];
+//    
+//    if (params) {
+//        for (NSString *key in params) {
+//            NSString *data = [NSString stringWithFormat:@"%@", [params objectForKey:key]];
+//            NSString *encryptData = [[RSAEncryptor shareInstance] encryptString:data];
+//            [RSAParams setObject:encryptData forKey:key];
+//        }
+//    }
+    
+//    NSMutableDictionary *nParams = [[NSMutableDictionary alloc] init];
+//    
+//    for (NSString *key in RSAParams) {
+//        [nParams setObject:[RSAEncryptor decryptString:[RSAParams objectForKey:key]] forKey:key];
+//    }
     
     // method
     switch (method) {

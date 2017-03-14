@@ -64,6 +64,7 @@
     
     UIImageView *addrImgView = [[UIImageView alloc]initWithFrame:CGRectMake(rScreen.size.width - 21, 40, 16, 16)];
     addrImgView.image = [UIImage imageNamed:@"i_location.png"];
+    [addrImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onGetGeoCode)]];
     [baseInfoView addSubview:addrImgView];
     
     self.shopAddr = [[UITextField alloc] initWithFrame:CGRectMake(60, 40, rScreen.size.width - 88, 15)];
@@ -259,6 +260,21 @@
     self.needupdate = YES;
 
 }
+
+- (IBAction)onGetGeoCode {
+    BMKGeoCodeSearch *search = [[BMKGeoCodeSearch alloc]init];
+    search.delegate = self;
+    BMKReverseGeoCodeOption *rever = [[BMKReverseGeoCodeOption alloc]init];
+    rever.reverseGeoPoint = [Utils getMyLocation];
+    // don't delete following line
+    NSLog(@"%d",[search reverseGeoCode:rever]);
+    
+}
+
+- (void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error {
+    self.shopAddr.text = result.address;
+}
+
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];

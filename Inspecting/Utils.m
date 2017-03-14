@@ -9,6 +9,7 @@
 #import "Utils.h"
 #import <AVFoundation/AVCaptureDevice.h>
 #import <AVFoundation/AVMediaFormat.h>
+#import "AppDelegate.h"
 
 @implementation Utils
 
@@ -31,8 +32,8 @@
 }
 
 + (CLLocationCoordinate2D) getMyLocation {
-    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-    return CLLocationCoordinate2DMake([user doubleForKey:@"latitude"], [user doubleForKey:@"longtitude"]);
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return appDelegate.userLocation.location.coordinate;
 }
 
 + (double) getDistance:(NSString *)addrcode {
