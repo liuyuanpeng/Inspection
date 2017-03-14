@@ -1,0 +1,6 @@
+framework module RSAEncrypt {
+  umbrella header "RSAEncrypt-umbrella.h"
+
+  export *
+  module * { export * }
+}
