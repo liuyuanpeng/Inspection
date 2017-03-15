@@ -7,7 +7,7 @@
 //
 
 #import "RSAEncryptor.h"
-#import <RSAEncrypt/RSAEncrypt.h>
+#import "RSAEncrypt.h"
 
 @implementation RSAEncryptor
 

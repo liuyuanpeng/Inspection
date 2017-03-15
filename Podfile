@@ -13,5 +13,4 @@ target 'Inspecting' do
   pod 'SDWebImage','~>3.8.2' 
   pod 'PYPhotoBrowser','~>1.2.5'
   pod 'GTMBase64'
-  pod 'RSAEncrypt', '~> 1.1.0'
 end
