@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inspecting/AFNRequestManager.m"
-            timestampString = "511381823.89669"
+            timestampString = "511458966.637245"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
             landmarkName = "+requestAFURL:params:imageData:succeed:failure:"
             landmarkType = "7">
          </BreakpointContent>
