@@ -117,18 +117,18 @@
     NSString *pwd = [self.password.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *imsi = [iPhone getIMSI];
     NSString *imei = [iPhone getIMEI];
-    if (username.length == 0) {
-        [self.view makeToast:@"请输入用户名!"];
-        return;
-    }
-    else if (pwd.length  == 0) {
-        [self.view makeToast:@"请输入密码!"];
-        return;
-    }
+//    if (username.length == 0) {
+//        [self.view makeToast:@"请输入用户名!"];
+//        return;
+//    }
+//    else if (pwd.length  == 0) {
+//        [self.view makeToast:@"请输入密码!"];
+//        return;
+//    }
     
     NSDictionary *params = @{
-                             @"acctid": username,
-                             @"pwd": [pwd md5],
+                             @"acctid": @"fjxmcjh",
+                             @"pwd": [@"1234" md5],
                              @"imsi": imsi,
                              @"imei": imei
                              };

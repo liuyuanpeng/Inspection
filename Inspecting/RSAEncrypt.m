@@ -1,5 +1,4 @@
 #import "RSAEncrypt.h"
-
 @implementation RSAEncrypt
 
 static SecKeyRef _public_key=nil;
@@ -38,7 +37,7 @@ static SecKeyRef _public_key=nil;
     SecKeyRef keyRef = [self PublicKeyWithString:key];
     size_t cipherBufferSize = SecKeyGetBlockSize(keyRef);
     uint8_t *cipherBuffer = malloc(cipherBufferSize * sizeof(uint8_t));
-    NSData *stringBytes = [original dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *stringBytes = [original dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     size_t blockSize = cipherBufferSize - 11;
     size_t blockCount = (size_t)ceil([stringBytes length] / (double)blockSize);
     NSMutableData *encryptedData = [[NSMutableData alloc] init];
@@ -61,7 +60,7 @@ static SecKeyRef _public_key=nil;
     }
     if (cipherBuffer) free(cipherBuffer);
     
-    return [encryptedData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+    return [[NSString alloc] initWithData:encryptedData encoding:NSUTF8StringEncoding];
 }
 
 //使用公钥 key 加密字符串,不使用SecPadding

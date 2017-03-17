@@ -17,13 +17,11 @@
 		91831A871E53F4CD00E670B3 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91831A861E53F4CD00E670B3 /* AppDelegate.mm */; };
 		91831A921E53F4CD00E670B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91831A911E53F4CD00E670B3 /* Assets.xcassets */; };
 		91831A951E53F4CD00E670B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91831A931E53F4CD00E670B3 /* LaunchScreen.storyboard */; };
-		91831AA31E54989600E670B3 /* IMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91831AA21E54989600E670B3 /* IMainViewController.m */; };
 		91831AA61E54B64900E670B3 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91831AA51E54B64900E670B3 /* HomeViewController.m */; };
 		91831AA91E54B65A00E670B3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91831AA81E54B65A00E670B3 /* LoginViewController.m */; };
 		91831AAC1E54B67500E670B3 /* PublicMissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91831AAB1E54B67500E670B3 /* PublicMissionViewController.m */; };
 		91831AAF1E54B68400E670B3 /* MyMissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91831AAE1E54B68400E670B3 /* MyMissionViewController.m */; };
 		91831AB21E54B6A000E670B3 /* UserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91831AB11E54B6A000E670B3 /* UserInfoViewController.m */; };
-		91831AB51E54C76B00E670B3 /* IMainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91831AB41E54C76B00E670B3 /* IMainController.m */; };
 		9183CBD81E5B44E70064572E /* Icon_bus_station.png in Resources */ = {isa = PBXBuildFile; fileRef = 9183CB6E1E5B44E70064572E /* Icon_bus_station.png */; };
 		9183CBD91E5B44E70064572E /* Icon_end.png in Resources */ = {isa = PBXBuildFile; fileRef = 9183CB6F1E5B44E70064572E /* Icon_end.png */; };
 		9183CBDA1E5B44E70064572E /* Icon_line_node.png in Resources */ = {isa = PBXBuildFile; fileRef = 9183CB701E5B44E70064572E /* Icon_line_node.png */; };
@@ -192,8 +190,6 @@
 		91831A911E53F4CD00E670B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91831A941E53F4CD00E670B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91831A961E53F4CD00E670B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		91831AA11E54989600E670B3 /* IMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMainViewController.h; sourceTree = "<group>"; };
-		91831AA21E54989600E670B3 /* IMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMainViewController.m; sourceTree = "<group>"; };
 		91831AA41E54B64900E670B3 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		91831AA51E54B64900E670B3 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		91831AA71E54B65A00E670B3 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -204,8 +200,6 @@
 		91831AAE1E54B68400E670B3 /* MyMissionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMissionViewController.m; sourceTree = "<group>"; };
 		91831AB01E54B6A000E670B3 /* UserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfoViewController.h; sourceTree = "<group>"; };
 		91831AB11E54B6A000E670B3 /* UserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfoViewController.m; sourceTree = "<group>"; };
-		91831AB31E54C76B00E670B3 /* IMainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMainController.h; sourceTree = "<group>"; };
-		91831AB41E54C76B00E670B3 /* IMainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMainController.m; sourceTree = "<group>"; };
 		9183CB6E1E5B44E70064572E /* Icon_bus_station.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon_bus_station.png; path = images/Icon_bus_station.png; sourceTree = "<group>"; };
 		9183CB6F1E5B44E70064572E /* Icon_end.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon_end.png; path = images/Icon_end.png; sourceTree = "<group>"; };
 		9183CB701E5B44E70064572E /* Icon_line_node.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon_line_node.png; path = images/Icon_line_node.png; sourceTree = "<group>"; };
@@ -533,8 +527,6 @@
 		91831AA01E5497B800E670B3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				91831AA11E54989600E670B3 /* IMainViewController.h */,
-				91831AA21E54989600E670B3 /* IMainViewController.m */,
 				91831AA41E54B64900E670B3 /* HomeViewController.h */,
 				91831AA51E54B64900E670B3 /* HomeViewController.m */,
 				91831AA71E54B65A00E670B3 /* LoginViewController.h */,
@@ -545,8 +537,6 @@
 				91831AAE1E54B68400E670B3 /* MyMissionViewController.m */,
 				91831AB01E54B6A000E670B3 /* UserInfoViewController.h */,
 				91831AB11E54B6A000E670B3 /* UserInfoViewController.m */,
-				91831AB31E54C76B00E670B3 /* IMainController.h */,
-				91831AB41E54C76B00E670B3 /* IMainController.m */,
 				91C78C5C1E68070E009AC9A2 /* MerchInfoViewController.h */,
 				91C78C5D1E68070E009AC9A2 /* MerchInfoViewController.m */,
 				91C78C651E6B10DF009AC9A2 /* ILogViewController.h */,
@@ -950,7 +940,6 @@
 				91F46D221E646BC0004491E5 /* iPhone.m in Sources */,
 				91C78C7F1E6B31C5009AC9A2 /* INewShopViewController.m in Sources */,
 				9195D17A1E5D68CB007B451F /* IPublicMissionView.m in Sources */,
-				91831AA31E54989600E670B3 /* IMainViewController.m in Sources */,
 				91C78C731E6B2D92009AC9A2 /* IShopTableViewCell.m in Sources */,
 				91831A841E53F4CD00E670B3 /* main.m in Sources */,
 				91831AAF1E54B68400E670B3 /* MyMissionViewController.m in Sources */,
@@ -971,7 +960,6 @@
 				91F46D1C1E6467CC004491E5 /* NSString+MD5.m in Sources */,
 				91831AA61E54B64900E670B3 /* HomeViewController.m in Sources */,
 				91831AA91E54B65A00E670B3 /* LoginViewController.m in Sources */,
-				91831AB51E54C76B00E670B3 /* IMainController.m in Sources */,
 				91AA2DCE1E59A01100731F9E /* INewestTableViewCell.m in Sources */,
 				91C78C701E6B15F0009AC9A2 /* ILogTableViewCell.m in Sources */,
 				91F46D131E645D00004491E5 /* IPopupView.m in Sources */,
@@ -1096,9 +1084,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = LRH7M5ZE2D;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/BaiduMapKit\"",
+				);
 				INFOPLIST_FILE = Inspecting/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = liuyuanpeng.inspecting;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1111,9 +1105,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = LRH7M5ZE2D;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/BaiduMapKit\"",
+				);
 				INFOPLIST_FILE = Inspecting/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = liuyuanpeng.inspecting;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
