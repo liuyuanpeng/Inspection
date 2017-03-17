@@ -116,16 +116,31 @@
     [publicMissionView.statusButton addTarget:self action:@selector(onLockTask:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+
+/**
+ 获取随机数
+
+ @return 随机经纬度
+ */
 - (double)getRandom {
     return (arc4random()%10)/100.0 - 0.05;
 }
 
+
+/**
+ 更新地图泡泡
+ */
 - (void)recreateAnnotation {
     if (self.annotations.count > 0) {
+        // 移除原来的所有泡泡
         [self.mapView removeAnnotations:self.annotations];
+        [self.annotations removeAllObjects];
     }
     
+    // 获取公共任务列表数据
     NSArray *missionArray = [iPublicMission getInstance].missionArray;
+    
+    // 逐一添加到地图
     for (NSInteger i = 0; i < missionArray.count; i++) {
         NSDictionary *dict = [missionArray objectAtIndex:i];
         IAnnotation *annotation=[[IAnnotation alloc]init];
@@ -141,6 +156,12 @@
     }
 }
 
+
+/**
+ 切换地图和公共任务列表
+
+ @param sender 按钮对象
+ */
 - (IBAction)onLocate:(id)sender {
     if ([Utils locationAccess]) {
         [self.missionView setHidden:!self.missionView.isHidden];
@@ -151,6 +172,12 @@
     }
 }
 
+
+/**
+ 放大地图
+
+ @param sender 放大按钮
+ */
 - (IBAction)onZoomIn:(id)sender {
     float currentZoomLevel  = [self.mapView getMapStatus].fLevel;
     if (currentZoomLevel == MIN_ZOOM_LEVEL) {
@@ -167,6 +194,12 @@
     
 }
 
+
+/**
+ 缩小地图
+
+ @param sender 缩小按钮
+ */
 - (IBAction)onZoomOut:(id)sender {
     float currentZoomLevel = [self.mapView getMapStatus].fLevel;
     if (currentZoomLevel == MAX_ZOOM_LEVEL) {
@@ -182,6 +215,10 @@
     [self.mapView setZoomLevel:currentZoomLevel];
 }
 
+
+/**
+ 更新公共任务列表
+ */
 - (void) updateMissions {
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
@@ -208,10 +245,6 @@
     
     // get all missions
     [self updateMissions];
-}
-
-- (void)createAnnotation {
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -267,6 +300,12 @@
 }
 
 #pragma mark - lock task
+
+/**
+ 锁定公共任务
+
+ @param sender IBAction
+ */
 - (IBAction)onLockTask:(UIButton *)sender {
     NSDictionary *missionDict = [[iPublicMission getInstance].missionArray objectAtIndex:sender.tag];
     NSDictionary *params = @{
@@ -282,12 +321,16 @@
             [self.popupView hide];
             [self.view makeToast:@"请求处理成功!" duration:2 position:CSToastPositionCenter];
         }
+        else {
+            [self.view makeToast: [ret objectForKey:@"desc"] duration:2 position:CSToastPositionCenter];
+        }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
     }];
 }
 
 #pragma mark - BMKMapViewDelegate
+// 自定义泡泡图标
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id<BMKAnnotation>)annotation {
     if ([annotation isKindOfClass:[BMKUserLocation class]]) {
         // 我的位置
@@ -312,6 +355,7 @@
 }
 
 #pragma mark - Annotation Clicked
+// 点击泡泡事件
 - (IBAction)onAnnotationClick:(UIGestureRecognizer *)sender {
     BMKPinAnnotationView *annotation = (BMKPinAnnotationView *)sender.view;
     IPublicMissionView *missionView = (IPublicMissionView *)self.popupView.contentView;

@@ -9,7 +9,6 @@
 #import "MerchInfoViewController.h"
 #import <RadioButton/RadioButton.h>
 #import "ITextView.h"
-#import "UIImage+UIImageEx.h"
 #import "AFNRequestManager.h"
 #import "iUser.h"
 #import "ILogViewController.h"

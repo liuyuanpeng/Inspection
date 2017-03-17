@@ -10,8 +10,7 @@
 
 @interface UIImage (UIImageEx)
 
+// 压缩图片大小
 + (UIImage*) scaleToSize:(UIImage *)img size:(CGSize)size;
-
-- (UIImage*) imageByScallingAndCroppingForSize:(CGSize)targetSize;
 
 @end

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		912C7DDC1E7C3FFE000DAF06 /* IPubTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */; };
+		912C7DDF1E7C5593000DAF06 /* TextLimitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DDE1E7C5593000DAF06 /* TextLimitViewController.m */; };
 		914707B31E781B0200E46B3B /* RSAEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 914707B21E781B0200E46B3B /* RSAEncryptor.m */; };
 		91655EA91E66CC120031CFE0 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 91655EA81E66CC120031CFE0 /* Utils.m */; };
 		91655EAC1E66DEAB0031CFE0 /* iPublicMission.m in Sources */ = {isa = PBXBuildFile; fileRef = 91655EAB1E66DEAB0031CFE0 /* iPublicMission.m */; };
@@ -171,6 +173,10 @@
 /* Begin PBXFileReference section */
 		1A0DB2BD903CC4F18FE2A065 /* Pods-Inspecting.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inspecting.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Inspecting/Pods-Inspecting.debug.xcconfig"; sourceTree = "<group>"; };
 		7F5BCA653F6238E36CA37A69 /* Pods-Inspecting.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inspecting.release.xcconfig"; path = "Pods/Target Support Files/Pods-Inspecting/Pods-Inspecting.release.xcconfig"; sourceTree = "<group>"; };
+		912C7DDA1E7C3FFE000DAF06 /* IPubTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPubTask.h; sourceTree = "<group>"; };
+		912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPubTask.m; sourceTree = "<group>"; };
+		912C7DDD1E7C5593000DAF06 /* TextLimitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLimitViewController.h; sourceTree = "<group>"; };
+		912C7DDE1E7C5593000DAF06 /* TextLimitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLimitViewController.m; sourceTree = "<group>"; };
 		914707B11E781B0200E46B3B /* RSAEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSAEncryptor.h; sourceTree = "<group>"; };
 		914707B21E781B0200E46B3B /* RSAEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSAEncryptor.m; sourceTree = "<group>"; };
 		91655EA71E66CC120031CFE0 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -415,6 +421,8 @@
 				91655EA81E66CC120031CFE0 /* Utils.m */,
 				914707B11E781B0200E46B3B /* RSAEncryptor.h */,
 				914707B21E781B0200E46B3B /* RSAEncryptor.m */,
+				912C7DDD1E7C5593000DAF06 /* TextLimitViewController.h */,
+				912C7DDE1E7C5593000DAF06 /* TextLimitViewController.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -491,6 +499,8 @@
 				91CDD6341E7033B800ECAF58 /* IMission.m */,
 				91B707BC1E76E4E1006E76AA /* IVersion.h */,
 				91B707BD1E76E4E1006E76AA /* IVersion.m */,
+				912C7DDA1E7C3FFE000DAF06 /* IPubTask.h */,
+				912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -934,6 +944,7 @@
 				91B707BE1E76E4E1006E76AA /* IVersion.m in Sources */,
 				91CDD6351E7033B800ECAF58 /* IMission.m in Sources */,
 				91831A871E53F4CD00E670B3 /* AppDelegate.mm in Sources */,
+				912C7DDC1E7C3FFE000DAF06 /* IPubTask.m in Sources */,
 				917964551E58306E00B5E808 /* UIImage+UIImageEx.m in Sources */,
 				91655EAC1E66DEAB0031CFE0 /* iPublicMission.m in Sources */,
 				9195D1741E5C5222007B451F /* IMyTableViewCell.m in Sources */,
@@ -968,6 +979,7 @@
 				91C78C5E1E68070E009AC9A2 /* MerchInfoViewController.m in Sources */,
 				91B707B81E758EFE006E76AA /* IAnnotation.m in Sources */,
 				91C78C671E6B10DF009AC9A2 /* ILogViewController.m in Sources */,
+				912C7DDF1E7C5593000DAF06 /* TextLimitViewController.m in Sources */,
 				91C78C611E682C4C009AC9A2 /* iMyTask.m in Sources */,
 				91F46D251E6572DD004491E5 /* iUser.m in Sources */,
 			);

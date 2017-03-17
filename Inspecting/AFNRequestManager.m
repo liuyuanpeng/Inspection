@@ -8,6 +8,7 @@
 
 #import "AFNRequestManager.h"
 #import "iUser.h"
+#import <Toast/UIView+Toast.h>
 
 @implementation AFNRequestManager
 
@@ -60,8 +61,8 @@
                 NSLog(@"request success");
                 
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                failure(error);
-                NSLog(@"request error");
+                UIApplication *ap = [UIApplication sharedApplication];
+                [ap.keyWindow makeToast:@"网络连接失败!" duration:2.0 position:CSToastPositionCenter];
             }];
         }
             

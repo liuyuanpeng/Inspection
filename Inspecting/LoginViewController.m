@@ -91,6 +91,8 @@
     ITermType *termtype = [ITermType getInstance];
     [termtype requestTypes];
     [IVersion getInstance];
+    
+    self.textLimitDelegate = self;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -117,18 +119,18 @@
     NSString *pwd = [self.password.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *imsi = [iPhone getIMSI];
     NSString *imei = [iPhone getIMEI];
-//    if (username.length == 0) {
-//        [self.view makeToast:@"请输入用户名!"];
-//        return;
-//    }
-//    else if (pwd.length  == 0) {
-//        [self.view makeToast:@"请输入密码!"];
-//        return;
-//    }
+    if (username.length == 0) {
+        [self.view makeToast:@"请输入用户名!"];
+        return;
+    }
+    else if (pwd.length  == 0) {
+        [self.view makeToast:@"请输入密码!"];
+        return;
+    }
     
     NSDictionary *params = @{
-                             @"acctid": @"fjxmcjh",
-                             @"pwd": [@"1234" md5],
+                             @"acctid": username,
+                             @"pwd": [pwd md5],
                              @"imsi": imsi,
                              @"imei": imei
                              };
@@ -221,4 +223,7 @@
     return YES;
 }
 
+- (NSInteger) getTextFieldLimit:(UITextField *)textField {
+    return 20;
+}
 @end

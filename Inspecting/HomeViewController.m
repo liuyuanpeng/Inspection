@@ -36,7 +36,6 @@
     UIImageView *header = [[UIImageView alloc] initWithFrame:CGRectMake(0, rHeader.origin.y + rHeader.size.height, rScreen.size.width, 270/2)];
     
     header.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"b_protrait.png"]] ;
-//    header.backgroundColor = [UIColor grayColor];
     [self.view addSubview:header];
     
     self.avatar = [[UIImageView alloc] initWithFrame:CGRectMake(10, 27, 80, 80)];

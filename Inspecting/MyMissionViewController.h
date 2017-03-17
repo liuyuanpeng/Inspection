@@ -1,7 +1,7 @@
 //
 //  MyMissionViewController.h
 //  Inspecting
-//
+//  我的任务
 //  Created by liuyuanpeng on 2017/2/16.
 //  Copyright © 2017年 default. All rights reserved.
 //
@@ -12,13 +12,21 @@
 @class MerchInfoViewController;
 
 @interface MyMissionViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
-
+// 我的任务列表
 @property (atomic, strong) UITableView *tableview;
-@property (nonatomic, strong) UIView *searchView;
-@property (nonatomic, strong) UITextField *keywordText;
-@property (nonatomic, weak) RadioButton *radioButtons;
-@property (nonatomic, strong) MerchInfoViewController *merchInfoViewController;
 
+// 搜索按钮
+@property (nonatomic, strong) UIView *searchView;
+
+// 搜索关键字
+@property (nonatomic, strong) UITextField *keywordText;
+
+// 单选按钮
+@property (nonatomic, weak) RadioButton *radioButtons;
+
+// 商户详情
+@property (nonatomic, strong) MerchInfoViewController *merchInfoViewController;
+// 我的任务列表
 @property (nonatomic, strong) NSMutableArray *myTaskArray;
 
 - (void)getMission;
