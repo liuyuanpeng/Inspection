@@ -13,9 +13,15 @@ typedef void(^complete)(BOOL status);
 @interface IPubTask : NSObject
 // 详细步骤
 @property(nonatomic, strong) NSArray *stepArray;
+@property(nonatomic, strong) NSDictionary *taskInfo;
+@property(nonatomic, strong) NSMutableArray *inspPubArray;
+@property(nonatomic, strong) NSArray *generatePics;
+@property(nonatomic, strong) NSArray *generateContents;
 
 #pragma mark - Instance Method
-- (NSDictionary *)getStepInfoByIndex:(NSInteger)index;
+- (NSDictionary *)getStepInfoByStep:(NSInteger)step;
+- (void)generate;
+
 
 #pragma mark - Class Method
 + (IPubTask *)shareInstance;

@@ -63,6 +63,7 @@
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                 UIApplication *ap = [UIApplication sharedApplication];
                 [ap.keyWindow makeToast:@"网络连接失败!" duration:2.0 position:CSToastPositionCenter];
+                failure(error);
             }];
         }
             

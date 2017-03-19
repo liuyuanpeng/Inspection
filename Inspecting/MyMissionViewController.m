@@ -13,6 +13,8 @@
 #import "AFNRequestManager.h"
 #import "MerchInfoViewController.h"
 #import "IMission.h"
+#import "IPubTaskDetailViewController.h"
+#import "IPubTask.h"
 
 @interface MyMissionViewController ()
 
@@ -215,12 +217,41 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (!self.merchInfoViewController) {
-        self.merchInfoViewController = [[MerchInfoViewController alloc] init];
-    }
+    
     NSDictionary *merchInfo = [self.myTaskArray objectAtIndex:indexPath.row];
-    self.merchInfoViewController.taskInfo = [[NSDictionary alloc] initWithDictionary:merchInfo];
-    [self.navigationController pushViewController:self.merchInfoViewController animated:NO];
+    
+    if (1 == [[merchInfo objectForKey:@"tasktype"] integerValue]) {
+        if (!self.merchInfoViewController) {
+            self.merchInfoViewController = [[MerchInfoViewController alloc] init];
+        }
+        self.merchInfoViewController.taskInfo = [[NSDictionary alloc] initWithDictionary:merchInfo];
+        [self.navigationController pushViewController:self.merchInfoViewController animated:NO];
+    }
+    else {
+        IPubTask *pubTask = [IPubTask shareInstance];
+        NSDictionary *params = @{
+                                 @"staffcode":[iUser getInstance].staffcode,
+                                 @"batchcode":[merchInfo objectForKey:@"batchcode"],
+                                 @"serialnbr": [merchInfo objectForKey:@"serialnbr"]
+                                 };
+        self.view.userInteractionEnabled = NO;
+        [AFNRequestManager requestAFURL:@"getPubTaskInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+            if (0 == [[ret objectForKey:@"status"] integerValue]) {
+                pubTask.stepArray = [[NSArray alloc]initWithArray:[ret objectForKey:@"datas"]];
+                pubTask.taskInfo = [[NSDictionary alloc] initWithDictionary:merchInfo];
+                [pubTask.inspPubArray removeAllObjects];
+                self.view.userInteractionEnabled = YES;
+                if (pubTask.stepArray.count > 0) {
+                    IPubTaskDetailViewController *pubTaskDetail = [[IPubTaskDetailViewController alloc] init];
+                    [pubTaskDetail setStep:1];
+                    [self.navigationController pushViewController:pubTaskDetail animated:YES];
+                }
+            }
+        } failure:^(NSError *error) {
+            self.view.userInteractionEnabled = YES;
+        }];
+        
+    }
 }
 
 #pragma mark - UITableView Datasource Impletation
@@ -305,7 +336,6 @@
 - (void)requestMission:(NSInteger)index recursive:(BOOL)bRecursive withState:(NSString *)state keyword:(NSString *)keyword{
     if (index >= [IMission getInstance].missions.count) {
         if (bRecursive) {
-            
             [self hideSeachView:YES];
             [self.tableview reloadData];
         }

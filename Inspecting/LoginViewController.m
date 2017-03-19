@@ -28,7 +28,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldEditChanged:) name:UITextFieldTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewEditChanged:) name:UITextViewTextDidChangeNotification object:nil];
+    
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     
     self.view.backgroundColor = [UIColor colorWithRed:234/255.0 green:230/255.0 blue:221/255.0 alpha:1.0];
@@ -91,8 +94,6 @@
     ITermType *termtype = [ITermType getInstance];
     [termtype requestTypes];
     [IVersion getInstance];
-    
-    self.textLimitDelegate = self;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -119,18 +120,18 @@
     NSString *pwd = [self.password.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *imsi = [iPhone getIMSI];
     NSString *imei = [iPhone getIMEI];
-    if (username.length == 0) {
-        [self.view makeToast:@"请输入用户名!"];
-        return;
-    }
-    else if (pwd.length  == 0) {
-        [self.view makeToast:@"请输入密码!"];
-        return;
-    }
+//    if (username.length == 0) {
+//        [self.view makeToast:@"请输入用户名!"];
+//        return;
+//    }
+//    else if (pwd.length  == 0) {
+//        [self.view makeToast:@"请输入密码!"];
+//        return;
+//    }
     
     NSDictionary *params = @{
-                             @"acctid": username,
-                             @"pwd": [pwd md5],
+                             @"acctid": @"fjxmcjh",
+                             @"pwd": [@"1234" md5],
                              @"imsi": imsi,
                              @"imei": imei
                              };
@@ -213,17 +214,66 @@
 */
 
 
-#pragma mark - UITextField Delegate Impletation
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    if (textField == self.username) {
-        [self.password becomeFirstResponder];
+#pragma mark - UITextFieldDidChanged Notification
+- (void)textFieldEditChanged:(NSNotification *)obj {
+    UITextField *textField = (UITextField *)obj.object;
+    NSInteger maxLength = 30;
+    NSString *toBeString = textField.text;
+    NSString *lang = [[UIApplication sharedApplication]textInputMode].primaryLanguage; //键盘输入模式
+    if ([lang isEqualToString:@"zh-Hans"]) { // 简体中文输入，包括简体拼音，健体五笔，简体手写
+        UITextRange *selectedRange = [textField markedTextRange];
+        //获取高亮部分
+        UITextPosition *position = [textField positionFromPosition:selectedRange.start offset:0];
+        // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
+        if (!position) {
+            if (toBeString.length > maxLength) {
+                textField.text = [toBeString substringToIndex:maxLength];
+            }
+        }
+        // 有高亮选择的字符串，则暂不对文字进行统计和限制
+        else{
+            
+        }
     }
-    return YES;
+    // 中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
+    else{
+        if (toBeString.length > maxLength) {
+            textField.text = [toBeString substringToIndex:maxLength];
+        }
+    }
 }
 
-- (NSInteger) getTextFieldLimit:(UITextField *)textField {
-    return 20;
+- (void)textViewEditChanged:(NSNotification *)obj {
+    UITextView *textView = (UITextView *)obj.object;
+    NSInteger maxLength = 100; // 默认限制长度
+    NSString *toBeString = textView.text;
+    NSString *lang = [[UIApplication sharedApplication]textInputMode].primaryLanguage; //键盘输入模式
+    if ([lang isEqualToString:@"zh-Hans"]) { // 简体中文输入，包括简体拼音，健体五笔，简体手写
+        UITextRange *selectedRange = [textView markedTextRange];
+        //获取高亮部分
+        UITextPosition *position = [textView positionFromPosition:selectedRange.start offset:0];
+        // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
+        if (!position) {
+            if (toBeString.length > maxLength) {
+                textView.text = [toBeString substringToIndex:maxLength];
+            }
+        }
+        // 有高亮选择的字符串，则暂不对文字进行统计和限制
+        else{
+            
+        }
+    }
+    // 中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
+    else{
+        if (toBeString.length > maxLength) {
+            textView.text = [toBeString substringToIndex:maxLength];
+        }
+    }
 }
+
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
 @end

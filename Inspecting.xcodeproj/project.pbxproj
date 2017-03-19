@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		912C7DDC1E7C3FFE000DAF06 /* IPubTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */; };
-		912C7DDF1E7C5593000DAF06 /* TextLimitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DDE1E7C5593000DAF06 /* TextLimitViewController.m */; };
+		912C7DE21E7D8140000DAF06 /* IPubTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DE11E7D8140000DAF06 /* IPubTaskDetailViewController.m */; };
 		914707B31E781B0200E46B3B /* RSAEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 914707B21E781B0200E46B3B /* RSAEncryptor.m */; };
 		91655EA91E66CC120031CFE0 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 91655EA81E66CC120031CFE0 /* Utils.m */; };
 		91655EAC1E66DEAB0031CFE0 /* iPublicMission.m in Sources */ = {isa = PBXBuildFile; fileRef = 91655EAB1E66DEAB0031CFE0 /* iPublicMission.m */; };
@@ -175,8 +175,8 @@
 		7F5BCA653F6238E36CA37A69 /* Pods-Inspecting.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inspecting.release.xcconfig"; path = "Pods/Target Support Files/Pods-Inspecting/Pods-Inspecting.release.xcconfig"; sourceTree = "<group>"; };
 		912C7DDA1E7C3FFE000DAF06 /* IPubTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPubTask.h; sourceTree = "<group>"; };
 		912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPubTask.m; sourceTree = "<group>"; };
-		912C7DDD1E7C5593000DAF06 /* TextLimitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLimitViewController.h; sourceTree = "<group>"; };
-		912C7DDE1E7C5593000DAF06 /* TextLimitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLimitViewController.m; sourceTree = "<group>"; };
+		912C7DE01E7D8140000DAF06 /* IPubTaskDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPubTaskDetailViewController.h; sourceTree = "<group>"; };
+		912C7DE11E7D8140000DAF06 /* IPubTaskDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPubTaskDetailViewController.m; sourceTree = "<group>"; };
 		914707B11E781B0200E46B3B /* RSAEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSAEncryptor.h; sourceTree = "<group>"; };
 		914707B21E781B0200E46B3B /* RSAEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSAEncryptor.m; sourceTree = "<group>"; };
 		91655EA71E66CC120031CFE0 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -421,8 +421,6 @@
 				91655EA81E66CC120031CFE0 /* Utils.m */,
 				914707B11E781B0200E46B3B /* RSAEncryptor.h */,
 				914707B21E781B0200E46B3B /* RSAEncryptor.m */,
-				912C7DDD1E7C5593000DAF06 /* TextLimitViewController.h */,
-				912C7DDE1E7C5593000DAF06 /* TextLimitViewController.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -563,6 +561,8 @@
 				91C78C7E1E6B31C5009AC9A2 /* INewShopViewController.m */,
 				91C78C831E6C050B009AC9A2 /* INewTermViewController.h */,
 				91C78C841E6C050B009AC9A2 /* INewTermViewController.m */,
+				912C7DE01E7D8140000DAF06 /* IPubTaskDetailViewController.h */,
+				912C7DE11E7D8140000DAF06 /* IPubTaskDetailViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -977,9 +977,9 @@
 				91CDD62E1E6D9AF000ECAF58 /* ITermType.m in Sources */,
 				9172A78E1E78EF9C002E90C3 /* RSAEncrypt.m in Sources */,
 				91C78C5E1E68070E009AC9A2 /* MerchInfoViewController.m in Sources */,
+				912C7DE21E7D8140000DAF06 /* IPubTaskDetailViewController.m in Sources */,
 				91B707B81E758EFE006E76AA /* IAnnotation.m in Sources */,
 				91C78C671E6B10DF009AC9A2 /* ILogViewController.m in Sources */,
-				912C7DDF1E7C5593000DAF06 /* TextLimitViewController.m in Sources */,
 				91C78C611E682C4C009AC9A2 /* iMyTask.m in Sources */,
 				91F46D251E6572DD004491E5 /* iUser.m in Sources */,
 			);
@@ -1102,7 +1102,7 @@
 					"\"${PODS_ROOT}/Headers/Public/BaiduMapKit\"",
 				);
 				INFOPLIST_FILE = Inspecting/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = liuyuanpeng.inspecting;
@@ -1123,7 +1123,7 @@
 					"\"${PODS_ROOT}/Headers/Public/BaiduMapKit\"",
 				);
 				INFOPLIST_FILE = Inspecting/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = liuyuanpeng.inspecting;

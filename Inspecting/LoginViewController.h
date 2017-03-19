@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TextLimitViewController.h"
 
-@interface LoginViewController : TextLimitViewController <UITextFieldDelegate, TextLimitViewControllerDelegate>
+@interface LoginViewController : UIViewController <UITextFieldDelegate>
 // 用户名
 @property (nonatomic, strong) UITextField *username;
 // 密码
