@@ -394,16 +394,16 @@
     NSDictionary *picInfo = [inspPicArray objectAtIndex:index];
     NSDictionary *stepInfo = [[IPubTask shareInstance] getStepInfoByStep:self.step];
     
-    NSDictionary *params = @{
+    NSDictionary *params 	= @{
                              @"batchcode": [stepInfo objectForKey:@"batchcode"],
                              @"serialnbr": [stepInfo objectForKey:@"serialnbr"],
-                             @"seq": [picInfo objectForKey:@"step"],
-                             @"oldfile": [picInfo objectForKey:@"oldfile"]
+                             @"seq": [NSString stringWithFormat:@"%@",[picInfo objectForKey:@"step"]],
+                             @"oldfile": ([picInfo objectForKey:@"file"] == nil)?[picInfo objectForKey:@"oldfile"]:@""
                              };
 
     index++;
     if ([picInfo objectForKey:@"file"]) {
-        [AFNRequestManager requestAFURL:@"inspPubTaskPics.json" params:params fileData:UIImageJPEGRepresentation([picInfo objectForKey:@"file"], 0.5) succeed:^(NSDictionary *ret) {
+        [AFNRequestManager requestAFURL:@"inspPubTaskPics.json" params:params imageData:UIImageJPEGRepresentation([picInfo objectForKey:@"file"], 0.5) succeed:^(NSDictionary *ret) {
             if (0 == [[ret objectForKey:@"status"] integerValue]) {
                 [self uploadByIndex:index];
             }

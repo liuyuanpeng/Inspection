@@ -122,12 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inspecting/IPubTaskDetailViewController.m"
-            timestampString = "511636799.681418"
+            timestampString = "511637226.897291"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "405"
-            endingLineNumber = "405"
-            landmarkName = "-uploadByIndex:"
+            startingLineNumber = "371"
+            endingLineNumber = "371"
+            landmarkName = "-uploadFaild"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -137,13 +137,45 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Inspecting/IPubTaskDetailViewController.m"
-            timestampString = "511637226.897291"
+            filePath = "Inspecting/AFNRequestManager.m"
+            timestampString = "511674858.601435"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "371"
-            endingLineNumber = "371"
-            landmarkName = "-uploadFaild"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
+            landmarkName = "+requestAFURL:params:fileData:succeed:failure:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Inspecting/AFNRequestManager.m"
+            timestampString = "511674866.678209"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "+requestAFURL:params:fileData:succeed:failure:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Inspecting/AFNRequestManager.m"
+            timestampString = "511674874.295354"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
+            landmarkName = "+requestAFURL:params:fileData:succeed:failure:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
