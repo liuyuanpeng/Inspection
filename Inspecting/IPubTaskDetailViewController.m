@@ -403,7 +403,7 @@
 
     index++;
     if ([picInfo objectForKey:@"file"]) {
-        [AFNRequestManager requestAFURL:@"inspPubTaskPics.json" params:params imageData:UIImageJPEGRepresentation([picInfo objectForKey:@"file"], 0.5) succeed:^(NSDictionary *ret) {
+        [AFNRequestManager requestAFURL:@"inspPubTaskPics.json" params:params imageData:UIImageJPEGRepresentation([picInfo objectForKey:@"file"], 0.2) succeed:^(NSDictionary *ret) {
             if (0 == [[ret objectForKey:@"status"] integerValue]) {
                 [self uploadByIndex:index];
             }

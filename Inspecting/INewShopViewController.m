@@ -477,7 +477,7 @@
                              };
     index++;
     if (img) {
-        [AFNRequestManager requestAFURL:@"inspShopPics.json" params:params imageData:UIImageJPEGRepresentation(img, 0.5) succeed:^(NSDictionary *ret) {
+        [AFNRequestManager requestAFURL:@"inspShopPics.json" params:params imageData:UIImageJPEGRepresentation(img, 0.2) succeed:^(NSDictionary *ret) {
             if (0 == [[ret objectForKey:@"status"] integerValue]) {
                 [self uploadImages:(index)];
             }
