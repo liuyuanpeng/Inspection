@@ -128,12 +128,11 @@
     nameLabel.text = @"姓名";
     [contactorInfoView addSubview:nameLabel];
     
-    self.nameTextView = [[UITextView alloc] initWithFrame:CGRectMake(35, 5, rScreen.size.width - 40, 20)];
+    self.nameTextView = [[UITextField alloc] initWithFrame:CGRectMake(35, 5, rScreen.size.width - 40, 20)];
     self.nameTextView.font = [UIFont systemFontOfSize:12.0];
     self.nameTextView.textColor = [UIColor darkGrayColor];
     self.nameTextView.textAlignment = NSTextAlignmentRight;
     self.nameTextView.delegate = self;
-    [self.nameTextView setScrollEnabled:NO];
     [contactorInfoView addSubview:self.nameTextView];
     
     UILabel *telLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 35, 30, 15)];
@@ -141,12 +140,12 @@
     telLabel.text = @"电话";
     [contactorInfoView addSubview:telLabel];
     
-    self.telTextView = [[UITextView alloc] initWithFrame:CGRectMake(35, 35, rScreen.size.width - 40, 20)];
+    self.telTextView = [[UITextField alloc] initWithFrame:CGRectMake(35, 35, rScreen.size.width - 40, 20)];
     self.telTextView.font = [UIFont systemFontOfSize:12.0];
     self.telTextView.textColor = [UIColor darkGrayColor];
     self.telTextView.textAlignment = NSTextAlignmentRight;
     self.telTextView.delegate = self;
-    [self.telTextView setScrollEnabled:NO];
+    self.telTextView.keyboardType = UIKeyboardTypeNumberPad;
     [contactorInfoView addSubview:self.telTextView];
 
     
@@ -155,15 +154,14 @@
     mailLabel.text = @"邮箱";
     [contactorInfoView addSubview:mailLabel];
     
-    self.mailTextView = [[UITextView alloc] initWithFrame:CGRectMake(35, 65, rScreen.size.width - 40, 20)];
+    self.mailTextView = [[UITextField alloc] initWithFrame:CGRectMake(35, 65, rScreen.size.width - 40, 20)];
     self.mailTextView.font = [UIFont systemFontOfSize:12.0];
     self.mailTextView.textColor = [UIColor darkGrayColor];
     self.mailTextView.textAlignment = NSTextAlignmentRight;
     self.mailTextView.delegate = self;
-    [self.mailTextView setScrollEnabled:NO];
+    [self.mailTextView setKeyboardType:UIKeyboardTypeEmailAddress];
     [contactorInfoView addSubview:self.mailTextView];
 
-    
     UIView *split1 = [[UIView alloc] initWithFrame:CGRectMake(5, 30, rScreen.size.width - 10, 1)];
     split1.backgroundColor = [UIColor lightGrayColor];
     [contactorInfoView addSubview:split1];
@@ -205,7 +203,12 @@
     NSInteger btnTag = 1;
     for (NSString *optionTitle in @[@"不存在", @"正常", @"其他情况"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
-        btnRect.origin.x += 100;
+        if ([optionTitle isEqualToString:@"正常"]) {
+            btnRect.origin.x += 80;
+        }
+        else {
+            btnRect.origin.x += 100;
+        }
         [btn setTitle:optionTitle forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont boldSystemFontOfSize:17];

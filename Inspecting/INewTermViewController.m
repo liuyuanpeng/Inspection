@@ -160,7 +160,12 @@
     NSInteger btnTag = 1;
     for (NSString *optionTitle in @[@"不存在", @"正常", @"其他情况"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
-        btnRect.origin.x += 100;
+        if ([optionTitle isEqualToString:@"正常"]) {
+            btnRect.origin.x += 80;
+        }
+        else {
+            btnRect.origin.x += 100;
+        }
         [btn setTitle:optionTitle forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont boldSystemFontOfSize:17];

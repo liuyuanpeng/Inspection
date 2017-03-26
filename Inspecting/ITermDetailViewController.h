@@ -47,4 +47,6 @@
 @property (nonatomic, weak) UIImageView *curSelPic;
 @property (nonatomic, strong) UIImage *loadingImage;
 @property (nonatomic, assign) BOOL needupdate;
+
+@property (nonatomic, strong) UIScrollView *scrollView;
 @end

@@ -28,9 +28,9 @@
 @property (nonatomic, strong) UILabel *instName;
 @property (nonatomic, strong) UITextField *addr;
 
-@property (nonatomic, strong) UITextView *nameTextView;
-@property (nonatomic, strong) UITextView *telTextView;
-@property (nonatomic, strong) UITextView *mailTextView;
+@property (nonatomic, strong) UITextField *nameTextView;
+@property (nonatomic, strong) UITextField *telTextView;
+@property (nonatomic, strong) UITextField *mailTextView;
 
 
 @property (nonatomic, strong) UITableView *tableView;

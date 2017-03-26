@@ -135,6 +135,7 @@
     self.telText.font = [UIFont systemFontOfSize:12.0f];
     self.telText.textAlignment = NSTextAlignmentRight;
     self.telText.textColor = [UIColor darkGrayColor];
+    self.telText.keyboardType = UIKeyboardTypeNumberPad;
     [contactView addSubview:self.telText];
     
     UILabel *mailLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 70, 55, 15)];
@@ -147,6 +148,7 @@
     self.mailText.font = [UIFont systemFontOfSize:12.0f];
     self.mailText.textAlignment = NSTextAlignmentRight;
     self.mailText.textColor = [UIColor darkGrayColor];
+    self.mailText.keyboardType = UIKeyboardTypeEmailAddress;
     [contactView addSubview:self.mailText];
     
     for (NSInteger i = 1; i <= 2; i++) {
@@ -170,7 +172,12 @@
     NSInteger btnTag = 1;
     for (NSString *optionTitle in @[@"不存在", @"正常", @"其他情况"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
-        btnRect.origin.x += 100;
+        if ([optionTitle isEqualToString:@"正常"]) {
+            btnRect.origin.x += 80;
+        }
+        else {
+            btnRect.origin.x += 100;
+        }
         [btn setTitle:optionTitle forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont boldSystemFontOfSize:17];

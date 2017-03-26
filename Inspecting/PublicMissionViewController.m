@@ -123,7 +123,7 @@
  @return 随机经纬度
  */
 - (double)getRandom {
-    return (arc4random()%10)/100.0 - 0.05;
+    return (arc4random()%1000)/10000.0 - 0.05;
 }
 
 

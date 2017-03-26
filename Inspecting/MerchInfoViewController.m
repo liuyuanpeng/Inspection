@@ -32,6 +32,9 @@
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     CGRect rNav = self.navigationController.navigationBar.frame;
     
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height)];
+    [self.view addSubview:self.scrollView];
+    
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,  rScreen.size.width, 30)];
     titleLabel.text = @"商户详情";
     titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -46,21 +49,21 @@
     self.navigationItem.rightBarButtonItem = barItem;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, rNav.origin.y + rNav.size.height + 5, 100, 25)];
+    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, - rNav.origin.y - rNav.size.height + 5, 100, 25)];
     baseinfoLabel.font = [UIFont systemFontOfSize:13];
     baseinfoLabel.text = @"基本信息";
-    [self.view addSubview:baseinfoLabel];
+    [self.scrollView addSubview:baseinfoLabel];
     
     self.editBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.editBtn setTitle:@"编辑" forState:UIControlStateNormal];
     [self.editBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    self.editBtn.frame = CGRectMake(rScreen.size.width - 50, rNav.origin.y + rNav.size.height + 5, 40, 20);
+    self.editBtn.frame = CGRectMake(rScreen.size.width - 50, - rNav.origin.y - rNav.size.height + 5, 40, 20);
     [self.editBtn addTarget:self action:@selector(onEdit:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.editBtn];
+    [self.scrollView addSubview:self.editBtn];
     
-    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height + 35, rScreen.size.width, 130)];
+    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, - rNav.origin.y - rNav.size.height + 35, rScreen.size.width, 130)];
     [baseInfoView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:baseInfoView];
+    [self.scrollView addSubview:baseInfoView];
     
     self.merchimg = [[UIImageView alloc] initWithFrame:CGRectMake(5, 15, 70, 70)];
     [self.merchimg.layer setCornerRadius:2.0f];
@@ -119,7 +122,7 @@
     [baseInfoView addSubview:self.merchAddr];
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, baseInfoView.frame.origin.y + baseInfoView.frame.size.height + 5, rScreen.size.width, 59) style:UITableViewStylePlain];
-    [self.view addSubview:self.tableView];
+    [self.scrollView addSubview:self.tableView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -128,18 +131,23 @@
     UILabel *resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, self.tableView.frame.origin.y + self.tableView.frame.size.height + 5, 100, 25)];
     resultLabel.text = @"巡检结果";
     resultLabel.font = [UIFont systemFontOfSize:13];
-    [self.view addSubview:resultLabel];
+    [self.scrollView addSubview:resultLabel];
     
     UIView *resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 180)];
     [resultView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:resultView];
+    [self.scrollView addSubview:resultView];
     
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 10, 100, 30);
     NSInteger btntag = 1;
     for (NSString *optionTitle in @[@"不存在", @"正常", @"其他情况"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
-        btnRect.origin.x += 100;
+        if ([optionTitle isEqualToString:@"正常"]) {
+            btnRect.origin.x += 80;
+        }
+        else {
+            btnRect.origin.x += 100;
+        }
         [btn setTitle:optionTitle forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont boldSystemFontOfSize:17];
@@ -215,7 +223,9 @@
     [commitBtn setTitle:@"提交" forState:UIControlStateNormal];
     [commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [commitBtn addTarget:self action:@selector(onCommit:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:commitBtn];
+    [self.scrollView addSubview:commitBtn];
+    
+    self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
     
     self.pickerView = [[PickerView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height)];
     [self.pickerView setHidden:YES];
@@ -560,10 +570,10 @@
     }
     
     if (indexPath.row == 0) {
-        cell.textLabel.text = [NSString stringWithFormat:@"门店: %ld", self.merchInfo ? [[self.merchInfo objectForKey:@"shopcnt"] integerValue] : 0];
+        cell.textLabel.text = [NSString stringWithFormat:@"门店: %ld", self.merchInfo ? [[self.merchInfo objectForKey:@"shopcnt"] integerValue] : 0L];
     }
     else {
-        cell.textLabel.text = [NSString stringWithFormat:@"终端: %ld", self.merchInfo ? [[self.merchInfo objectForKey:@"termcnt"] integerValue] : 0];
+        cell.textLabel.text = [NSString stringWithFormat:@"终端: %ld", self.merchInfo ? [[self.merchInfo objectForKey:@"termcnt"] integerValue] : 0L];
     }
     
     return cell;

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inspecting/IShopDetailViewController.m"
-            timestampString = "511122323.517521"
+            timestampString = "512207532.396202"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "649"
-            endingLineNumber = "649"
+            startingLineNumber = "652"
+            endingLineNumber = "652"
             landmarkName = "-uploadImages:"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inspecting/INewShopViewController.m"
-            timestampString = "511122323.517521"
+            timestampString = "512207430.100001"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "375"
-            endingLineNumber = "375"
+            startingLineNumber = "382"
+            endingLineNumber = "382"
             landmarkName = "-onCommit:"
             landmarkType = "7">
          </BreakpointContent>
@@ -176,6 +176,22 @@
             startingLineNumber = "165"
             endingLineNumber = "165"
             landmarkName = "+requestAFURL:params:fileData:succeed:failure:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Inspecting/ILogViewController.m"
+            timestampString = "512206501.710996"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "-viewWillAppear:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

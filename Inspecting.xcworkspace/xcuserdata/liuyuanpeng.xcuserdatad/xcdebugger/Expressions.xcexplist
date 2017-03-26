@@ -12,19 +12,36 @@
          contextName = "-[PublicMissionViewController onLockTask:]:PublicMissionViewController.m">
       </ContextState>
       <ContextState
-         contextName = "__42-[PublicMissionViewController onLockTask:]_block_invoke:PublicMissionViewController.m">
+         contextName = "__42-[MyMissionViewController viewWillAppear:]_block_invoke:MyMissionViewController.m">
       </ContextState>
       <ContextState
-         contextName = "__42-[MyMissionViewController viewWillAppear:]_block_invoke:MyMissionViewController.m">
+         contextName = "__37-[HomeViewController viewWillAppear:]_block_invoke:HomeViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ITermDetailViewController onUpdateLog:]:ITermDetailViewController.m">
       </ContextState>
       <ContextState
          contextName = "+[Utils getAddrCode]:Utils.m">
       </ContextState>
       <ContextState
+         contextName = "__44-[ITermDetailViewController viewWillAppear:]_block_invoke:ITermDetailViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "__42-[PublicMissionViewController onLockTask:]_block_invoke:PublicMissionViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[PublicMissionViewController recreateAnnotation]:PublicMissionViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "annotation.coordinate">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[PublicMissionViewController viewWillAppear:]:PublicMissionViewController.m">
       </ContextState>
       <ContextState
-         contextName = "__37-[HomeViewController viewWillAppear:]_block_invoke:HomeViewController.m">
+         contextName = "__37-[ILogViewController viewWillAppear:]_block_invoke:ILogViewController.m">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

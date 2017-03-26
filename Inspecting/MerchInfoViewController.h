@@ -57,4 +57,6 @@
 
 @property (nonatomic, assign) BOOL needupdate;
 @property (nonatomic, strong) UIImage *loadingImage;
+
+@property (nonatomic, strong) UIScrollView *scrollView;
 @end

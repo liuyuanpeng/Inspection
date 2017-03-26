@@ -160,7 +160,7 @@
     [tabBarController.tabBar insertSubview:backView atIndex:0];
     tabBarController.tabBar.opaque = YES;
     [tabBarController.tabBar setTintColor:[UIColor whiteColor]];
-    [tabBarController.tabBar setUnselectedItemTintColor:[UIColor whiteColor]];
+//    [tabBarController.tabBar setUnselectedItemTintColor:[UIColor whiteColor]];
     
     HomeViewController *homeViewController = [[HomeViewController alloc] init];
     PublicMissionViewController *publicMissionViewController = [[PublicMissionViewController alloc] init];
@@ -169,32 +169,42 @@
     
     homeViewController.myMissionViewController = myMissionViewController;
     
+    NSDictionary *textAttribute = @{
+                                    NSForegroundColorAttributeName: [UIColor whiteColor],
+                                    NSFontAttributeName: [UIFont systemFontOfSize:12.0]
+                                    };
+    
     UINavigationController *navHome = [[UINavigationController alloc] initWithRootViewController:homeViewController];
     [navHome.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics: UIBarMetricsDefault];
     [navHome.navigationBar setBackgroundColor:[UIColor colorWithRed:225/255.0 green:64/255.0 blue:67/255.0 alpha:1.0]];
     navHome.tabBarItem.title = @"首页";
-    navHome.tabBarItem.image = [UIImage scaleToSize:[UIImage imageNamed:@"i_home.png"] size:CGSizeMake(30, 30)];
+    navHome.tabBarItem.image = [[UIImage scaleToSize:[UIImage imageNamed:@"i_home.png"] size:CGSizeMake(30, 30)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [navHome.tabBarItem setTitleTextAttributes:textAttribute forState:UIControlStateNormal];
+    
     
     UINavigationController *navMyMission = [[UINavigationController alloc] initWithRootViewController:myMissionViewController];
     
     [navMyMission.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics: UIBarMetricsDefault];
     [navMyMission.navigationBar setBackgroundColor:[UIColor colorWithRed:225/255.0 green:64/255.0 blue:67/255.0 alpha:1.0]];
     navMyMission.tabBarItem.title = @"我的任务";
-    navMyMission.tabBarItem.image = [UIImage scaleToSize:[UIImage imageNamed:@"i_mymission.png"] size:CGSizeMake(30, 30)];
+    navMyMission.tabBarItem.image = [[UIImage scaleToSize:[UIImage imageNamed:@"i_mymission.png"] size:CGSizeMake(30, 30)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [navMyMission.tabBarItem setTitleTextAttributes:textAttribute forState:UIControlStateNormal];
     
     UINavigationController *navPublicMission = [[UINavigationController alloc] initWithRootViewController:publicMissionViewController];
     
     [navPublicMission.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics: UIBarMetricsDefault];
     [navPublicMission.navigationBar setBackgroundColor:[UIColor colorWithRed:225/255.0 green:64/255.0 blue:67/255.0 alpha:1.0]];
     navPublicMission.tabBarItem.title = @"公共任务";
-    navPublicMission.tabBarItem.image = [UIImage scaleToSize:[UIImage imageNamed:@"i_allmission.png"] size:CGSizeMake(30, 30)];
+    navPublicMission.tabBarItem.image = [[UIImage scaleToSize:[UIImage imageNamed:@"i_allmission.png"] size:CGSizeMake(30, 30)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [navPublicMission.tabBarItem setTitleTextAttributes:textAttribute forState:UIControlStateNormal];
     
     UINavigationController *navUserInfo = [[UINavigationController alloc] initWithRootViewController:userInfoViewController];
     
     [navUserInfo.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics: UIBarMetricsDefault];
     [navUserInfo.navigationBar setBackgroundColor:[UIColor colorWithRed:225/255.0 green:64/255.0 blue:67/255.0 alpha:1.0]];
     navUserInfo.tabBarItem.title = @"我的";
-    navUserInfo.tabBarItem.image = [UIImage scaleToSize:[UIImage imageNamed:@"i_mine.png"] size:CGSizeMake(30, 30)];
+    navUserInfo.tabBarItem.image = [[UIImage scaleToSize:[UIImage imageNamed:@"i_mine.png"] size:CGSizeMake(30, 30)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [navUserInfo.tabBarItem setTitleTextAttributes:textAttribute forState:UIControlStateNormal];
     
     [tabBarController addChildViewController:navHome];
     [tabBarController addChildViewController:navMyMission];
