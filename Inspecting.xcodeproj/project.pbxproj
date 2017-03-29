@@ -738,7 +738,7 @@
 				TargetAttributes = {
 					91831A7E1E53F4CD00E670B3 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = LRH7M5ZE2D;
+						DevelopmentTeam = S68Y74UE24;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1095,7 +1095,7 @@
 			baseConfigurationReference = 1A0DB2BD903CC4F18FE2A065 /* Pods-Inspecting.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = LRH7M5ZE2D;
+				DEVELOPMENT_TEAM = S68Y74UE24;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -1105,7 +1105,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = liuyuanpeng.inspecting;
+				PRODUCT_BUNDLE_IDENTIFIER = inspecting.xunjian.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1116,7 +1116,7 @@
 			baseConfigurationReference = 7F5BCA653F6238E36CA37A69 /* Pods-Inspecting.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = LRH7M5ZE2D;
+				DEVELOPMENT_TEAM = S68Y74UE24;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -1126,7 +1126,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = liuyuanpeng.inspecting;
+				PRODUCT_BUNDLE_IDENTIFIER = inspecting.xunjian.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -177,7 +177,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *missionDict = [[IMission getInstance].missions objectAtIndex:indexPath.row];
     INewestTableViewCell *cell = [INewestTableViewCell cellWithTableView:tableView];
-    [cell setName:[missionDict objectForKey:@"taskname"] code:[missionDict objectForKey:@"taskcode"] finished:0 total:[[missionDict objectForKey:@"uncompleted"]integerValue]];
+    [cell setName:[missionDict objectForKey:@"taskname"] code:[missionDict objectForKey:@"taskcode"] finished:[[missionDict objectForKey:@"completed"] integerValue] total:[[missionDict objectForKey:@"uncompleted"]integerValue]];
     return cell;
 }
 

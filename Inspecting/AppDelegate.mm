@@ -9,9 +9,7 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 
-// use for bundle identifier: default.inspecting
-// #define BMKKey @"r6olmS6fnA5WRqnO7nSeIDTcULYYN33A"
-#define BMKKey @"M65qGxyRTKVXPV0ihcF2VVdBZxXDiTxa"
+#define BMKKey @"B56L7bzeCA8KALABf4fynQSqkPKRUF3y"
 
 @interface AppDelegate ()
 
