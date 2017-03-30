@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 
-#define BMKKey @"B56L7bzeCA8KALABf4fynQSqkPKRUF3y"
+#define BMKKey @"DlbVPXuBL0wIXw5AjErkyQ6px2Ul2I0q"
 
 @interface AppDelegate ()
 

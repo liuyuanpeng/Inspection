@@ -313,7 +313,7 @@
         UIImage *userImg = [self.userImageDict objectForKey:@(i)];
         if (inspedImgurl == nil || [inspedImgurl isEqualToString:@""]) {
             if (nil == userImg) {
-                [self.view makeToast:[NSString stringWithFormat:@"请先添加完整%ld个图片!", self.maxNum] duration:2.0 position:CSToastPositionCenter];
+                [self.view makeToast:[NSString stringWithFormat:@"请先添加完整%ld个图片!", (long)self.maxNum] duration:2.0 position:CSToastPositionCenter];
                 return NO;
             }
         }
