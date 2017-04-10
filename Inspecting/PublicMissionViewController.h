@@ -7,18 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <BaiduMapAPI_Map/BMKMapView.h>
+#import <MapKit/MapKit.h>
 
 @class NoneImageView;
 @class IPopupView;
 
-@interface PublicMissionViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, BMKMapViewDelegate>
+@interface PublicMissionViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, MKMapViewDelegate>
 
 //公共任务列表
 @property (nonatomic, strong) UITableView *tableView;
 
 // 百度地图
-@property (nonatomic, strong) BMKMapView *mapView;
+@property (nonatomic, strong) MKMapView *mapView;
 
 // 公共任务
 @property (nonatomic, strong) UIView *missionView;

@@ -10,6 +10,7 @@
 #import <AVFoundation/AVCaptureDevice.h>
 #import <AVFoundation/AVMediaFormat.h>
 #import "AppDelegate.h"
+#import <DYLocationConverter/DYLocationConverter.h>
 
 @implementation Utils
 
@@ -23,17 +24,25 @@
 }
 
 + (BOOL)locationAccess {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"locationAccess"];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return appDelegate.locationEnable;
 }
 
 + (NSString *)getAddrCode {
-    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-    return [NSString stringWithFormat:@"%.5f,%.5f",[user doubleForKey:@"latitude"], [user doubleForKey:@"longtitude"]];
+    CLLocationCoordinate2D gcj02Coordinate = [self getMyCoordinate];
+    CLLocationCoordinate2D coordinate = [DYLocationConverter bd09FromGcj02:gcj02Coordinate];
+    return [NSString stringWithFormat:@"%.5f,%.5f",coordinate.latitude, coordinate.longitude];
 }
 
-+ (CLLocationCoordinate2D) getMyLocation {
++ (CLLocation *) getMyLocation {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return appDelegate.userLocation.location.coordinate;
+    return appDelegate.userLocation;
+}
+
++ (CLLocationCoordinate2D) getMyCoordinate {
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return appDelegate.userCoordinate;
 }
 
 + (double) getDistance:(NSString *)addrcode {
@@ -43,12 +52,11 @@
     }
     double latitude = [[titudeArray objectAtIndex:0] doubleValue];
     double longtitude = [[titudeArray objectAtIndex:1] doubleValue];
-    BMKMapPoint a, b;
-    a.x = latitude;
-    a.y = longtitude;
-    b.x = [[NSUserDefaults standardUserDefaults] doubleForKey:@"latitude"];
-    b.y = [[NSUserDefaults standardUserDefaults] doubleForKey:@"longtitude"];
-    return BMKMetersBetweenMapPoints(a, b);
+    CLLocation *a = [[CLLocation alloc] initWithLatitude:latitude longitude:longtitude];
+    a = [DYLocationConverter gcj02LocationFromBd09:a];
+    CLLocation *b = [self getMyLocation];
+
+    return [a distanceFromLocation:b]/1000;
 }
 
 @end

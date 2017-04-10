@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <BaiduMapAPI_Search/BMKGeocodeSearch.h>
+#import <MapKit/MapKit.h>
 
 @class RadioButton;
 @class ITextView;
@@ -16,7 +16,7 @@
 @class ITermViewController;
 @class PickerView;
 
-@interface MerchInfoViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, BMKGeoCodeSearchDelegate>
+@interface MerchInfoViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MKMapViewDelegate>
 
 @property (nonatomic, strong) UIImageView *merchimg;
 @property (nonatomic, strong) UITextField *merchname;

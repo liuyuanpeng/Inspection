@@ -147,7 +147,7 @@
     self.telTextView.delegate = self;
     self.telTextView.keyboardType = UIKeyboardTypeNumberPad;
     [contactorInfoView addSubview:self.telTextView];
-
+    
     
     UILabel *mailLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 65, 30, 15)];
     mailLabel.font = [UIFont systemFontOfSize:12.0f];
@@ -161,7 +161,7 @@
     self.mailTextView.delegate = self;
     [self.mailTextView setKeyboardType:UIKeyboardTypeEmailAddress];
     [contactorInfoView addSubview:self.mailTextView];
-
+    
     UIView *split1 = [[UIView alloc] initWithFrame:CGRectMake(5, 30, rScreen.size.width - 10, 1)];
     split1.backgroundColor = [UIColor lightGrayColor];
     [contactorInfoView addSubview:split1];
@@ -302,24 +302,21 @@
     self.loadingImage = [UIImage animatedImageWithImages:imageArray duration:10.f];
     
     self.needupdate = YES;
-
+    
 }
 
 - (IBAction)onGetGeoCode {
     if (!self.bEdit) {
         return;
     }
-    BMKGeoCodeSearch *search = [[BMKGeoCodeSearch alloc]init];
-    search.delegate = self;
-    BMKReverseGeoCodeOption *rever = [[BMKReverseGeoCodeOption alloc]init];
-    rever.reverseGeoPoint = [Utils getMyLocation];
-    // don't delete following line
-    NSLog(@"%d",[search reverseGeoCode:rever]);
-    
-}
-
-- (void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error {
-    self.addr.text = result.address;
+    CLGeocoder *geoCoder = [[CLGeocoder alloc]init];
+    [geoCoder reverseGeocodeLocation:[Utils getMyLocation] completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (placemarks.count > 0) {
+            CLPlacemark *placeMark = [placemarks objectAtIndex:0];
+            
+            self.addr.text = placeMark.administrativeArea;
+        }
+    }];
 }
 
 
@@ -546,14 +543,14 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 #pragma mark - UITextFieldDelegate
 

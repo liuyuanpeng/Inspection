@@ -17,10 +17,13 @@
 #import <Toast/UIView+Toast.h>
 #import "AppDelegate.h"
 #import "IAnnotation.h"
+#import "IAnnotationView.h"
 #import "IPopupView.h"
+#import "MKMapView+ZoomLevel.h"
+#import <DYLocationConverter/DYLocationConverter.h>
 
 #define MAX_ZOOM_LEVEL 18
-#define MIN_ZOOM_LEVEL 3
+#define MIN_ZOOM_LEVEL 10
 
 @interface PublicMissionViewController ()
 
@@ -36,26 +39,19 @@
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     CGRect rView =CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height - self.tabBarController.tabBar.frame.size.height);
     
-    self.mapView = [[BMKMapView alloc] initWithFrame:rView];
+    self.mapView = [[MKMapView alloc] initWithFrame:rView];
     self.mapView.delegate = self;
     self.mapView.zoomEnabled = YES;
-    self.mapView.showMapScaleBar = YES;
+    self.mapView.rotateEnabled = NO;
+    self.mapView.pitchEnabled = NO;
+    if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+        self.mapView.showsScale = YES;
+    }
     [self.mapView setShowsUserLocation:YES];
-    self.mapView.showMapPoi = YES;
-    [self.mapView setCenterCoordinate: [Utils getMyLocation]];
-    self.mapView.zoomLevel = 16.0f;
+    self.mapView.showsPointsOfInterest = YES;
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     appDelegate.mapView = self.mapView;
-    [self.mapView updateLocationData:appDelegate.userLocation];
-    
-    
-    BMKLocationViewDisplayParam *param =  [[BMKLocationViewDisplayParam alloc] init];
-    param.isRotateAngleValid = NO;
-    param.isAccuracyCircleShow = NO;
-    param.locationViewOffsetX = 0;
-    param.locationViewOffsetY = 0;
-    [self.mapView updateLocationViewWithParam:param];
-
+    [self.mapView setCenterCoordinate:appDelegate.userCoordinate zoomLevel:16 animated:NO];
     
     self.missionView = [[UIView alloc] initWithFrame:rView];
     self.missionView.backgroundColor = [UIColor clearColor];
@@ -90,7 +86,7 @@
     [self.zoomOut setBackgroundImage:[UIImage imageNamed:@"main_bottombtn_down.9.png"] forState:UIControlStateSelected];
     [self.zoomIn setBackgroundImage:[UIImage imageNamed:@"main_topbtn_up.9.png"] forState:UIControlStateNormal];
     [self.zoomIn setBackgroundImage:[UIImage imageNamed:@"main_topbtn_down.9.png"] forState:UIControlStateDisabled];
-
+    
     CGRect rMap = self.mapView.frame;
     self.zoomOut.frame = CGRectMake(rMap.size.width - 60, rMap.size.height - 60, 40, 40);
     self.zoomIn.frame = CGRectMake(rMap.size.width - 60, rMap.size.height - 100, 40, 40);
@@ -107,6 +103,13 @@
     self.noneZoomout.image = [UIImage imageNamed:@"main_icon_zoomout.png"];
     [self.mapView addSubview:self.noneZoomout];
     [self.mapView addSubview:self.noneZoomin];
+    
+    UIButton *myLocationBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    myLocationBtn.frame = CGRectMake(rMap.size.width - 55, rMap.size.height - 140, 30, 30);
+    [myLocationBtn setBackgroundImage:[UIImage imageNamed:@"my_location.png"] forState:UIControlStateNormal];
+    [myLocationBtn addTarget:self action:@selector(onLocate) forControlEvents:UIControlEventTouchUpInside];
+    [self.mapView addSubview:myLocationBtn];
+    
     self.annotations = [[NSMutableArray alloc] init];
     
     self.popupView = [[IPopupView alloc] init];
@@ -116,10 +119,14 @@
     [publicMissionView.statusButton addTarget:self action:@selector(onLockTask:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+- (IBAction) onLocate {
+    [self.mapView setCenterCoordinate:[Utils getMyCoordinate] zoomLevel:16 animated:YES];
+}
+
 
 /**
  获取随机数
-
+ 
  @return 随机经纬度
  */
 - (double)getRandom {
@@ -148,18 +155,21 @@
         NSArray *array = [[dict objectForKey:@"addrcode"] componentsSeparatedByString:@","];
         if (array.count != 2) {
             array = [[Utils getAddrCode] componentsSeparatedByString:@","];
+            annotation.coordinate = CLLocationCoordinate2DMake([[array objectAtIndex:0] doubleValue] + [self getRandom], [[array objectAtIndex:1] doubleValue] + [self getRandom]);
         }
-        annotation.coordinate = CLLocationCoordinate2DMake([[array objectAtIndex:0] doubleValue] + [self getRandom], [[array objectAtIndex:1] doubleValue] + [self getRandom]);
+        else {
+            annotation.coordinate = [DYLocationConverter gcj02FromBd09: CLLocationCoordinate2DMake([[array objectAtIndex:0] doubleValue], [[array objectAtIndex:1] doubleValue])];
+        }
+        
         [self.annotations addObject:annotation];
-        [self.mapView addAnnotation:annotation];
-
     }
+    [self.mapView addAnnotations:self.annotations];
 }
 
 
 /**
  切换地图和公共任务列表
-
+ 
  @param sender 按钮对象
  */
 - (IBAction)onLocate:(id)sender {
@@ -175,11 +185,14 @@
 
 /**
  放大地图
-
+ 
  @param sender 放大按钮
  */
 - (IBAction)onZoomIn:(id)sender {
-    float currentZoomLevel  = [self.mapView getMapStatus].fLevel;
+    float currentZoomLevel  =  self.mapView.zoomLevel;
+    if (currentZoomLevel == MAX_ZOOM_LEVEL) {
+        return;
+    }
     if (currentZoomLevel == MIN_ZOOM_LEVEL) {
         self.noneZoomout.image = [UIImage imageNamed:@"main_icon_zoomout.png"];
         [self.zoomOut setEnabled:YES];
@@ -190,18 +203,20 @@
         [self.zoomIn setEnabled:NO];
         currentZoomLevel = MAX_ZOOM_LEVEL;
     }
-    [self.mapView setZoomLevel:currentZoomLevel];
-    
+    [self.mapView setCenterCoordinate:self.mapView.centerCoordinate zoomLevel:currentZoomLevel animated:YES];
 }
 
 
 /**
  缩小地图
-
+ 
  @param sender 缩小按钮
  */
 - (IBAction)onZoomOut:(id)sender {
-    float currentZoomLevel = [self.mapView getMapStatus].fLevel;
+    float currentZoomLevel = self.mapView.zoomLevel;
+    if (currentZoomLevel == MIN_ZOOM_LEVEL) {
+        return;
+    }
     if (currentZoomLevel == MAX_ZOOM_LEVEL) {
         self.noneZoomin.image = [UIImage imageNamed:@"main_icon_zoomin.png"];
         [self.zoomIn setEnabled:YES];
@@ -212,7 +227,8 @@
         [self.zoomOut setEnabled:NO];
         currentZoomLevel = MIN_ZOOM_LEVEL;
     }
-    [self.mapView setZoomLevel:currentZoomLevel];
+    [self.mapView setCenterCoordinate:self.mapView.centerCoordinate zoomLevel:currentZoomLevel animated:YES];
+    
 }
 
 
@@ -237,7 +253,7 @@
     }failure:^(NSError *error) {
         NSLog(@"%@", error);
     }];
-
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -253,14 +269,14 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 #pragma mark - UITableView Delegate Implementation
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -303,7 +319,7 @@
 
 /**
  锁定公共任务
-
+ 
  @param sender IBAction
  */
 - (IBAction)onLockTask:(UIButton *)sender {
@@ -331,14 +347,16 @@
 
 #pragma mark - BMKMapViewDelegate
 // 自定义泡泡图标
-- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id<BMKAnnotation>)annotation {
-    if ([annotation isKindOfClass:[BMKUserLocation class]]) {
+- (MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    if ([annotation isKindOfClass:[MKUserLocation class]]) {
         // 我的位置
         return nil;
     }
-    BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"iannotation_view"];
-    newAnnotationView.paopaoView = nil;
-    newAnnotationView.annotation = annotation;
+    static NSString *pin = @"iannotation_view";
+    MKAnnotationView *newAnnotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:pin];
+    if (!newAnnotationView) {
+        newAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pin];
+    }
     IAnnotation *iAnnotation = annotation;
     NSDictionary *missionDict = [[iPublicMission getInstance].missionArray objectAtIndex:iAnnotation.tag];
     if ([@"" isEqualToString:[missionDict objectForKey:@"opstaff"]]) {
@@ -347,17 +365,19 @@
     else {
         newAnnotationView.image = [UIImage imageNamed:@"i_map_locked.png"];
     }
+    newAnnotationView.transform = CGAffineTransformMakeScale(0.5, 0.5);
     newAnnotationView.userInteractionEnabled = YES;
     newAnnotationView.tag = iAnnotation.tag;
     [newAnnotationView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onAnnotationClick:)]];
     return newAnnotationView;
+    
     
 }
 
 #pragma mark - Annotation Clicked
 // 点击泡泡事件
 - (IBAction)onAnnotationClick:(UIGestureRecognizer *)sender {
-    BMKPinAnnotationView *annotation = (BMKPinAnnotationView *)sender.view;
+    MKPinAnnotationView *annotation = (MKPinAnnotationView *)sender.view;
     IPublicMissionView *missionView = (IPublicMissionView *)self.popupView.contentView;
     missionView.statusButton.tag = annotation.tag;
     

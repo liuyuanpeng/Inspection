@@ -1,0 +1,6 @@
+framework module DYLocationConverter {
+  umbrella header "DYLocationConverter-umbrella.h"
+
+  export *
+  module * { export * }
+}

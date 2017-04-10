@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <BaiduMapAPI_Search/BMKGeocodeSearch.h>
+#import <MapKit/MapKit.h>
 
 @class ITextView;
 @class RadioButton;
 
-@interface INewShopViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, BMKGeoCodeSearchDelegate>
+@interface INewShopViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MKMapViewDelegate>
 
 @property (nonatomic, strong) UITextField *shopName;
 @property (nonatomic, strong) UITextField *shopAddr;

@@ -15,9 +15,11 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - BaiduMapKit (3.2.1)
   - DACircularProgress (2.3.1)
-  - IQKeyboardManager (4.0.8)
+  - DYCoordinateInChina (0.1.1)
+  - DYLocationConverter (0.0.4):
+    - DYCoordinateInChina
+  - IQKeyboardManager (4.0.9)
   - MBProgressHUD (1.0.0)
   - PYPhotoBrowser (1.2.5):
     - DACircularProgress
@@ -32,7 +34,7 @@ PODS:
 DEPENDENCIES:
   - ActionSheetPicker-3.0 (~> 2.2.0)
   - AFNetworking (~> 3.1.0)
-  - BaiduMapKit (~> 3.2.1)
+  - DYLocationConverter
   - IQKeyboardManager (~> 4.0.8)
   - PYPhotoBrowser (~> 1.2.5)
   - RadioButton (~> 1.0)
@@ -42,15 +44,16 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: d11a4c12c6aaf704b8a3f56d179198c99f3e41e6
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  BaiduMapKit: 9c748785aa3dddfc41dcb70c14b21ce32f680930
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
-  IQKeyboardManager: 1a8189fa153bf09044355ee0ad36826f6767e7f7
+  DYCoordinateInChina: 26eede8f63682536b9f2688cf9cbe4ebf21dcbf9
+  DYLocationConverter: c6046909d23087f808b1515df344870d5e854baf
+  IQKeyboardManager: 322c7405df3eb5f7e50dede32ea937bf3d4364e0
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   PYPhotoBrowser: 832154ec5e61c2c321d9be0e69af1fda8731e5ac
   RadioButton: 7ef053baf6ff0e7f9e777016c28e9ba4e330edba
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   Toast: 14a93686d6c8bfe2727afd342414e35660a8a1f3
 
-PODFILE CHECKSUM: 671ba1adc3ec7bb233d6af3535c5ecffc2c2e058
+PODFILE CHECKSUM: f8cd938037b730b859070b5bf97667e9f35e5384
 
 COCOAPODS: 1.2.0

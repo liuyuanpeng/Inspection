@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <BaiduMapAPI_Utils/BMKGeometry.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface Utils : NSObject
 
@@ -33,7 +33,9 @@
 
  @return 结构体
  */
-+ (CLLocationCoordinate2D) getMyLocation;
++ (CLLocation *) getMyLocation;
+
++ (CLLocationCoordinate2D)getMyCoordinate;
 
 
 /**

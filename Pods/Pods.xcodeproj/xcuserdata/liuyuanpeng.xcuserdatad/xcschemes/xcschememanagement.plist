@@ -19,6 +19,16 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>DYCoordinateInChina.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>DYLocationConverter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>IQKeyboardManager.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -57,7 +67,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>094953D18DABC720F2E2920C9E2CEA76</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>17CEAD1B3EC4E80098DF5F8AA00BE966</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>308D44DBC91AE8E1B953EB3838BC845F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>36B04013CA2341D4377FCDA2E30F5024</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -67,27 +92,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6EB0A8B8E0FCCFF34A893B070A412443</key>
+		<key>45C3346F259E072C06AD9D0E4567D6DB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7C7345F23D894200B8E945EE6E81108E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>7FDFC86539A5F82E69A2C9641089D1F9</key>
+		<key>6C0E7E8770A7EBF6AA8191663871FFD4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>965699190112DDBD9B7864D091660DBC</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>A7A937D884197A04039CC68FA54888BA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -102,7 +117,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FD0BB855479016576185A7C56C07FB05</key>
+		<key>E3634B075B6FABC3FE0CB6E7952ACBCA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E8D31EA256FCB3BCA1A87405D6B7D896</key>
 		<dict>
 			<key>primary</key>
 			<true/>

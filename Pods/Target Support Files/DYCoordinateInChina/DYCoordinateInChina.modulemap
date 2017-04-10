@@ -1,0 +1,6 @@
+framework module DYCoordinateInChina {
+  umbrella header "DYCoordinateInChina-umbrella.h"
+
+  export *
+  module * { export * }
+}

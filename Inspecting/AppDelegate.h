@@ -7,29 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <BaiduMapAPI_Base/BMKBaseComponent.h>//引入base相关所有的头文件
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 
-#import <BaiduMapAPI_Map/BMKMapComponent.h>//引入地图功能所有的头文件
-
-#import <BaiduMapAPI_Search/BMKSearchComponent.h>//引入检索功能所有的头文件
-
-#import <BaiduMapAPI_Cloud/BMKCloudSearchComponent.h>//引入云检索功能所有的头文件
-
-#import <BaiduMapAPI_Location/BMKLocationComponent.h>//引入定位功能所有的头文件
-
-#import <BaiduMapAPI_Utils/BMKUtilsComponent.h>//引入计算工具所有的头文件
-
-#import <BaiduMapAPI_Radar/BMKRadarComponent.h>//引入周边雷达功能所有的头文件
-
-#import <BaiduMapAPI_Map/BMKMapView.h>//只引入所需的单个头文件
-
-@interface AppDelegate : UIResponder <UIApplicationDelegate, BMKLocationServiceDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) BMKMapManager *mapManager;
-@property (strong, nonatomic) BMKLocationService *locService;
-@property (weak, nonatomic) BMKMapView *mapView;
-@property (strong, nonatomic) BMKUserLocation *userLocation;
-
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (weak, nonatomic) MKMapView *mapView;
+@property (strong, nonatomic) CLLocation* userLocation;
+@property (assign, nonatomic) CLLocationCoordinate2D userCoordinate;
+@property (assign, nonatomic) BOOL locationEnable;
 
 @end

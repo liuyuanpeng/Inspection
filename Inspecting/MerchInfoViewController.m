@@ -256,17 +256,14 @@
     if (!self.bEdit) {
         return;
     }
-    BMKGeoCodeSearch *search = [[BMKGeoCodeSearch alloc]init];
-    search.delegate = self;
-    BMKReverseGeoCodeOption *rever = [[BMKReverseGeoCodeOption alloc]init];
-    rever.reverseGeoPoint = [Utils getMyLocation];
-    // don't delete following line
-    NSLog(@"%d",[search reverseGeoCode:rever]);
-
-}
-
-- (void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error {
-    self.merchAddr.text = result.address;
+    CLGeocoder *geoCoder = [[CLGeocoder alloc]init];
+    [geoCoder reverseGeocodeLocation:[Utils getMyLocation] completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (placemarks.count > 0) {
+            CLPlacemark *placeMark = [placemarks objectAtIndex:0];
+            
+            self.merchAddr.text = placeMark.administrativeArea;
+        }
+    }];
 }
 
 - (void)hideTabBar {
