@@ -201,7 +201,7 @@
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 10, 100, 30);
     NSInteger btnTag = 1;
-    for (NSString *optionTitle in @[@"不存在", @"正常", @"其他情况"]) {
+    for (NSString *optionTitle in @[@"正常", @"不存在", @"其他情况"]) {
         RadioButton *btn = [[RadioButton alloc] initWithFrame:btnRect];
         if ([optionTitle isEqualToString:@"正常"]) {
             btnRect.origin.x += 80;
