@@ -452,21 +452,17 @@
 }
 
 - (IBAction)addTerm:(id)sender {
-    if (nil == self.addTermViewController) {
-        self.addTermViewController = [[INewTermViewController alloc] init];
-    }
-    self.addTermViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    self.addTermViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
-    [self.navigationController pushViewController:self.addTermViewController animated:YES];
+    INewTermViewController *addTermViewController = [[INewTermViewController alloc] init];
+    addTermViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    addTermViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
+    [self.navigationController pushViewController:addTermViewController animated:YES];
 }
 
 - (IBAction)onUpdateLog:(id)sender {
-    if (nil == self.logViewController) {
-        self.logViewController = [[ILogViewController alloc] init];
-    }
-    self.logViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    self.logViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
-    [self.navigationController pushViewController:self.logViewController animated:YES];
+    ILogViewController *logViewController = [[ILogViewController alloc] init];
+    logViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    logViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
+    [self.navigationController pushViewController:logViewController animated:YES];
 }
 
 - (IBAction)onEdit:(UIButton *)sender {
@@ -532,7 +528,7 @@
             [self uploadImages:0];
         }
     } failure:^(NSError *error) {
-        NSLog(@"%@", error);
+        [self.view makeToast:@"巡检上传失败!"];
     }];
 }
 
@@ -601,13 +597,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.termDetailViewController == nil) {
-        self.termDetailViewController = [[ITermDetailViewController alloc] init];
-    }
-    self.termDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    self.termDetailViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
-    self.termDetailViewController.termInfo = [[NSDictionary alloc] initWithDictionary:[[self.shopDetail objectForKey:@"termlst"] objectAtIndex:indexPath.row]];
-    [self.navigationController pushViewController:self.termDetailViewController animated:YES];
+     ITermDetailViewController *termDetailViewController = [[ITermDetailViewController alloc] init];
+    termDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    termDetailViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
+    termDetailViewController.termInfo = [[NSDictionary alloc] initWithDictionary:[[self.shopDetail objectForKey:@"termlst"] objectAtIndex:indexPath.row]];
+    [self.navigationController pushViewController:termDetailViewController animated:YES];
 }
 
 #pragma mark - UIImagePickerControllerDelegate Implementation
@@ -624,6 +618,13 @@
 - (void)uploadImgOK {
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
+    [self.view makeToast:@"巡检上传成功!"];
+}
+
+- (void)uploadImgFail {
+    self.view.userInteractionEnabled = YES;
+    [self.indicator stopAnimating];
+    [self.view makeToast:@"巡检图片上传失败!"];
 }
 
 - (void) uploadImages:(NSInteger)index {
@@ -657,7 +658,7 @@
                 [self uploadImages:(index)];
             }
         } failure:^(NSError *error) {
-            NSLog(@"%@",error);
+            [self uploadImgFail];
         }];
     }
     else {
@@ -666,7 +667,7 @@
                 [self uploadImages:index];
             }
         } failure:^(NSError *error) {
-            NSLog(@"%@", error);
+            [self uploadImgFail];
         }];
     }
 }

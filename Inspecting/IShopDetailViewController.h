@@ -11,9 +11,6 @@
 
 @class ITextView;
 @class RadioButton;
-@class ILogViewController;
-@class ITermDetailViewController;
-@class INewTermViewController;
 
 @interface IShopDetailViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextViewDelegate, MKMapViewDelegate>
 
@@ -47,9 +44,6 @@
 @property (nonatomic, assign) BOOL bEdit;
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
-@property (nonatomic, strong) ILogViewController *logViewController;
-@property (nonatomic, strong) ITermDetailViewController *termDetailViewController;
-@property (nonatomic, strong) INewTermViewController *addTermViewController;
 
 @property (nonatomic, strong) UILabel *resultLabel;
 @property (nonatomic, strong) UIView *resultView;

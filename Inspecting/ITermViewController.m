@@ -91,12 +91,10 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (!self.termDetailViewController) {
-        self.termDetailViewController = [[ITermDetailViewController alloc] init];
-    }
-    self.termDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    self.termDetailViewController.termInfo = [[NSDictionary alloc] initWithDictionary:[self.termArray objectAtIndex:indexPath.row]];
-    [self.navigationController pushViewController:self.termDetailViewController animated:YES];
+    ITermDetailViewController *termDetailViewController = [[ITermDetailViewController alloc] init];
+    termDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    termDetailViewController.termInfo = [[NSDictionary alloc] initWithDictionary:[self.termArray objectAtIndex:indexPath.row]];
+    [self.navigationController pushViewController:termDetailViewController animated:YES];
 }
 
 #pragma mark - UITableView Datasource Impletation

@@ -335,7 +335,7 @@
             [self uploadImages:0];
         }
     } failure:^(NSError *error) {
-        NSLog(@"%@", error);
+        [self.view makeToast:@"巡检上传失败!"];
     }];
 }
 
@@ -444,11 +444,9 @@
 }
 
 - (IBAction)onUpdateLog:(id)sender {
-    if (nil == self.logViewController) {
-        self.logViewController = [[ILogViewController alloc] init];
-    }
-    self.logViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    [self.navigationController pushViewController:self.logViewController animated:YES];
+    ILogViewController *logViewController = [[ILogViewController alloc] init];
+    logViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    [self.navigationController pushViewController:logViewController animated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -474,6 +472,13 @@
 - (void)uploadImgOK {
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
+    [self.view makeToast:@"巡检上传成功!"];
+}
+
+- (void)uploadImgFail {
+    self.view.userInteractionEnabled = YES;
+    [self.indicator stopAnimating];
+    [self.view makeToast:@"巡检图片上传失败!"];
 }
 
 - (void) uploadImages:(NSInteger)index {
@@ -505,7 +510,7 @@
                 [self uploadImages:(index)];
             }
         } failure:^(NSError *error) {
-            NSLog(@"%@",error);
+            [self uploadImgFail];
         }];
     }
     else {
@@ -514,7 +519,7 @@
                 [self uploadImages:index];
             }
         } failure:^(NSError *error) {
-            NSLog(@"%@", error);
+            [self uploadImgFail];
         }];
     }
 }
@@ -584,18 +589,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0) {
-        if (nil == self.shopViewController) {
-            self.shopViewController = [[IShopViewController alloc] init];
-        }
-        self.shopViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-        [self.navigationController pushViewController:self.shopViewController animated:YES];
+        IShopViewController *shopViewController = [[IShopViewController alloc] init];
+        shopViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+        [self.navigationController pushViewController:shopViewController animated:YES];
     }
     else {
-        if (nil == self.termViewController) {
-            self.termViewController = [[ITermViewController alloc] init];
-        }
-        self.termViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-        [self.navigationController pushViewController:self.termViewController animated:YES];
+        ITermViewController *termViewController = [[ITermViewController alloc] init];
+        termViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+        [self.navigationController pushViewController:termViewController animated:YES];
     }
 }
 

@@ -430,15 +430,13 @@
 
 
 - (IBAction)onUpdateLog:(id)sender {
-    if (nil == self.logViewController) {
-        self.logViewController = [[ILogViewController alloc] init];
-    }
-    self.logViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    self.logViewController.termInfo = [[NSDictionary alloc] initWithDictionary:self.termInfo];
+    ILogViewController *logViewController = [[ILogViewController alloc] init];
+    logViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    logViewController.termInfo = [[NSDictionary alloc] initWithDictionary:self.termInfo];
     if (self.shopInfo) {
-        self.logViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
+        logViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:self.shopInfo];
     }
-    [self.navigationController pushViewController:self.logViewController animated:YES];
+    [self.navigationController pushViewController:logViewController animated:YES];
 }
 
 - (IBAction)onEdit:(UIButton *)sender {

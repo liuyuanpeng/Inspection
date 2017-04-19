@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @class RadioButton;
-@class MerchInfoViewController;
 
 @interface MyMissionViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 // 我的任务列表
@@ -24,8 +23,6 @@
 // 单选按钮
 @property (nonatomic, weak) RadioButton *radioButtons;
 
-// 商户详情
-@property (nonatomic, strong) MerchInfoViewController *merchInfoViewController;
 // 我的任务列表
 @property (nonatomic, strong) NSMutableArray *myTaskArray;
 

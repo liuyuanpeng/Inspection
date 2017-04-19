@@ -10,7 +10,6 @@
 
 @class RadioButton;
 @class ITextView;
-@class ILogViewController;
 
 @interface ITermDetailViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -37,8 +36,6 @@
 @property (nonatomic, strong) NSDictionary *termInfo;
 
 @property (nonatomic, strong) NSMutableDictionary *termDetail;
-
-@property (nonatomic, strong) ILogViewController *logViewController;
 
 @property (nonatomic, assign) NSInteger inspcntid;
 

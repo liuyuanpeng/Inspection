@@ -11,9 +11,9 @@
 #import <RadioButton/RadioButton.h>
 #import "iUser.h"
 #import "AFNRequestManager.h"
-#import "MerchInfoViewController.h"
 #import "IMission.h"
 #import "IPubTaskDetailViewController.h"
+#import "MerchInfoViewController.h"
 #import "IPubTask.h"
 
 @interface MyMissionViewController ()
@@ -221,11 +221,9 @@
     NSDictionary *merchInfo = [self.myTaskArray objectAtIndex:indexPath.row];
     
     if (1 == [[merchInfo objectForKey:@"tasktype"] integerValue]) {
-        if (!self.merchInfoViewController) {
-            self.merchInfoViewController = [[MerchInfoViewController alloc] init];
-        }
-        self.merchInfoViewController.taskInfo = [[NSDictionary alloc] initWithDictionary:merchInfo];
-        [self.navigationController pushViewController:self.merchInfoViewController animated:NO];
+        MerchInfoViewController *merchInfoViewController = [[MerchInfoViewController alloc] init];
+        merchInfoViewController.taskInfo = [[NSDictionary alloc] initWithDictionary:merchInfo];
+        [self.navigationController pushViewController:merchInfoViewController animated:NO];
     }
     else {
         IPubTask *pubTask = [IPubTask shareInstance];

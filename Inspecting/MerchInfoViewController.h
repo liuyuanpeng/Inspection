@@ -11,9 +11,6 @@
 
 @class RadioButton;
 @class ITextView;
-@class ILogViewController;
-@class IShopViewController;
-@class ITermViewController;
 @class PickerView;
 
 @interface MerchInfoViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MKMapViewDelegate>
@@ -41,9 +38,6 @@
 @property (nonatomic, strong) NSDictionary *taskInfo;
 @property (nonatomic, strong) NSMutableDictionary *merchInfo;
 
-@property (nonatomic, strong) ILogViewController *logViewController;
-@property (nonatomic, strong) IShopViewController *shopViewController;
-@property (nonatomic, strong) ITermViewController *termViewController;
 @property (nonatomic, strong) PickerView *pickerView;
 
 @property (nonatomic, weak) UIImageView *curSelPic;

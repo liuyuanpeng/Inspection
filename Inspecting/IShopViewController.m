@@ -81,11 +81,9 @@
 }
 
 - (IBAction)addShop:(id)sender {
-    if (nil == self.addShopViewController) {
-        self.addShopViewController = [[INewShopViewController alloc] init];
-    }
-    self.addShopViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    [self.navigationController pushViewController:self.addShopViewController animated:YES];
+    INewShopViewController *addShopViewController = [[INewShopViewController alloc] init];
+    addShopViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    [self.navigationController pushViewController:addShopViewController animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -112,12 +110,10 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (!self.shopDetailViewController) {
-        self.shopDetailViewController = [[IShopDetailViewController alloc] init];
-    }
-    self.shopDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
-    self.shopDetailViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:[self.shopArray objectAtIndex:indexPath.row]];
-    [self.navigationController pushViewController:self.shopDetailViewController animated:YES];
+    IShopDetailViewController *shopDetailViewController = [[IShopDetailViewController alloc] init];
+    shopDetailViewController.merchInfo = [[NSDictionary alloc] initWithDictionary:self.merchInfo];
+    shopDetailViewController.shopInfo = [[NSDictionary alloc] initWithDictionary:[self.shopArray objectAtIndex:indexPath.row]];
+    [self.navigationController pushViewController:shopDetailViewController animated:YES];
 }
 
 #pragma mark - UITableView Datasource Impletation
