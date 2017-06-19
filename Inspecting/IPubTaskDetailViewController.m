@@ -30,17 +30,20 @@
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     CGRect rNav = self.navigationController.navigationBar.frame;
     
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height)];
+    [self.view addSubview:self.scrollView];
+    
     NSDictionary *stepInfo = [[IPubTask shareInstance]getStepInfoByStep:self.step];
     NSDictionary *taskInfo = [IPubTask shareInstance].taskInfo;
     
-    UILabel *basicInfo = [[UILabel alloc] initWithFrame:CGRectMake(10, rNav.origin.y + rNav.size.height + 5, 200, 20)];
+    UILabel *basicInfo = [[UILabel alloc] initWithFrame:CGRectMake(10, 5 - rNav.origin.y - rNav.size.height, 200, 20)];
     basicInfo.font = [UIFont systemFontOfSize:13.0];
     basicInfo.text = @"基本信息";
-    [self.view addSubview:basicInfo];
+    [self.scrollView addSubview:basicInfo];
     
-    UIView *basicInfoView = [[UIView alloc] initWithFrame:CGRectMake(0,rNav.origin.y + rNav.size.height + 30, rScreen.size.width, 100)];
+    UIView *basicInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, -rNav.origin.y - rNav.size.height + 30, rScreen.size.width, 100)];
     basicInfoView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:basicInfoView];
+    [self.scrollView addSubview:basicInfoView];
     
     UILabel *taskName = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 15)];
     taskName.font = [UIFont systemFontOfSize:12.0];
@@ -100,31 +103,30 @@
     UILabel *stepIllustrate = [[UILabel alloc] initWithFrame:CGRectMake(10, basicInfoView.frame.origin.y + basicInfoView.frame.size.height + 5, 200, 20)];
     stepIllustrate.font = [UIFont systemFontOfSize:13.0];
     stepIllustrate.text = @"步骤说明";
-    [self.view addSubview:stepIllustrate];
+    [self.scrollView addSubview:stepIllustrate];
     
     UILabel *stepTitle = [[UILabel alloc] initWithFrame:CGRectMake(rScreen.size.width - 500, stepIllustrate.frame.origin.y, 490, 20)];
     stepTitle.font = [UIFont systemFontOfSize:13.0];
     stepTitle.textAlignment = NSTextAlignmentRight;
     stepTitle.textColor = [UIColor redColor];
     stepTitle.text = [NSString stringWithString:[stepInfo objectForKey:@"stepname"]];
-    [self.view addSubview:stepTitle];
+    [self.scrollView addSubview:stepTitle];
     
     UITextView *remarkTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, basicInfoView.frame.origin.y + basicInfoView.frame.size.height + 30, rScreen.size.width, 40)];
     [remarkTextView setEditable:NO];
     remarkTextView.font = [UIFont systemFontOfSize:12.0];
     [remarkTextView setBackgroundColor:[UIColor whiteColor]];
     [remarkTextView setScrollEnabled:NO];
-    [self.view addSubview:remarkTextView];
+    [self.scrollView addSubview:remarkTextView];
     remarkTextView.text = [NSString stringWithString:[stepInfo objectForKey:@"remark"]];
+    CGSize rcRemark = [remarkTextView sizeThatFits:CGSizeMake(remarkTextView.frame.size.width, FLT_MAX)];
+    remarkTextView.py_height = rcRemark.height > 40.0f ? rcRemark.height : 40.0f;
     
     UILabel *inspContent = [[UILabel alloc] initWithFrame:CGRectMake(10, remarkTextView.frame.origin.y + remarkTextView.frame.size.height + 5, 100, 20)];
     inspContent.font = [UIFont systemFontOfSize:13.0];
     inspContent.text = @"巡检内容";
-    [self.view addSubview:inspContent];
+    [self.scrollView addSubview:inspContent];
     
-    UIView *inspView = [[UIView alloc] initWithFrame:CGRectMake(0, remarkTextView.frame.origin.y + remarkTextView.frame.size.height + 30, rScreen.size.width, 110)];
-    [inspView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:inspView];
     
     self.inspContentText = [[ITextView alloc] initWithFrame:CGRectMake(20, 10, rScreen.size.width - 40, 40)];
     [self.inspContentText setPlaceholder:@"请输入情况说明"];
@@ -133,18 +135,25 @@
     [self.inspContentText.layer setMasksToBounds:YES];
     [self.inspContentText.layer setBorderWidth:1.0];
     [self.inspContentText.layer setBorderColor:[UIColor grayColor].CGColor];
-    [inspView addSubview:self.inspContentText];
     
     NSArray *picList = (NSArray *)[stepInfo objectForKey:@"piclst"];
     if (picList && picList.count > 0) {
         self.inspContentText.text = [NSString stringWithString:[[picList objectAtIndex:0] objectForKey:@"content"]];
     }
+
+    CGSize rcInsp = [self.inspContentText sizeThatFits:CGSizeMake(self.inspContentText.frame.size.width, FLT_MAX)];
+    self.inspContentText.py_height = rcInsp.height > 40.0f ? rcInsp.height : 40.0f;
     
-    UIView *spitLine = [[UIView alloc] initWithFrame:CGRectMake(0, 60, rScreen.size.width, 1)];
+    UIView *inspView = [[UIView alloc] initWithFrame:CGRectMake(0, remarkTextView.frame.origin.y + remarkTextView.frame.size.height + 30, rScreen.size.width, rcInsp.height + 70)];
+    [inspView setBackgroundColor:[UIColor whiteColor]];
+    [self.scrollView addSubview:inspView];
+    [inspView addSubview:self.inspContentText];
+    
+    UIView *spitLine = [[UIView alloc] initWithFrame:CGRectMake(0, rcInsp.height + 20, rScreen.size.width, 1)];
     [spitLine setBackgroundColor:[UIColor grayColor]];
     [inspView addSubview:spitLine];
     
-    UILabel *photoTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 65, 40, 20)];
+    UILabel *photoTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, rcInsp.height + 25, 40, 20)];
     photoTitle.text = @"拍照:";
     photoTitle.font = [UIFont systemFontOfSize:13.0];
     [inspView addSubview:photoTitle];
@@ -156,7 +165,7 @@
     self.loadingImage = [UIImage animatedImageWithImages:imageArray duration:10.f];
     self.maxNum = [[stepInfo objectForKey:@"picnum"] integerValue];
     self.picViewArray = [[NSMutableArray alloc] initWithCapacity:self.maxNum];
-    CGRect rcPic = CGRectMake(55, 65, 40, 40);
+    CGRect rcPic = CGRectMake(55, rcInsp.height + 25, 40, 40);
     for (NSInteger i = 0; i < self.maxNum; i++) {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:rcPic];
         imageView.image = BACK_IMG;
@@ -198,7 +207,7 @@
     self.preButton.frame = rcButton;
     [self.preButton setHidden:YES];
     [self.preButton addTarget:self action:@selector(onBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.preButton];
+    [self.scrollView addSubview:self.preButton];
     
     self.nextButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.nextButton setBackgroundColor:[UIColor colorWithRed:60/255.0 green:179/255.0 blue:113/255.0 alpha:1.0]];
@@ -209,7 +218,7 @@
     self.nextButton.frame = rcButton;
     [self.nextButton setHidden:YES];
     [self.nextButton addTarget:self action:@selector(onBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.nextButton];
+    [self.scrollView addSubview:self.nextButton];
 
     self.commitButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.commitButton setBackgroundColor:[UIColor colorWithRed:60/255.0 green:179/255.0 blue:113/255.0 alpha:1.0]];
@@ -220,7 +229,9 @@
     self.commitButton.frame = rcButton;
     [self.commitButton setHidden:YES];
     [self.commitButton addTarget:self action:@selector(onBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.commitButton];
+    [self.scrollView addSubview:self.commitButton];
+    
+    self.scrollView.contentSize = CGSizeMake(rScreen.size.width, self.commitButton.frame.origin.y + self.commitButton.frame.size.height);
     
     self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.indicator setCenter:CGPointMake(rScreen.size.width/2, rScreen.size.height/2)];

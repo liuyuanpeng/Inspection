@@ -23,4 +23,5 @@
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 @property (nonatomic, strong) NSMutableDictionary * userImageDict;
 @property (nonatomic, assign) NSInteger maxNum;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @end

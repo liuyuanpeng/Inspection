@@ -261,7 +261,7 @@
         if (placemarks.count > 0) {
             CLPlacemark *placeMark = [placemarks objectAtIndex:0];
             
-            self.merchAddr.text = placeMark.administrativeArea;
+            self.merchAddr.text = [NSString stringWithFormat:@"%@%@%@%@",placeMark.administrativeArea?placeMark.administrativeArea:@"", placeMark.locality?placeMark.locality:@"", placeMark.subLocality?placeMark.subLocality:@"", placeMark.thoroughfare?placeMark.thoroughfare:@""];
         }
     }];
 }
