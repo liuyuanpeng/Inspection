@@ -350,6 +350,10 @@
     [self uploadByIndex:0];}
 
 - (void)uploadSuccess {
+    if (![Utils locationAccess]) {
+        [self.view makeToast:@"定位功能不可用!"];
+        return;
+    }
     NSDictionary *stepInfo = [[IPubTask shareInstance]getStepInfoByStep:self.step];
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,

@@ -343,6 +343,10 @@
 }
 
 - (IBAction)onCommit:(id)sender {
+    if (![Utils locationAccess]) {
+        [self.view makeToast:@"定位功能不可用!"];
+        return;
+    }
     for (NSInteger i = 0; i < 4; i++) {
         if (self.inspresultArray.count > i) {
             NSDictionary *dict = [self.inspresultArray objectAtIndex:i];

@@ -19,6 +19,7 @@
 #import "iUser.h"
 #import "ITermType.h"
 #import "IVersion.h"
+#import "Utils.h"
 
 @interface LoginViewController ()
 
@@ -107,13 +108,11 @@
 
 
 - (IBAction)onLogin:(id)sender {
-//    NSDictionary *parameters = @{@"batchcode":@"batchcode",@"seq":@12, @"serialnbr":@"dfjkdfj",@"oldfile":@"",@"logo":@"",@"posi":@"", @"inspcntid":@234324};
-//    [AFNRequestManager requestAFURL:@"inspPubTaskPics.json" params:parameters imageData:UIImagePNGRepresentation([UIImage imageNamed:@"i_finished.png"]) succeed:^(id ret)  {
-//        NSLog(@"upload success");
-//    } failure:^(NSError * eror) {
-//        NSLog(@"error");
-//    }];
-//    return;
+    // check location access
+    if (![Utils locationAccess]) {
+        [self.view makeToast:@"定位功能不可用!"];
+        return;
+    }
     
     // check username
     NSString *username = [self.username.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];

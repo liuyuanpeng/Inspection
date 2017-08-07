@@ -312,7 +312,10 @@
 
 
 - (IBAction)onCommit:(id)sender {
-    
+    if (![Utils locationAccess]) {
+        [self.view makeToast:@"定位功能不可用!"];
+        return;
+    }
     for (NSInteger i = 0; i < 2; i++) {
         if ([self.userImgDict objectForKey:@(i)] == nil) {
             [self.view makeToast:@"请先上传图片!"];

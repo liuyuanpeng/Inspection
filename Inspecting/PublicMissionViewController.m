@@ -236,6 +236,10 @@
  更新公共任务列表
  */
 - (void) updateMissions {
+    if (![Utils locationAccess]) {
+        [self.view makeToast:@"定位功能不可用!"];
+        return;
+    }
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
                              @"addrcode": [Utils getAddrCode],
@@ -323,6 +327,10 @@
  @param sender IBAction
  */
 - (IBAction)onLockTask:(UIButton *)sender {
+    if (![Utils locationAccess]) {
+        [self.view makeToast:@"定位功能不可用!"];
+        return;
+    }
     NSDictionary *missionDict = [[iPublicMission getInstance].missionArray objectAtIndex:sender.tag];
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
