@@ -14,5 +14,8 @@
 @property (nonatomic, strong) NSDictionary *shopInfo;
 @property (nonatomic, strong) NSMutableArray *termArray;
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UIView *searchView;
+@property (nonatomic, strong) UITextField *keywordText;
+
 
 @end

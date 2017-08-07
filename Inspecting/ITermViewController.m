@@ -30,10 +30,41 @@
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
     
+    UIBarButtonItem *buttonSearch = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(onSearch:)];
+    [buttonSearch setTintColor:[UIColor whiteColor]];
+    self.navigationItem.rightBarButtonItem = buttonSearch;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    self.searchView = [[UIView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rNav.size.width, 90)];
+    self.searchView.backgroundColor = [UIColor clearColor];
+    [self.searchView setHidden:YES];
+    [self.view addSubview:self.searchView];
+    self.keywordText = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, rNav.size.width - 20, 25)];
+    [self.keywordText setBorderStyle:UITextBorderStyleRoundedRect];
+    [self.keywordText setPlaceholder:@"请输入关键字"];
+    [self.searchView addSubview:self.keywordText];
+    
+    UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    searchBtn.frame = CGRectMake(rScreen.size.width/2 - 100, 55, 90, 25);
+    [searchBtn setBackgroundColor:[UIColor colorWithRed:233/255.0 green:63/255.0 blue:51/255.0 alpha:1.0]];
+    [searchBtn setTitle:@"搜索" forState:UIControlStateNormal];
+    [searchBtn.layer setCornerRadius:2.0f];
+    [searchBtn.layer setMasksToBounds:YES];
+    [searchBtn addTarget:self action:@selector(onSearchAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.searchView addSubview:searchBtn];
+    
+    UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    cancelBtn.frame = CGRectMake(rScreen.size.width/2 + 10, 55, 90, 25);
+    [cancelBtn setBackgroundColor:[UIColor colorWithRed:60/255.0 green:179/255.0 blue:113/255.0 alpha:1.0]];
+    [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [cancelBtn.layer setCornerRadius:2.0f];
+    [cancelBtn.layer setMasksToBounds:YES];
+    [cancelBtn addTarget:self action:@selector(onCancelAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.searchView addSubview:cancelBtn];
+    
+
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height) style:UITableViewStylePlain];
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
@@ -41,6 +72,60 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:self.tableView];
+}
+
+- (BOOL)hideSeachView:(BOOL)bHide {
+    if (self.searchView.isHidden == bHide) {
+        return NO;
+    }
+    CGRect rTable = self.tableView.frame;
+    if (bHide) {
+        rTable.size.height += 90;
+        rTable.origin.y -= 90;
+    }
+    else {
+        rTable.size.height -= 90;
+        rTable.origin.y += 90;
+    }
+    
+    self.tableView.frame = rTable;
+    [self.searchView setHidden:bHide];
+    return YES;
+}
+
+
+- (IBAction)onSearch:(id)sender {
+    [self hideSeachView:NO];
+}
+
+-(IBAction)onCancelAction:(id)sender {
+    [self hideSeachView:YES];
+}
+
+-(IBAction)onSearchAction:(id)sender {
+    NSDictionary *params = @{
+                             @"staffcode": [iUser getInstance].staffcode,
+                             @"instcode": [self.merchInfo objectForKey:@"instcode"],
+                             @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
+                             @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
+                             @"shopcode": self.shopInfo == nil ? @"" : [self.shopInfo objectForKey:@"shopcode"],
+                             @"state":@"",
+                             @"keyword": self.keywordText.text
+                             };
+    [AFNRequestManager requestAFURL:@"getTermList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
+        if (0 == [[ret objectForKey:@"status"] integerValue]) {
+            if (self.termArray == nil) {
+                self.termArray = [[NSMutableArray alloc] init];
+            }
+            [self hideSeachView:YES];
+            [self.termArray removeAllObjects];
+            [self.termArray addObjectsFromArray:[ret objectForKey:@"detail"]];
+            [self.tableView reloadData];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -51,7 +136,8 @@
                              @"merchcode": [self.merchInfo objectForKey:@"merchcode"],
                              @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
                              @"shopcode": self.shopInfo == nil ? @"" : [self.shopInfo objectForKey:@"shopcode"],
-                             @"state":@""
+                             @"state":@"",
+                             @"keyword": self.keywordText.text
                              };
     [AFNRequestManager requestAFURL:@"getTermList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
