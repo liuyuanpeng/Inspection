@@ -30,18 +30,20 @@
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     CGRect rNav = self.navigationController.navigationBar.frame;
     
+    CGFloat vTop = [Utils isAboveIOS11] ? 0: - rNav.origin.y - rNav.size.height;
+
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height)];
     [self.view addSubview:self.scrollView];
     
     NSDictionary *stepInfo = [[IPubTask shareInstance]getStepInfoByStep:self.step];
     NSDictionary *taskInfo = [IPubTask shareInstance].taskInfo;
     
-    UILabel *basicInfo = [[UILabel alloc] initWithFrame:CGRectMake(10, 5 - rNav.origin.y - rNav.size.height, 200, 20)];
+    UILabel *basicInfo = [[UILabel alloc] initWithFrame:CGRectMake(10, 5 + vTop, 200, 20)];
     basicInfo.font = [UIFont systemFontOfSize:13.0];
     basicInfo.text = @"基本信息";
     [self.scrollView addSubview:basicInfo];
     
-    UIView *basicInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, -rNav.origin.y - rNav.size.height + 30, rScreen.size.width, 100)];
+    UIView *basicInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, vTop + 30, rScreen.size.width, 100)];
     basicInfoView.backgroundColor = [UIColor whiteColor];
     [self.scrollView addSubview:basicInfoView];
     
@@ -144,16 +146,16 @@
     CGSize rcInsp = [self.inspContentText sizeThatFits:CGSizeMake(self.inspContentText.frame.size.width, FLT_MAX)];
     self.inspContentText.py_height = rcInsp.height > 40.0f ? rcInsp.height : 40.0f;
     
-    UIView *inspView = [[UIView alloc] initWithFrame:CGRectMake(0, remarkTextView.frame.origin.y + remarkTextView.frame.size.height + 30, rScreen.size.width, rcInsp.height + 70)];
+    UIView *inspView = [[UIView alloc] initWithFrame:CGRectMake(0, remarkTextView.frame.origin.y + remarkTextView.frame.size.height + 30, rScreen.size.width, rcInsp.height + 80)];
     [inspView setBackgroundColor:[UIColor whiteColor]];
     [self.scrollView addSubview:inspView];
     [inspView addSubview:self.inspContentText];
     
-    UIView *spitLine = [[UIView alloc] initWithFrame:CGRectMake(0, rcInsp.height + 20, rScreen.size.width, 1)];
+    UIView *spitLine = [[UIView alloc] initWithFrame:CGRectMake(0, rcInsp.height + 30, rScreen.size.width, 1)];
     [spitLine setBackgroundColor:[UIColor grayColor]];
     [inspView addSubview:spitLine];
     
-    UILabel *photoTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, rcInsp.height + 25, 40, 20)];
+    UILabel *photoTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, rcInsp.height + 35, 40, 20)];
     photoTitle.text = @"拍照:";
     photoTitle.font = [UIFont systemFontOfSize:13.0];
     [inspView addSubview:photoTitle];
@@ -165,7 +167,7 @@
     self.loadingImage = [UIImage animatedImageWithImages:imageArray duration:10.f];
     self.maxNum = [[stepInfo objectForKey:@"picnum"] integerValue];
     self.picViewArray = [[NSMutableArray alloc] initWithCapacity:self.maxNum];
-    CGRect rcPic = CGRectMake(55, rcInsp.height + 25, 40, 40);
+    CGRect rcPic = CGRectMake(55, rcInsp.height + 35, 40, 40);
     for (NSInteger i = 0; i < self.maxNum; i++) {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:rcPic];
         imageView.image = BACK_IMG;

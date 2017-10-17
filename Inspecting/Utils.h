@@ -53,4 +53,10 @@
  */
 + (BOOL)locationAccess;
 
+
+/**
+ 判断系统版本是否大于11.0
+ */
++ (BOOL)isAboveIOS11;
+
 @end

@@ -32,6 +32,8 @@
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     CGRect rNav = self.navigationController.navigationBar.frame;
     
+    CGFloat vTop = [Utils isAboveIOS11] ? 0: - rNav.origin.y - rNav.size.height;
+    
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height)];
     [self.view addSubview:self.scrollView];
     
@@ -46,10 +48,11 @@
     [updateLog setBackgroundImage:[UIImage imageNamed:@"i_updata.png"] forState:UIControlStateNormal];
     [updateLog addTarget:self action:@selector(onUpdateLog:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView:updateLog];
+    
     self.navigationItem.rightBarButtonItem = barItem;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, - rNav.origin.y - rNav.size.height + 5, 100, 25)];
+    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, vTop + 5, 100, 25)];
     baseinfoLabel.font = [UIFont systemFontOfSize:13];
     baseinfoLabel.text = @"基本信息";
     [self.scrollView addSubview:baseinfoLabel];
@@ -57,11 +60,11 @@
     self.editBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.editBtn setTitle:@"编辑" forState:UIControlStateNormal];
     [self.editBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    self.editBtn.frame = CGRectMake(rScreen.size.width - 50, - rNav.origin.y - rNav.size.height + 5, 40, 20);
+    self.editBtn.frame = CGRectMake(rScreen.size.width - 50, vTop + 5, 40, 20);
     [self.editBtn addTarget:self action:@selector(onEdit:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:self.editBtn];
     
-    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, - rNav.origin.y - rNav.size.height + 35, rScreen.size.width, 130)];
+    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, vTop + 35, rScreen.size.width, 130)];
     [baseInfoView setBackgroundColor:[UIColor whiteColor]];
     [self.scrollView addSubview:baseInfoView];
     
@@ -227,7 +230,7 @@
     
     self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
     
-    self.pickerView = [[PickerView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height)];
+    self.pickerView = [[PickerView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height + vTop)];
     [self.pickerView setHidden:YES];
     __block MerchInfoViewController *blockSelf = self;
     [self.pickerView setComplete:^(NSDictionary *type) {

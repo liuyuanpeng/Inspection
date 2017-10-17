@@ -31,6 +31,8 @@
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     CGRect rNav = self.navigationController.navigationBar.frame;
     
+    CGFloat vTop = [Utils isAboveIOS11] ? 0: - rNav.origin.y - rNav.size.height;
+    
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height)];
     [self.view addSubview:self.scrollView];
     
@@ -48,7 +50,7 @@
     self.navigationItem.rightBarButtonItem = barItem;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, - rNav.origin.y - rNav.size.height + 5, 100, 25)];
+    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,vTop + 5, 100, 25)];
     baseinfoLabel.font = [UIFont systemFontOfSize:13];
     baseinfoLabel.text = @"基本信息";
     [self.scrollView addSubview:baseinfoLabel];
@@ -56,11 +58,11 @@
     UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
     [editBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    editBtn.frame = CGRectMake(rScreen.size.width - 50, - rNav.origin.y - rNav.size.height + 5, 40, 20);
+    editBtn.frame = CGRectMake(rScreen.size.width - 50,vTop + 5, 40, 20);
     [editBtn addTarget:self action:@selector(onEdit:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:editBtn];
     
-    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, - rNav.origin.y - rNav.size.height + 35, rScreen.size.width, 165)];
+    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0,vTop + 35, rScreen.size.width, 165)];
     [baseInfoView setBackgroundColor:[UIColor whiteColor]];
     [self.scrollView addSubview:baseInfoView];
     

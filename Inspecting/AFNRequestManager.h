@@ -11,20 +11,20 @@
 #import <AFNetworking/AFNetworking.h>
 
 
-//// server kaibin
-//#define BASE_URL @"http://106.14.18.135:8881/xunjian/appapi/"
-//// image server
-//#define IMG_URL @"http://106.14.18.135:8881"
+// server kaibin
+#define BASE_URL @"http://106.14.18.135:80/xunjian/appapi/"
+// image server
+#define IMG_URL @"http://106.14.18.135:80"
 
 //// server test server
 //#define BASE_URL @"http://120.24.159.160:9500/xunjian/appapi/"
 //// image server
 //#define IMG_URL @"http://120.24.159.160:9500"
 
-// server product
-#define BASE_URL @"http://218.5.69.154:9500/xunjian/appapi/"
-// image server
-#define IMG_URL @"http://218.5.69.154:9500"
+//// server product
+//#define BASE_URL @"http://218.5.69.154:9500/xunjian/appapi/"
+//// image server
+//#define IMG_URL @"http://218.5.69.154:9500"
 
 #pragma mark - networking request type
 enum HTTP_METHOD {

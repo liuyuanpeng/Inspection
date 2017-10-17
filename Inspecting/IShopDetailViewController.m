@@ -18,6 +18,8 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Toast/UIView+Toast.h>
 #import <PYPhotoBrowser/PYPhotoBrowser.h>
+#import "ITagView.h"
+#import "ITags.h"
 
 @interface IShopDetailViewController ()
 
@@ -30,6 +32,8 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1.0]];
     CGRect rScreen = [[UIScreen mainScreen] bounds];
     CGRect rNav = self.navigationController.navigationBar.frame;
+    
+    CGFloat vTop = [Utils isAboveIOS11] ? 0: - rNav.origin.y - rNav.size.height;
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, rNav.origin.y + rNav.size.height, rScreen.size.width, rScreen.size.height - rNav.origin.y - rNav.size.height)];
     [self.view addSubview:self.scrollView];
@@ -48,7 +52,7 @@
     self.navigationItem.rightBarButtonItem = barItem;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5 - rNav.origin.y - rNav.size.height, 100, 25)];
+    UILabel *baseinfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5 + vTop, 100, 25)];
     baseinfoLabel.font = [UIFont systemFontOfSize:13];
     baseinfoLabel.text = @"基本信息";
     [self.scrollView addSubview:baseinfoLabel];
@@ -56,11 +60,11 @@
     UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
     [editBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    editBtn.frame = CGRectMake(rScreen.size.width - 50, 5 - rNav.origin.y - rNav.size.height, 40, 20);
+    editBtn.frame = CGRectMake(rScreen.size.width - 50, 5 + vTop, 40, 20);
     [editBtn addTarget:self action:@selector(onEdit:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:editBtn];
     
-    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, 35 - rNav.origin.y - rNav.size.height, rScreen.size.width, 130)];
+    UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, 35 + vTop, rScreen.size.width, 130)];
     [baseInfoView setBackgroundColor:[UIColor whiteColor]];
     [self.scrollView addSubview:baseInfoView];
     
@@ -194,10 +198,21 @@
     resultLabel.font = [UIFont systemFontOfSize:13];
     [self.scrollView addSubview:resultLabel];
     
-    UIView *resultView = self.resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 180)];
+    NSMutableArray *tagsArray = [[ITags getInstance] getTagsArray];
+    self.tagView = [[ITagView alloc] initWithFrame:CGRectMake(0, 100, rScreen.size.width, 0) tagArray:tagsArray];
+    UIView *resultView = self.resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 240 + self.tagView.frame.size.height)];
     [resultView setBackgroundColor:[UIColor whiteColor]];
     [self.scrollView addSubview:resultView];
+    [resultView addSubview:self.tagView];
     
+    self.otherPay = [[ITextView alloc] initWithFrame:CGRectMake(30, 100 + self.tagView.frame.size.height, rScreen.size.width - 60, 50)];
+    [self.otherPay.layer setCornerRadius:2.0f];
+    [self.otherPay.layer setBorderColor:[UIColor grayColor].CGColor];
+    [self.otherPay.layer setBorderWidth:1.0f];
+    [self.otherPay setPlaceholder:@"请输入其他支付方式"];
+    [self.otherPay setPlaceholderColor:[UIColor grayColor]];
+    [resultView addSubview:self.otherPay];
+
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 10, 100, 30);
     NSInteger btnTag = 1;
@@ -235,16 +250,16 @@
     [self.desc setPlaceholderColor:[UIColor grayColor]];
     [resultView addSubview:self.desc];
     
-    UIView *splitView = [[UIView alloc] initWithFrame:CGRectMake(0, 110, rScreen.size.width, 1)];
+    UIView *splitView = [[UIView alloc] initWithFrame:CGRectMake(0, 170 + self.tagView.frame.size.height, rScreen.size.width, 1)];
     splitView.backgroundColor = [UIColor grayColor];
     [resultView addSubview:splitView];
     
-    UILabel *photoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 120, 30, 20)];
+    UILabel *photoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 180 + self.tagView.frame.size.height, 30, 20)];
     photoLabel.text = @"拍照";
     photoLabel.font = [UIFont systemFontOfSize:13];
     [resultView addSubview:photoLabel];
     
-    self.licencePic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 120, 50, 50)];
+    self.licencePic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 180 + self.tagView.frame.size.height, 50, 50)];
     self.licencePic.image = [UIImage imageNamed:@"i_add_yyzz.png"];
     self.licencePic.tag = 0;
     self.licencePic.userInteractionEnabled = YES;
@@ -252,7 +267,7 @@
     [self.licencePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.licencePic];
     
-    self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 120, 50, 50)];
+    self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 180 + self.tagView.frame.size.height, 50, 50)];
     self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp.png"];
     self.facadePic.tag = 1;
     self.facadePic.userInteractionEnabled = YES;
@@ -260,7 +275,7 @@
     [self.licencePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.facadePic];
     
-    self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 120, 50, 50)];
+    self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 180 + self.tagView.frame.size.height, 50, 50)];
     self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
     self.signPic.tag = 2;
     self.signPic.userInteractionEnabled = YES;
@@ -268,7 +283,7 @@
     [self.licencePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.signPic];
     
-    self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 120, 50, 50)];
+    self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 180 + self.tagView.frame.size.height, 50, 50)];
     self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
     self.sitePic.tag = 3;
     self.sitePic.userInteractionEnabled = YES;
@@ -333,7 +348,7 @@
         [self.tableView setFrame:rTable];
         
         [self.resultLabel setFrame:CGRectMake(5, self.tableView.frame.origin.y + self.tableView.frame.size.height + 5, 100, 25)];
-        [self.resultView setFrame:CGRectMake(0, self.resultLabel.frame.origin.y + 30, rTable.size.width, 180)];
+        [self.resultView setFrame:CGRectMake(0, self.resultLabel.frame.origin.y + 30, rTable.size.width, 240 + self.tagView.frame.size.height)];
         [self.commitBtn setFrame:CGRectMake(rTable.size.width/2 - 50, self.resultView.frame.origin.y + self.resultView.frame.size.height + 10, 100, 30)];
         self.scrollView.contentSize = CGSizeMake(rTable.size.width, self.commitBtn.frame.origin.y + self.commitBtn.frame.size.height);
         
@@ -380,7 +395,7 @@
             NSArray *termArray = [[NSArray alloc] initWithArray:[self.shopDetail objectForKey:@"termlst"]];
             [self resizeView:termArray.count];
             [self.tableView reloadData];
-            
+                        
             NSArray *inspresults = [[NSArray alloc] initWithArray:[self.shopDetail objectForKey:@"inspresult"]];
             [self.inspresultArray addObjectsFromArray:inspresults];
             for (NSInteger i = 0; i < inspresults.count; i++) {
@@ -392,6 +407,8 @@
                     [self.licencePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage: self.loadingImage];
                     [self.radioButton setSelectedWithTag:[[dict objectForKey:@"flag"] integerValue]];
                     self.desc.text = [NSString stringWithString:[dict objectForKey:@"content"]];
+                    self.otherPay.text = [NSString stringWithString:[dict objectForKey:@"paytypedesc"]];
+                    self.tagView.selectedTags = [[ITags getInstance] getSelectedTagsByCodes:[dict objectForKey:@"paytype"]];
                 }
                 else if (i == 1) {
                     [self.facadePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
@@ -483,6 +500,14 @@
         [self.view makeToast:@"定位功能不可用!"];
         return;
     }
+    if ([self.tagView getSelectedTags].count == 0) {
+        [self.view makeToast:@"至少选择一种支付方式!"];
+        return;
+    }
+    if ([[self.tagView getSelectedTags] containsObject:@"其他"] && [self.otherPay.text compare:@""] == NSOrderedSame) {
+        [self.view makeToast:@"选择其他时请填写其他支付方式!"];
+        return;
+    }
     for (NSInteger i = 0; i < 4; i++) {
         if (self.inspresultArray.count > i) {
             NSDictionary *dict = [self.inspresultArray objectAtIndex:i];
@@ -521,6 +546,8 @@
                              @"shopcode": [self.shopInfo objectForKey:@"shopcode"],
                              @"flag":@(self.radioButton.selectedButton.tag),
                              @"content": self.desc.text,
+                             @"paytype": [[ITags getInstance] getCodesBySelectedTags:[self.tagView getSelectedTags]],
+                             @"paytypedesc": self.otherPay.text,
                              @"data": [AFNRequestManager convertToJSONData:data]
                              };
     [self.indicator startAnimating];

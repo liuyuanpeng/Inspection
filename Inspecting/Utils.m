@@ -59,4 +59,7 @@
     return [a distanceFromLocation:b]/1000;
 }
 
++(BOOL)isAboveIOS11 {
+    return [[UIDevice currentDevice].systemVersion integerValue] >= 11;
+}
 @end

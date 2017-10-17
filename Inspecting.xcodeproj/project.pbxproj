@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		912C7DDC1E7C3FFE000DAF06 /* IPubTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */; };
 		912C7DE21E7D8140000DAF06 /* IPubTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DE11E7D8140000DAF06 /* IPubTaskDetailViewController.m */; };
+		91360B6F1F94946900B8EA47 /* ITagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91360B6E1F94946900B8EA47 /* ITagView.m */; };
+		91360B721F94FF1F00B8EA47 /* ITags.m in Sources */ = {isa = PBXBuildFile; fileRef = 91360B711F94FF1F00B8EA47 /* ITags.m */; };
 		914707B31E781B0200E46B3B /* RSAEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 914707B21E781B0200E46B3B /* RSAEncryptor.m */; };
 		91655EA91E66CC120031CFE0 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 91655EA81E66CC120031CFE0 /* Utils.m */; };
 		91655EAC1E66DEAB0031CFE0 /* iPublicMission.m in Sources */ = {isa = PBXBuildFile; fileRef = 91655EAB1E66DEAB0031CFE0 /* iPublicMission.m */; };
@@ -149,6 +151,10 @@
 		912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPubTask.m; sourceTree = "<group>"; };
 		912C7DE01E7D8140000DAF06 /* IPubTaskDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPubTaskDetailViewController.h; sourceTree = "<group>"; };
 		912C7DE11E7D8140000DAF06 /* IPubTaskDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPubTaskDetailViewController.m; sourceTree = "<group>"; };
+		91360B6D1F94946900B8EA47 /* ITagView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITagView.h; sourceTree = "<group>"; };
+		91360B6E1F94946900B8EA47 /* ITagView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ITagView.m; sourceTree = "<group>"; };
+		91360B701F94FF1F00B8EA47 /* ITags.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITags.h; sourceTree = "<group>"; };
+		91360B711F94FF1F00B8EA47 /* ITags.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ITags.m; sourceTree = "<group>"; };
 		914707B11E781B0200E46B3B /* RSAEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSAEncryptor.h; sourceTree = "<group>"; };
 		914707B21E781B0200E46B3B /* RSAEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSAEncryptor.m; sourceTree = "<group>"; };
 		91655EA71E66CC120031CFE0 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -450,6 +456,8 @@
 				91B707BD1E76E4E1006E76AA /* IVersion.m */,
 				912C7DDA1E7C3FFE000DAF06 /* IPubTask.h */,
 				912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */,
+				91360B701F94FF1F00B8EA47 /* ITags.h */,
+				91360B711F94FF1F00B8EA47 /* ITags.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -481,6 +489,8 @@
 				91B707B71E758EFE006E76AA /* IAnnotation.m */,
 				91F4B47D1E98ECE4005968F8 /* IAnnotationView.h */,
 				91F4B47E1E98ECE4005968F8 /* IAnnotationView.m */,
+				91360B6D1F94946900B8EA47 /* ITagView.h */,
+				91360B6E1F94946900B8EA47 /* ITagView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -862,8 +872,10 @@
 				91C78C6D1E6B1188009AC9A2 /* ITermViewController.m in Sources */,
 				91C78C7C1E6B3102009AC9A2 /* ITermDetailViewController.m in Sources */,
 				91F4B47F1E98ECE4005968F8 /* IAnnotationView.m in Sources */,
+				91360B6F1F94946900B8EA47 /* ITagView.m in Sources */,
 				91C78C761E6B2D9D009AC9A2 /* ITermTableViewCell.m in Sources */,
 				9195D1771E5C5232007B451F /* IPublicTableViewCell.m in Sources */,
+				91360B721F94FF1F00B8EA47 /* ITags.m in Sources */,
 				91C78C791E6B30F3009AC9A2 /* IShopDetailViewController.m in Sources */,
 				91F46D1C1E6467CC004491E5 /* NSString+MD5.m in Sources */,
 				91831AA61E54B64900E670B3 /* HomeViewController.m in Sources */,

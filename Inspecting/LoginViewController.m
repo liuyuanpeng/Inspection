@@ -20,6 +20,7 @@
 #import "ITermType.h"
 #import "IVersion.h"
 #import "Utils.h"
+#import "ITags.h"
 
 @interface LoginViewController ()
 
@@ -143,11 +144,16 @@
             [self.view makeToast:[ret valueForKey:@"desc"]];
         }
         else {
+            [self saveTags:[ret valueForKey:@"paytype"]];
             [self onLoginSuccess: [ret valueForKey:@"datas"]];
         }
     } failure:^(NSError * error) {
         NSLog(@"fail:%@", error);
     }];
+}
+
+-(void)saveTags:(NSMutableArray *)array {
+    [[ITags getInstance] setTags:array];
 }
 
 - (void) onLoginSuccess:(NSDictionary *)dict {
