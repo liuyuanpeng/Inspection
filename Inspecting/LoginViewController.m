@@ -133,7 +133,9 @@
                              @"acctid": username,
                              @"pwd": [pwd md5],
                              @"imsi": imsi,
-                             @"imei": imei
+                             @"imei": imei,
+                             @"version":@"1.0.0",
+                             @"system":@"IOS"
                              };
     [AFNRequestManager requestAFURL:@"loginCheck.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (4 == [[ret valueForKey:@"status"] integerValue]) {

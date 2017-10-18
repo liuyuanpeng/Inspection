@@ -173,7 +173,7 @@
     self.frame = frame;
     
     // 检测按钮状态，最少选中一个
-    [self checkButtonState];
+//    [self checkButtonState];
 }
 
 - (void)setTagButtonMargin:(UIButton*)btn fontMargin:(CGFloat)fontMargin{
@@ -237,7 +237,7 @@
     btn.selected = !btn.selected;
     
     // 检测按钮状态，最少选中一个
-    [self checkButtonState];
+//    [self checkButtonState];
 }
 
 @end
