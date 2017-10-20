@@ -179,6 +179,7 @@
     }
     else {
         [self.view makeToast:@"请先开启定位服务!" duration:2 position:CSToastPositionCenter];
+        [Utils openLocationSetting:self];
     }
 }
 
@@ -237,7 +238,8 @@
  */
 - (void) updateMissions {
     if (![Utils locationAccess]) {
-        [self.view makeToast:@"定位功能不可用!"];
+        [self.view makeToast:@"请先开启定位服务!"];
+        [Utils openLocationSetting:self];
         return;
     }
     NSDictionary *params = @{
@@ -328,7 +330,8 @@
  */
 - (IBAction)onLockTask:(UIButton *)sender {
     if (![Utils locationAccess]) {
-        [self.view makeToast:@"定位功能不可用!"];
+        [self.view makeToast:@"请先开启定位服务!"];
+        [Utils openLocationSetting:self];
         return;
     }
     NSDictionary *missionDict = [[iPublicMission getInstance].missionArray objectAtIndex:sender.tag];

@@ -353,7 +353,8 @@
 
 - (void)uploadSuccess {
     if (![Utils locationAccess]) {
-        [self.view makeToast:@"定位功能不可用!"];
+        [self.view makeToast:@"请先开启定位服务!"];
+        [Utils openLocationSetting:self];
         return;
     }
     NSDictionary *stepInfo = [[IPubTask shareInstance]getStepInfoByStep:self.step];

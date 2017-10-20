@@ -265,7 +265,8 @@
 
 - (IBAction)onCommit:(id)sender {
     if (![Utils locationAccess]) {
-        [self.view makeToast:@"定位功能不可用!"];
+        [self.view makeToast:@"请先开启定位服务!"];
+        [Utils openLocationSetting:self];
         return;
     }
     for (NSInteger i = 0; i < 2; i++) {

@@ -13,6 +13,7 @@
 #import <Toast/UIView+Toast.h>
 #import "NSString+MD5.h"
 #import "IVersion.h"
+#import "Utils.h"
 
 @interface UserInfoViewController ()
 
@@ -106,6 +107,9 @@
     [self.view addSubview:versionContainer];
     self.currentVersion = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, rScreen.size.width - 20, fontSize)];
     self.currentVersion.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+    self.currentVersion.userInteractionEnabled=YES;
+    UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(labelTouchUpInside:)];
+    [self.currentVersion addGestureRecognizer:labelTapGestureRecognizer];
     [versionContainer addSubview:self.currentVersion];
     
     UIButton *changePW = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -125,13 +129,8 @@
     logoutBtn.titleLabel.font = [UIFont systemFontOfSize:fontSize];
     [logoutBtn addTarget:self action:@selector(onLogout:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:logoutBtn];
-    NSString *version = [IVersion getInstance].version;
-    if (version) {
-        [self setVersion:version];
-    }
-    else {
-        [self setVersion:@"1.0.0"];
-    }
+
+    [self setVersion];
     
     self.changePwdView = [[IPopupView alloc] init];
     UIView *changepwd = [[UIView alloc] initWithFrame:CGRectMake(50, rScreen.size.height/2 - 80, rScreen.size.width - 100, 160)];
@@ -234,8 +233,16 @@
     self.idNO.text = [NSString stringWithString:idNo];
 }
 
-- (void)setVersion:(NSString *)version {
-    self.currentVersion.text = [NSString stringWithFormat:@"当前版本: %@", version];
+- (void)setVersion{
+    NSString *version = [IVersion getInstance].version;
+    NSString *lastVersion = [IVersion getInstance].lastVersion;
+    BOOL res = [version isEqualToString:lastVersion];
+    if(YES == res) {
+        self.currentVersion.text = [NSString stringWithFormat:@"当前版本: %@", version];
+    }else{
+        self.currentVersion.text = [NSString stringWithFormat:@"当前版本: %@ [新版本为:%@] 点击下载！", version,lastVersion];
+    }
+    
 }
 
 - (IBAction)onChangePassword:(id)sender {
@@ -249,6 +256,19 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void) labelTouchUpInside:(UITapGestureRecognizer *)recognizer{
+    
+    NSString *version = [IVersion getInstance].version;
+    NSString *lastVersion = [IVersion getInstance].lastVersion;
+    BOOL res = [version isEqualToString:lastVersion];
+    if(YES == res) {
+        [self.view makeToast:@"已经是最新版本了!"];
+    }else{
+        [Utils openUpdate:self];
+    }
+    
 }
 
 /*

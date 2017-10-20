@@ -15,14 +15,15 @@
     static IVersion *instance = nil;
     dispatch_once(&onceToken, ^{
         instance = [[IVersion alloc] init];
-//        [AFNRequestManager requestAFURL:@"getVersion.json" httpMethod:METHOD_POST params:nil succeed:^(NSDictionary *ret) {
-//            if (0 ==  [[ret objectForKey:@"status"] integerValue]) {
-//                instance.version = [NSString stringWithString:[ret objectForKey:@""]];
-//            }
-//        } failure:^(NSError *error) {
-//            NSLog(@"%@", error);
-//        }];
+        [AFNRequestManager requestAFURL:@"getVersion.json" httpMethod:METHOD_POST params:nil succeed:^(NSDictionary *ret) {
+            if (0 ==  [[ret objectForKey:@"status"] integerValue]) {
+                instance.lastVersion = [NSString stringWithString:[[ret objectForKey:@"datas"] objectForKey:@"version"]];
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@", error);
+        }];
     });
+    instance.version = @"1.0.0";
     return instance;
 }
 

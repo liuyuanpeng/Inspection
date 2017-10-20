@@ -62,4 +62,27 @@
 +(BOOL)isAboveIOS11 {
     return [[UIDevice currentDevice].systemVersion integerValue] >= 11;
 }
+
++(void)openLocationSetting:(UIViewController *) viewController{
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"打开定位服务" message:@"巡检过程中，需要您允许访问您的位置" preferredStyle:UIAlertControllerStyleAlert];//UIAlertControllerStyleAlert视图在中央
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    [viewController  presentViewController:alertController animated:YES completion:nil];
+}
+
++(void)openUpdate:(UIViewController *) viewController{
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"更新" message:@"您有新的版本，请前往APP Store更新" preferredStyle:UIAlertControllerStyleAlert];//UIAlertControllerStyleAlert视图在中央
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString  *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/us/app/id%@",@"1221434009"];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    [viewController  presentViewController:alertController animated:YES completion:nil];
+}
 @end

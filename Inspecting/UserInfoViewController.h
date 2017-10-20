@@ -26,6 +26,5 @@
 
 - (void)setAvatar:(NSString *)avatar name:(NSString *)name organ:(NSString *)organ;
 - (void)setIdType:(NSString *)type idNo:(NSString *)idNo;
-- (void)setVersion:(NSString *)version;
 
 @end

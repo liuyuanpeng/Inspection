@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 
 @interface Utils : NSObject
 
@@ -58,5 +59,15 @@
  判断系统版本是否大于11.0
  */
 + (BOOL)isAboveIOS11;
+
+/**
+ 打开位置服务设置
+ **/
++(void)openLocationSetting:(UIViewController *) viewController;
+
+/**
+ 打开更新页面
+ **/
++(void)openUpdate:(UIViewController *) viewController;
 
 @end

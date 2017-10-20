@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface IVersion : NSObject
+@property (nonatomic, strong) NSString *lastVersion;
 @property (nonatomic, strong) NSString *version;
 + (IVersion *)getInstance;
 @end

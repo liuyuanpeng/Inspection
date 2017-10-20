@@ -107,11 +107,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 - (IBAction)onLogin:(id)sender {
     // check location access
     if (![Utils locationAccess]) {
-        [self.view makeToast:@"定位功能不可用!"];
+        [self.view makeToast:@"请先开启定位服务!"];
+        [Utils openLocationSetting:self];
         return;
     }
     
@@ -140,6 +140,9 @@
     [AFNRequestManager requestAFURL:@"loginCheck.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (4 == [[ret valueForKey:@"status"] integerValue]) {
             [self.view makeToast:[ret valueForKey:@"desc"]];
+        }else if (6 == [[ret valueForKey:@"status"] integerValue]) {
+            [self.view makeToast:[ret valueForKey:@"desc"]];
+            [Utils openUpdate:self];
         }
         else if (0 != [[ret valueForKey:@"status"] integerValue]) {
 //            [self onLoginSuccess];
