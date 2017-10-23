@@ -64,7 +64,7 @@
 }
 
 +(void)openLocationSetting:(UIViewController *) viewController{
-    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"打开定位服务" message:@"巡检过程中，需要您允许访问您的位置" preferredStyle:UIAlertControllerStyleAlert];//UIAlertControllerStyleAlert视图在中央
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"打开定位服务" message:@"为了保证巡检的有效性，登录前请授权该App获取您的位置信息！" preferredStyle:UIAlertControllerStyleAlert];//UIAlertControllerStyleAlert视图在中央
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
