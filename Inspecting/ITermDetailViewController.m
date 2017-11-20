@@ -217,6 +217,13 @@
     [self.serialPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
     [self.serialPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.serialPic];
+    
+    self.testPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 120, 50, 50)];
+    self.testPic.tag = 2;
+    self.testPic.userInteractionEnabled = YES;
+    [self.testPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.testPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [resultView addSubview:self.testPic];
 
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     commitBtn.frame = CGRectMake(rScreen.size.width/2 - 50, resultView.frame.origin.y + resultView.frame.size.height + 10, 100, 30);
@@ -235,8 +242,8 @@
     self.indicator.color = [UIColor blueColor];
     [self.view addSubview:self.indicator];
     
-    self.inspresultArray = [[NSMutableArray alloc] initWithCapacity:2];
-    self.userImgDict = [[NSMutableDictionary alloc] initWithCapacity:2];
+    self.inspresultArray = [[NSMutableArray alloc] initWithCapacity:3];
+    self.userImgDict = [[NSMutableDictionary alloc] initWithCapacity:3];
     NSMutableArray *imageArray = [[NSMutableArray alloc] initWithCapacity:12];
     for (int i = 1; i <= 12; i++) {
         [imageArray addObject:[UIImage imageNamed:[NSString stringWithFormat:@"loading%d", i]]];
@@ -337,6 +344,7 @@
     [self.inspresultArray removeAllObjects];
     self.instPic.image = [UIImage imageNamed:@"i_add_posup.png"];
     self.serialPic.image = [UIImage imageNamed:@"i_add_posdown.png"];
+    self.testPic.image = [UIImage imageNamed:@"i_add_postest.png"];
     self.radioButton.selected = YES;
     self.desc.text = @"";
 
@@ -388,6 +396,10 @@
                     if (![@"" isEqualToString:[dict objectForKey:@"picuri"]]) {
                         [self.serialPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
                     }
+                }else if (i == 2) {
+                    if (![@"" isEqualToString:[dict objectForKey:@"picuri"]]) {
+                        [self.testPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
+                    }
                 }
             }
 
@@ -426,7 +438,8 @@
     self.curSelPic = imgView;
     UIImage *image = imgView.image;
     if ([image isEqual:[UIImage imageNamed:@"i_add_posup.png"]] ||
-        [image isEqual:[UIImage imageNamed:@"i_add_posdown.png"]]) {
+        [image isEqual:[UIImage imageNamed:@"i_add_posdown.png"]] ||
+        [image isEqual:[UIImage imageNamed:@"i_add_postest.png"]]) {
         return;
     }
     
@@ -502,7 +515,7 @@
 }
 
 - (void) uploadImages:(NSInteger)index {
-    if (index >= 2) {
+    if (index >= 3) {
         [self uploadImgOK];
         return;
     }

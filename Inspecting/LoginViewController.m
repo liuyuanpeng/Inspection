@@ -134,7 +134,7 @@
                              @"pwd": [pwd md5],
                              @"imsi": imsi,
                              @"imei": imei,
-                             @"version":@"1.0.0",
+                             @"version":[IVersion getInstance].version,
                              @"system":@"IOS"
                              };
     [AFNRequestManager requestAFURL:@"loginCheck.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
