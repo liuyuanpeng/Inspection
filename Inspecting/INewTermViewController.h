@@ -22,6 +22,7 @@
 @property (nonatomic, strong) ITextView *desc;
 @property (nonatomic, strong) UIImageView *instPic;
 @property (nonatomic, strong) UIImageView *serialPic;
+@property (nonatomic, strong) UIImageView *testPic;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;

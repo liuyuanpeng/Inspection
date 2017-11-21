@@ -23,7 +23,7 @@
             NSLog(@"%@", error);
         }];
     });
-    instance.version = @"1.0.6";
+    instance.version = @"1.0.8";
     return instance;
 }
 
