@@ -32,7 +32,7 @@
 	<key>NSLocationUsageDescription</key>
 	<string>定位	</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>用户使用时期定位</string>
+	<string>您的用户信息将被用于验证巡检工作的真实有效</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>相册</string>
 	<key>UILaunchStoryboardName</key>
