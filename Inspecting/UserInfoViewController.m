@@ -14,6 +14,7 @@
 #import "NSString+MD5.h"
 #import "IVersion.h"
 #import "Utils.h"
+#import "MHProgress.h"
 
 @interface UserInfoViewController ()
 
@@ -133,11 +134,13 @@
     [self setVersion];
     
     self.changePwdView = [[IPopupView alloc] init];
-    UIView *changepwd = [[UIView alloc] initWithFrame:CGRectMake(50, rScreen.size.height/2 - 80, rScreen.size.width - 100, 160)];
+    UIView *changepwd = [[UIView alloc] initWithFrame:CGRectMake(50, rScreen.size.height/2 - 120, rScreen.size.width - 100, 160)];
     [changepwd.layer setCornerRadius:10.0f];
     [changepwd.layer setMasksToBounds:YES];
     [changepwd setBackgroundColor:[UIColor whiteColor]];
     [self.changePwdView setContentView:changepwd];
+    self.changepwd=changepwd;
+    
     UILabel *oldpwd = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 30)];
     oldpwd.text = @"旧密码:";
     self.oldpwdText = [[UITextField alloc] initWithFrame:CGRectMake(100, 10, changepwd.frame.size.width - 110, 25)];
@@ -172,7 +175,15 @@
 }
 
 - (IBAction)onSure:(id)sender {
-    if (![self.newpwdText2.text isEqualToString:self.newpwdText.text]) {
+    [self.changepwd endEditing:YES];
+    NSString *oldPwd = [self.oldpwdText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *newPwd = [self.newpwdText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *newPwd2 = [self.newpwdText2.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (oldPwd.length == 0 || newPwd.length==0 || newPwd2==0) {
+        [self.changePwdView makeToast:@"密码不能为空!" duration:2 position:[NSValue valueWithCGPoint:CGPointMake(self.tabBarController.tabBar.frame.size.width/2, self.tabBarController.tabBar.frame.origin.y - 20)]];
+        return;
+    }
+    if (![newPwd isEqualToString:newPwd2]) {
         [self.changePwdView makeToast:@"两次新密码不一样!" duration:2 position:[NSValue valueWithCGPoint:CGPointMake(self.tabBarController.tabBar.frame.size.width/2, self.tabBarController.tabBar.frame.origin.y - 20)]];
         return;
     }
@@ -182,6 +193,7 @@
                              @"oldpwd": [self.oldpwdText.text md5],
                              @"pwd": [self.newpwdText.text md5]
                              };
+    [[MHProgress getCommitInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"changePwd.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             [self.changePwdView hide];
@@ -190,12 +202,15 @@
         else {
             [self.changePwdView makeToast:[ret objectForKey:@"desc"]];
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
 }
 
 - (IBAction)onCancel:(id)sender {
+    [self.changePwdView endEditing:YES];
     [self.changePwdView hide];
 }
 
@@ -205,15 +220,22 @@
     NSDictionary *params = @{
                              @"staffcode":[iUser getInstance].staffcode
                              };
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"getUserInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret valueForKey:@"status"] integerValue]) {
             NSDictionary *userInfo = [ret objectForKey:@"datas"];
             [self setAvatar:[userInfo objectForKey:@"headimg"] name:[userInfo objectForKey:@"name"] organ:[userInfo objectForKey:@"instname"]];
             [self setIdType:[userInfo objectForKey:@"idtype"] idNo:[userInfo objectForKey:@"idcode"]];
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void)setAvatar:(NSString *)avatar name:(NSString *)name organ:(NSString *)organ {
@@ -247,6 +269,7 @@
 
 - (IBAction)onChangePassword:(id)sender {
     [self.changePwdView show];
+    [self.oldpwdText becomeFirstResponder];
 }
 
 - (IBAction)onLogout:(id)sender {

@@ -27,6 +27,7 @@
 @property (nonatomic, strong) UIImageView *instPic;
 @property (nonatomic, strong) UIImageView *serialPic;
 @property (nonatomic, strong) UIImageView *testPic;
+@property (nonatomic, strong) UIButton *editBtn;
 
 @property (nonatomic, assign) BOOL bEdit;
 

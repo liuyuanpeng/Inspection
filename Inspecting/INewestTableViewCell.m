@@ -36,12 +36,12 @@
         
         CGRect rScreen = [[UIScreen mainScreen]bounds];
         
-        UILabel *finishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(rScreen.size.width - 100, 25, 50, 14)];
+        UILabel *finishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(rScreen.size.width - 155, 25, 50, 14)];
         finishedLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
         finishedLabel.text = @"完成度:";
         [self.contentView addSubview:finishedLabel];
         
-        self.completePercentLabel = [[UILabel alloc] initWithFrame:CGRectMake(rScreen.size.width - 50, 25, 40, 14)];
+        self.completePercentLabel = [[UILabel alloc] initWithFrame:CGRectMake(rScreen.size.width - 110, 25, 90, 14)];
         self.completePercentLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
         [self.contentView addSubview:self.completePercentLabel];
     }

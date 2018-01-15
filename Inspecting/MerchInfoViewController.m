@@ -19,6 +19,8 @@
 #import <Toast/UIView+Toast.h>
 #import "PickerView.h"
 #import <PYPhotoBrowser/PYPhotoBrowser.h>
+#import "MHProgress.h"
+#import "UIScrollView+UITouch.h"
 
 @interface MerchInfoViewController ()
 
@@ -294,6 +296,11 @@
 }
 
 - (IBAction)onCommit:(id)sender {
+    [self.view endEditing:YES];
+    if(self.bEdit){
+        self.bEdit = false;
+        [self.editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    }
     if (![Utils locationAccess]) {
         [self.view makeToast:@"请先开启定位服务!"];
         [Utils openLocationSetting:self];
@@ -337,6 +344,7 @@
                              };
     [self.indicator startAnimating];
     self.view.userInteractionEnabled = NO;
+    [[MHProgress getCommitInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"inspMerchInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.insp_cnt_id = [[ret objectForKey:@"insp_cnt_id"] integerValue];
@@ -344,6 +352,7 @@
         }
     } failure:^(NSError *error) {
         [self.view makeToast:@"巡检上传失败!"];
+        [[MHProgress getCommitInstance] closeLoadingView];
     }];
 }
 
@@ -368,6 +377,7 @@
                              @"merchcode": [self.taskInfo objectForKey:@"merchcode"],
                              @"batchcode": [self.taskInfo objectForKey:@"batchcode"]
                              };
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"getMerchInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.merchInfo = [[NSMutableDictionary alloc] initWithDictionary:[ret objectForKey:@"datas"]];
@@ -406,8 +416,10 @@
                 }
             }
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
 }
 
@@ -461,7 +473,6 @@
     [super viewWillDisappear:animated];
     self.bEdit = false;
     [self.editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-    [self.view endEditing:YES];
 }
 
 - (IBAction)onEdit:(UIButton *)sender {
@@ -480,12 +491,14 @@
 - (void)uploadImgOK {
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
+    [[MHProgress getCommitInstance] closeLoadingView];
     [self.view makeToast:@"巡检上传成功!"];
 }
 
 - (void)uploadImgFail {
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
+    [[MHProgress getCommitInstance] closeLoadingView];
     [self.view makeToast:@"巡检图片上传失败!"];
 }
 

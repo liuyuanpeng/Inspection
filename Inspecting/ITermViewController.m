@@ -11,6 +11,7 @@
 #import "ITermTableViewCell.h"
 #import "iUser.h"
 #import "AFNRequestManager.h"
+#import "MHProgress.h"
 
 @interface ITermViewController ()
 
@@ -82,10 +83,12 @@
     if (bHide) {
         rTable.size.height += 90;
         rTable.origin.y -= 90;
+        [self.keywordText resignFirstResponder];
     }
     else {
         rTable.size.height -= 90;
         rTable.origin.y += 90;
+        [self.keywordText becomeFirstResponder];
     }
     
     self.tableView.frame = rTable;
@@ -93,6 +96,9 @@
     return YES;
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
 
 - (IBAction)onSearch:(id)sender {
     [self hideSeachView:NO];
@@ -112,6 +118,7 @@
                              @"state":@"",
                              @"keyword": self.keywordText.text
                              };
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"getTermList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             if (self.termArray == nil) {
@@ -122,9 +129,12 @@
             [self.termArray addObjectsFromArray:[ret objectForKey:@"detail"]];
             [self.tableView reloadData];
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
+    
 
 }
 
@@ -139,6 +149,7 @@
                              @"state":@"",
                              @"keyword": self.keywordText.text
                              };
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"getTermList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             if (self.termArray == nil) {
@@ -148,8 +159,10 @@
             [self.termArray addObjectsFromArray:[ret objectForKey:@"detail"]];
             [self.tableView reloadData];
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
 }
 

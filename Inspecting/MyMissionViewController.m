@@ -15,6 +15,8 @@
 #import "IPubTaskDetailViewController.h"
 #import "MerchInfoViewController.h"
 #import "IPubTask.h"
+#import <Toast/UIView+Toast.h>
+#import "MHProgress.h"
 
 @interface MyMissionViewController ()
 
@@ -23,8 +25,7 @@
 @implementation MyMissionViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
+   [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1.0];
     
@@ -77,10 +78,10 @@
         [buttons addObject:btn];
     }
     
-    [buttons[0] setGroupButtons:buttons];
-    [buttons[0] setSelected:YES];
+    [buttons[1] setGroupButtons:buttons];
+    [buttons[1] setSelected:YES];
     
-    self.radioButtons = buttons[0];
+    self.radioButtons = buttons[1];
     
     UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     searchBtn.frame = CGRectMake(rScreen.size.width/2 - 100, 95, 90, 25);
@@ -157,13 +158,15 @@
     if (bHide) {
         rTable.size.height += 130;
         rTable.origin.y -= 130;
+        [self.keywordText resignFirstResponder];
     }
     else {
         rTable.size.height -= 130;
         rTable.origin.y += 130;
+        [self.keywordText becomeFirstResponder];
     }
-    
-    self.tableview.frame = rTable;
+
+    self.tableview.frame = CGRectMake(rTable.origin.x,rTable.origin.y,rTable.size.width,rTable.size.height);
     [self.searchView setHidden:bHide];
     return YES;
 }
@@ -244,9 +247,13 @@
                     [pubTaskDetail setStep:1];
                     [self.navigationController pushViewController:pubTaskDetail animated:YES];
                 }
+            }else{
+                [self.view makeToast:[ret valueForKey:@"desc"]];
             }
+            [[MHProgress getSeachInstance] closeLoadingView];
         } failure:^(NSError *error) {
             self.view.userInteractionEnabled = YES;
+            [[MHProgress getSeachInstance] closeLoadingView];
         }];
         
     }
@@ -282,11 +289,13 @@
     }
 }
 - (void)getAllMission {
+    [[MHProgress getSeachInstance] showLoadingView];
     [self.myTaskArray removeAllObjects];
     [self requestMission:0 recursive:YES];
 }
 
 - (void)getCurMission {
+    [[MHProgress getSeachInstance] showLoadingView];
     [self.myTaskArray removeAllObjects];
     [self requestMission:[IMission getInstance].curSel recursive:NO];
 }
@@ -295,6 +304,8 @@
     if (index >= [IMission getInstance].missions.count) {
         if (bRecursive) {
             [self.tableview reloadData];
+            [[MHProgress getSeachInstance] closeLoadingView];
+            [self hideSeachView:YES];
         }
         return;
     }
@@ -302,10 +313,11 @@
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
                              @"batchcode": [taskInfo objectForKey:@"taskcode"],
-                             @"state":@"",
+                             @"state":@"001",
                              @"keyword":@""
                              };
     index++;
+   
     [AFNRequestManager requestAFURL:@"getMyTaskList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             [self filter004:[ret objectForKey:@"detail"]];
@@ -314,14 +326,22 @@
             }
             else {
                 [self.tableview reloadData];
+                [[MHProgress getSeachInstance] closeLoadingView];
+                [self hideSeachView:YES];
             }
+        }else{
+            [self.view makeToast:[ret valueForKey:@"desc"] duration:3 position:@"CSToastPositionCenter"];
+            [[MHProgress getSeachInstance] closeLoadingView];
+            [self hideSeachView:YES];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
 }
 
 - (void)searchMissionWithState:(NSString *)state keyword:(NSString *)keyword {
+    [[MHProgress getSeachInstance] showLoadingView];
     [self.myTaskArray removeAllObjects];
     if ([IMission getInstance].curSel == -1) {
         [self requestMission:0 recursive:YES withState:state keyword:keyword];
@@ -332,7 +352,7 @@
 }
 
 - (void)requestMission:(NSInteger)index recursive:(BOOL)bRecursive withState:(NSString *)state keyword:(NSString *)keyword{
-    if (index >= [IMission getInstance].missions.count) {
+        if (index >= [IMission getInstance].missions.count) {
         if (bRecursive) {
             [self hideSeachView:YES];
             [self.tableview reloadData];
@@ -357,9 +377,13 @@
                 [self hideSeachView:YES];
                 [self.tableview reloadData];
             }
+        }else{
+            [self.view makeToast:[ret valueForKey:@"desc"] duration:3 position:@"CSToastPositionCenter"];
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
 }
 #pragma mark - UITextFieldDidChanged Notification

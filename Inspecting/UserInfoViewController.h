@@ -23,6 +23,8 @@
 @property (nonatomic, strong) UITextField *oldpwdText;
 @property (nonatomic, strong) UITextField *newpwdText;
 @property (nonatomic, strong) UITextField *newpwdText2;
+@property (nonatomic, strong) UIView *changepwd;
+
 
 - (void)setAvatar:(NSString *)avatar name:(NSString *)name organ:(NSString *)organ;
 - (void)setIdType:(NSString *)type idNo:(NSString *)idNo;

@@ -20,6 +20,8 @@
 #import <PYPhotoBrowser/PYPhotoBrowser.h>
 #import "ITagView.h"
 #import "ITags.h"
+#import "MHProgress.h"
+#import "UIScrollView+UITouch.h"
 
 @interface IShopDetailViewController ()
 
@@ -63,6 +65,8 @@
     editBtn.frame = CGRectMake(rScreen.size.width - 50, 5 + vTop, 40, 20);
     [editBtn addTarget:self action:@selector(onEdit:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:editBtn];
+    self.editBtn = editBtn;
+    
     
     UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0, 35 + vTop, rScreen.size.width, 130)];
     [baseInfoView setBackgroundColor:[UIColor whiteColor]];
@@ -272,7 +276,7 @@
     self.facadePic.tag = 1;
     self.facadePic.userInteractionEnabled = YES;
     [self.facadePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
-    [self.licencePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [self.facadePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.facadePic];
     
     self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 180 + self.tagView.frame.size.height, 50, 50)];
@@ -280,7 +284,7 @@
     self.signPic.tag = 2;
     self.signPic.userInteractionEnabled = YES;
     [self.signPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
-    [self.licencePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [self.signPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.signPic];
     
     self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 180 + self.tagView.frame.size.height, 50, 50)];
@@ -288,7 +292,7 @@
     self.sitePic.tag = 3;
     self.sitePic.userInteractionEnabled = YES;
     [self.sitePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
-    [self.licencePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [self.sitePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.sitePic];
     
     UIButton *commitBtn = self.commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -321,9 +325,6 @@
 }
 
 - (IBAction)onGetGeoCode {
-    if (!self.bEdit) {
-        return;
-    }
     CLGeocoder *geoCoder = [[CLGeocoder alloc]init];
     [geoCoder reverseGeocodeLocation:[Utils getMyLocation] completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
         if (placemarks.count > 0) {
@@ -341,7 +342,7 @@
 
 - (void)resizeView:(NSInteger) count {
     static NSInteger termcount = 0;
-    if (termcount != count) {
+//    if (termcount != count) {
         termcount = count;
         CGRect rTable = self.tableView.frame;
         rTable.size.height = 30*count;
@@ -352,7 +353,7 @@
         [self.commitBtn setFrame:CGRectMake(rTable.size.width/2 - 50, self.resultView.frame.origin.y + self.resultView.frame.size.height + 10, 100, 30)];
         self.scrollView.contentSize = CGSizeMake(rTable.size.width, self.commitBtn.frame.origin.y + self.commitBtn.frame.size.height);
         
-    }
+//    }
     
 }
 
@@ -378,6 +379,7 @@
                              @"batchcode": [self.merchInfo objectForKey:@"batchcode"],
                              @"shopcode": [self.shopInfo objectForKey:@"shopcode"]
                              };
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"getShopInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.shopDetail = [[NSDictionary alloc] initWithDictionary:[ret objectForKey:@"datas"]];
@@ -422,11 +424,14 @@
                 }
             }
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
     
 }
+
 
 - (IBAction)onSelectPic:(UIGestureRecognizer *)sender {
     if (![Utils cameraAccess]) {
@@ -496,6 +501,12 @@
 }
 
 - (IBAction)onCommit:(id)sender {
+    [self.view endEditing:YES];
+    if(self.bEdit){
+        self.bEdit = false;
+        [self.editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    }
+    
     if (![Utils locationAccess]) {
         [self.view makeToast:@"请先开启定位服务!"];
         [Utils openLocationSetting:self];
@@ -553,6 +564,7 @@
                              };
     [self.indicator startAnimating];
     self.view.userInteractionEnabled = NO;
+    [[MHProgress getCommitInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"inspShopInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.inspcntid = [[ret objectForKey:@"insp_cnt_id"] integerValue];
@@ -560,6 +572,7 @@
         }
     } failure:^(NSError *error) {
         [self.view makeToast:@"巡检上传失败!"];
+        [[MHProgress getCommitInstance] closeLoadingView];
     }];
 }
 
@@ -649,12 +662,14 @@
 - (void)uploadImgOK {
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
+    [[MHProgress getCommitInstance] closeLoadingView];
     [self.view makeToast:@"巡检上传成功!"];
 }
 
 - (void)uploadImgFail {
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
+    [[MHProgress getCommitInstance] closeLoadingView];
     [self.view makeToast:@"巡检图片上传失败!"];
 }
 

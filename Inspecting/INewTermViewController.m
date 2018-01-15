@@ -17,6 +17,8 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Toast/UIView+Toast.h>
 #import <PYPhotoBrowser/PYPhotoBrowser.h>
+#import "MHProgress.h"
+#import "UIScrollView+UITouch.h"
 
 @interface INewTermViewController ()
 
@@ -324,6 +326,7 @@
 
 
 - (IBAction)onCommit:(id)sender {
+    [self.view endEditing:YES];
     if (![Utils locationAccess]) {
         [self.view makeToast:@"请先开启定位服务!"];
         [Utils openLocationSetting:self];
@@ -359,7 +362,7 @@
     
     [self.indicator startAnimating];
     self.view.userInteractionEnabled = NO;
-    
+    [[MHProgress getCommitInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"inspNewTermInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.inspcntid = [[ret objectForKey:@"insp_cnt_id"] integerValue];
@@ -372,6 +375,7 @@
         self.view.userInteractionEnabled = YES;
         [self.view makeToast:@"新建终端失败!"];
         NSLog(@"%@", error);
+        [[MHProgress getCommitInstance] closeLoadingView];
     }];
 }
 
@@ -410,6 +414,7 @@
 }
 
 - (void)uploadImgOK {
+    [[MHProgress getCommitInstance] closeLoadingView];
     [self.view makeToast:@"新建终端成功!" duration:2 position:CSToastPositionBottom title:nil image:nil style:[[CSToastStyle alloc] initWithDefaultStyle] completion:^(BOOL didTap) {
         [self.navigationController popViewControllerAnimated:YES];
         self.view.userInteractionEnabled = YES;
@@ -418,9 +423,14 @@
 }
 
 - (void)uploadImgFail {
+    [[MHProgress getCommitInstance] closeLoadingView];
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
     [self.view makeToast:@"上传图片失败!"];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void) uploadImages:(NSInteger)index {

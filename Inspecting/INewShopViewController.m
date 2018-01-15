@@ -14,6 +14,8 @@
 #import "AFNRequestManager.h"
 #import <Toast/UIView+Toast.h>
 #import <PYPhotoBrowser/PYPhotoBrowser.h>
+#import "MHProgress.h"
+#import "UIScrollView+UITouch.h"
 
 @interface INewShopViewController ()
 
@@ -64,8 +66,9 @@
     addrLabel.text = @"门店地址";
     [baseInfoView addSubview:addrLabel];
     
-    UIImageView *addrImgView = [[UIImageView alloc]initWithFrame:CGRectMake(rScreen.size.width - 21, 40, 16, 16)];
+    UIImageView *addrImgView = [[UIImageView alloc]initWithFrame:CGRectMake(rScreen.size.width - 24, 35, 20, 20)];
     addrImgView.image = [UIImage imageNamed:@"i_location.png"];
+    addrImgView.userInteractionEnabled = YES;
     [addrImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onGetGeoCode)]];
     [baseInfoView addSubview:addrImgView];
     
@@ -345,6 +348,7 @@
 }
 
 - (IBAction)onCommit:(id)sender {
+    [self.view endEditing:YES];
     if (![Utils locationAccess]) {
         [self.view makeToast:@"请先开启定位服务!"];
         [Utils openLocationSetting:self];
@@ -392,7 +396,7 @@
     
     [self.indicator startAnimating];
     self.view.userInteractionEnabled = NO;
-    
+    [[MHProgress getCommitInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"inspNewShopInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.shopcode = [NSString stringWithString:[ret objectForKey:@"shopcode"]];
@@ -402,6 +406,7 @@
         }
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getCommitInstance] closeLoadingView];
     }];
     
 }
@@ -446,12 +451,14 @@
         self.view.userInteractionEnabled = YES;
         [self.indicator stopAnimating];
     }];
+    [[MHProgress getCommitInstance] closeLoadingView];
 }
 
 - (void)uploadImgFail {
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
     [self.view makeToast:@"上传图片失败!"];
+    [[MHProgress getCommitInstance] closeLoadingView];
 }
 
 - (void) uploadImages:(NSInteger)index {

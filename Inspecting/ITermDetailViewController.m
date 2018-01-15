@@ -18,6 +18,8 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Toast/UIView+Toast.h>
 #import <PYPhotoBrowser/PYPhotoBrowser.h>
+#import "MHProgress.h"
+#import "UIScrollView+UITouch.h"
 
 @interface ITermDetailViewController ()
 
@@ -61,6 +63,7 @@
     editBtn.frame = CGRectMake(rScreen.size.width - 50,vTop + 5, 40, 20);
     [editBtn addTarget:self action:@selector(onEdit:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:editBtn];
+    self.editBtn=editBtn;
     
     UIView *baseInfoView = [[UIView alloc] initWithFrame:CGRectMake(0,vTop + 35, rScreen.size.width, 165)];
     [baseInfoView setBackgroundColor:[UIColor whiteColor]];
@@ -271,6 +274,11 @@
 }
 
 - (IBAction)onCommit:(id)sender {
+    [self.view endEditing:YES];
+    if(self.bEdit){
+        self.bEdit = false;
+        [self.editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    }
     if (![Utils locationAccess]) {
         [self.view makeToast:@"请先开启定位服务!"];
         [Utils openLocationSetting:self];
@@ -320,6 +328,7 @@
                              };
     [self.indicator startAnimating];
     self.view.userInteractionEnabled = NO;
+    [[MHProgress getCommitInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"inspTermInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             self.inspcntid = [[ret objectForKey:@"insp_cnt_id"] integerValue];
@@ -328,7 +337,8 @@
     } failure:^(NSError *error) {
         [self.indicator stopAnimating];
         self.view.userInteractionEnabled = YES;
-        [self.view makeToast:@"终端巡检请求失败!"];
+        [[MHProgress getCommitInstance] closeLoadingView];
+        [self.view makeToast:@"终端巡检上传失败!"];
         NSLog(@"%@", error);
     }];
 
@@ -356,6 +366,7 @@
                              @"termcode": [self.termInfo objectForKey:@"termcode"],
                              @"shopcode": self.shopInfo ? [self.shopInfo objectForKey:@"shopcode"] :[self.termInfo objectForKey:@"shopcode"]
                              };
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"getTermInfo.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             if (nil == self.termDetail) {
@@ -404,8 +415,10 @@
             }
 
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
 }
 
@@ -463,10 +476,12 @@
     if ([sender.currentTitle isEqualToString:@"编辑"]) {
         self.bEdit = true;
         [sender setTitle:@"保存" forState:UIControlStateNormal];
+        [self.termSerialnbr becomeFirstResponder];
     }
     else if ([sender.currentTitle isEqualToString:@"保存"]) {
         self.bEdit = false;
         [sender setTitle:@"编辑" forState:UIControlStateNormal];
+        [self.view endEditing:YES];
     }
 }
 
@@ -505,12 +520,18 @@
 - (void)uploadImgOK {
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
+    [[MHProgress getCommitInstance] closeLoadingView];
     [self.view makeToast:@"终端巡检请求成功!"];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void)uploadImgFail {
     self.view.userInteractionEnabled = YES;
     [self.indicator stopAnimating];
+    [[MHProgress getCommitInstance] closeLoadingView];
     [self.view makeToast:@"上传图片失败!"];
 }
 

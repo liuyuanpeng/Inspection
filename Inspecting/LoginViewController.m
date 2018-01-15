@@ -21,6 +21,7 @@
 #import "IVersion.h"
 #import "Utils.h"
 #import "ITags.h"
+#import "MHProgress.h"
 
 @interface LoginViewController ()
 
@@ -108,6 +109,7 @@
 }
 
 - (IBAction)onLogin:(id)sender {
+    [self.view endEditing:YES];
     // check location access
     if (![Utils locationAccess]) {
         [self.view makeToast:@"请先开启定位服务!"];
@@ -137,6 +139,8 @@
                              @"version":[IVersion getInstance].version,
                              @"system":@"IOS"
                              };
+    MHProgress *p = [[MHProgress alloc] initWithType:MHPopViewTypeFullScreenWithTips NSString:@"登录中"];
+    [p showLoadingView];
     [AFNRequestManager requestAFURL:@"loginCheck.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (4 == [[ret valueForKey:@"status"] integerValue]) {
             [self.view makeToast:[ret valueForKey:@"desc"]];
@@ -150,10 +154,13 @@
         }
         else {
             [self saveTags:[ret valueForKey:@"paytype"]];
+            [p closeLoadingView];
             [self onLoginSuccess: [ret valueForKey:@"datas"]];
         }
+        [p closeLoadingView];
     } failure:^(NSError * error) {
         NSLog(@"fail:%@", error);
+        [p closeLoadingView];
     }];
 }
 

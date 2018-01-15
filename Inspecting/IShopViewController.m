@@ -13,6 +13,7 @@
 #import "AFNRequestManager.h"
 #import "INewShopViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "MHProgress.h"
 
 @interface IShopViewController ()
 
@@ -93,6 +94,7 @@
                              @"state":@"",
                              @"keyword": self.keywordText.text
                              };
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"getShopList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             if (self.shopArray == nil) {
@@ -102,9 +104,12 @@
             [self.shopArray addObjectsFromArray:[ret objectForKey:@"detail"]];
             [self.tableView reloadData];
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
+    
 }
 
 - (IBAction)addShop:(id)sender {
@@ -118,6 +123,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
+
 - (BOOL)hideSeachView:(BOOL)bHide {
     if (self.searchView.isHidden == bHide) {
         return NO;
@@ -126,10 +135,12 @@
     if (bHide) {
         rTable.size.height += 90;
         rTable.origin.y -= 90;
+        [self.keywordText resignFirstResponder];
     }
     else {
         rTable.size.height -= 90;
         rTable.origin.y += 90;
+        [self.keywordText becomeFirstResponder];
     }
     
     self.tableView.frame = rTable;
@@ -155,6 +166,7 @@
                              @"state":@"",
                              @"keyword": self.keywordText.text
                              };
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"getShopList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             if (self.shopArray == nil) {
@@ -165,10 +177,11 @@
             [self.shopArray addObjectsFromArray:[ret objectForKey:@"detail"]];
             [self.tableView reloadData];
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
-
 }
 
 /*

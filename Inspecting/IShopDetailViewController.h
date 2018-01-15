@@ -40,6 +40,7 @@
 @property (nonatomic, strong) UIImageView *facadePic;
 @property (nonatomic, strong) UIImageView *signPic;
 @property (nonatomic, strong) UIImageView *sitePic;
+@property (nonatomic, strong) UIButton *editBtn;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 

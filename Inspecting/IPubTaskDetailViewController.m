@@ -15,6 +15,8 @@
 #import "Utils.h"
 #import "AFNRequestManager.h"
 #import "iUser.h"
+#import "MHProgress.h"
+#import "UIScrollView+UITouch.h"
 
 #define BACK_IMG [UIImage imageNamed:@"i_add_pic.png"]
 
@@ -346,17 +348,19 @@
 }
 
 - (void)uploadImgs {
+    [self.view endEditing:YES];
+    if (![Utils locationAccess]) {
+        [self.view makeToast:@"请先开启定位服务!"];
+        [Utils openLocationSetting:self];
+        return;
+    }
+    [[MHProgress getCommitInstance] showLoadingView];
     [[IPubTask shareInstance] generate];
     self.view.userInteractionEnabled = NO;
     [self.indicator startAnimating];
     [self uploadByIndex:0];}
 
 - (void)uploadSuccess {
-    if (![Utils locationAccess]) {
-        [self.view makeToast:@"请先开启定位服务!"];
-        [Utils openLocationSetting:self];
-        return;
-    }
     NSDictionary *stepInfo = [[IPubTask shareInstance]getStepInfoByStep:self.step];
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
@@ -374,19 +378,20 @@
                 self.view.userInteractionEnabled = YES;
                 [self.indicator stopAnimating];
             }];
+            [[MHProgress getCommitInstance] closeLoadingView];
         }
         else {
-            [self.view makeToast:@"提交巡检数据失败!" duration:2.0 position:CSToastPositionCenter];
             [self uploadFaild];
         }
+        
     } failure:^(NSError *error) {
-        [self.view makeToast:@"提交巡检数据失败!" duration:2.0 position:CSToastPositionCenter];
         [self uploadFaild];
     }];
 }
 
 - (void)uploadFaild {
-    [self.view makeToast:@"巡检图片上传失败,请稍后重试!" duration:2.0 position:CSToastPositionCenter];
+    [[MHProgress getCommitInstance] closeLoadingView];
+    [self.view makeToast:@"提交巡检数据失败,请稍后重试!" duration:2.0 position:CSToastPositionCenter];
     // 回滚图片
     NSDictionary *stepInfo = [[IPubTask shareInstance]getStepInfoByStep:self.step];
     NSDictionary *params = @{
@@ -524,6 +529,10 @@
     contentView.frame = CGRectMake(contentView.bounds.origin.x,  contentView.bounds.origin.y,  contentView.bounds.size.width, contentView.bounds.size.height + self.tabBarController.tabBar.frame.size.height);
     self.tabBarController.tabBar.hidden = YES;
     
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 #pragma mark - UIImagePickerControllerDelegate Implementation

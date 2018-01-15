@@ -13,6 +13,9 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "IMission.h"
 #import "MyMissionViewController.h"
+#import <Toast/UIView+Toast.h>
+#import "MHProgress.h"
+
 
 @interface HomeViewController ()
 
@@ -69,9 +72,9 @@
     finishedLabel.text = @"已完成任务：";
     finishedLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
     [finishedMissionView addSubview:finishedLabel];
-    self.finishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(105, 50, 30, 30)];
+    self.finishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(105, 50, 75, 30)];
     self.finishedLabel.textColor  = [UIColor colorWithRed:133/255.0 green:198/255.0 blue:103/255.0 alpha:1.0];
-    self.finishedLabel.text = @"66";
+//    self.finishedLabel.text = @"";
     self.finishedLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
     [finishedMissionView addSubview:self.finishedLabel];
     
@@ -85,18 +88,15 @@
     unfinishedLabel.text = @"未完成任务：";
     unfinishedLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
     [unFinishedMissionView addSubview:unfinishedLabel];
-    self.unfinishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(105, 50, 30, 30)];
+    self.unfinishedLabel = [[UILabel alloc] initWithFrame:CGRectMake(105, 50, 75, 30)];
     self.unfinishedLabel.textColor = [UIColor colorWithRed:252/255.0 green:7/255.0 blue:1/255.0 alpha:1.0];
-    self.unfinishedLabel.text = @"66";
+//    self.unfinishedLabel.text = @"";
     self.unfinishedLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
     [unFinishedMissionView addSubview:self.unfinishedLabel];
-    
-    
     
     UIView *splitLine = [[UIView alloc] initWithFrame:CGRectMake(rScreen.size.width/2, rHeader.origin.y + rHeader.size.height + 270/2, 2, 172/2)];
     splitLine.backgroundColor = [UIColor colorWithRed:226/255.0 green:226/255.0 blue:221/255.0 alpha:1.0];
     [self.view addSubview:splitLine];
-    
     
     UILabel *newestLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, finishedMissionView.frame.origin.y + 172/2 + 32/2, rScreen.size.width, 30)];
     newestLabel.text = @"最新任务";
@@ -109,9 +109,12 @@
     
     self.newestTable.delegate = self;
     self.newestTable.dataSource = self;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [[MHProgress getSeachInstance] showLoadingView];
+    
     [super viewWillAppear:animated];
     iUser *userInst = [iUser getInstance];
     [self setAvartar:userInst.headimg organAvatar:@"i_default_institution.png"];
@@ -127,9 +130,13 @@
             [[IMission getInstance].missions removeAllObjects];
             [[IMission getInstance].missions addObjectsFromArray:[ret objectForKey:@"detail"]];
             [self.newestTable reloadData];
+        }else{
+            [self.view makeToast:[ret valueForKey:@"desc"]];
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
 }
 

@@ -21,6 +21,7 @@
 #import "IPopupView.h"
 #import "MKMapView+ZoomLevel.h"
 #import <DYLocationConverter/DYLocationConverter.h>
+#import "MHProgress.h"
 
 #define MAX_ZOOM_LEVEL 18
 #define MIN_ZOOM_LEVEL 10
@@ -248,7 +249,7 @@
                              @"state": @"",
                              @"keyword": @""
                              };
-    
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"getPubTaskList.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret valueForKey:@"status"] integerValue]) {
             [[iPublicMission getInstance] setData:[ret valueForKey:@"detail"]];
@@ -256,8 +257,10 @@
             [self.tableView reloadData];
         }
         NSLog(@"%@", ret);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
     
 }
@@ -342,6 +345,7 @@
                              @"serialnbr": [missionDict objectForKey:@"serialnbr"],
                              @"flag": [@"" isEqualToString: [missionDict objectForKey:@"opstaff"]] ? @"1" : @"2"
                              };
+    [[MHProgress getSeachInstance] showLoadingView];
     [AFNRequestManager requestAFURL:@"lockPubTask.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
         if (0 == [[ret objectForKey:@"status"] integerValue]) {
             [self updateMissions];
@@ -351,8 +355,10 @@
         else {
             [self.view makeToast: [ret objectForKey:@"desc"] duration:2 position:CSToastPositionCenter];
         }
+        [[MHProgress getSeachInstance] closeLoadingView];
     } failure:^(NSError *error) {
         NSLog(@"%@", error);
+        [[MHProgress getSeachInstance] closeLoadingView];
     }];
 }
 

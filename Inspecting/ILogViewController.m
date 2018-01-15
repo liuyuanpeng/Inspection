@@ -11,6 +11,7 @@
 #import "iUser.h"
 #import "AFNRequestManager.h"
 #import <Toast/UIView+Toast.h>
+#import "MHProgress.h"
 
 @interface ILogViewController ()
 
@@ -41,6 +42,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [[MHProgress getSeachInstance] showLoadingView];
     if (self.termInfo != nil) {
         NSDictionary *params = @{
                                  @"staffcode": [iUser getInstance].staffcode,
@@ -50,6 +52,7 @@
                                  @"shopcode": self.shopInfo ? [self.shopInfo objectForKey:@"shopcode"] : [self.termInfo objectForKey:@"shopcode"],
                                  @"termcode": [self.termInfo objectForKey:@"termcode"]
                                  };
+        
         [AFNRequestManager requestAFURL:@"inspTermLog.json" httpMethod:METHOD_POST params:params succeed:^(NSDictionary *ret) {
             if (0 == [[ret objectForKey:@"status"] integerValue]) {
                 NSDictionary *datas = [ret valueForKey:@"datas"];
@@ -91,8 +94,10 @@
             else {
                 [self.view makeToast:[ret objectForKey:@"desc"]];
             }
+            [[MHProgress getSeachInstance] closeLoadingView];
         } failure:^(NSError *error) {
             NSLog(@"%@", error);
+            [[MHProgress getSeachInstance] closeLoadingView];
         }];
         
     }
@@ -152,8 +157,10 @@
             else {
                 [self.view makeToast:[ret objectForKey:@"desc"]];
             }
+            [[MHProgress getSeachInstance] closeLoadingView];
         } failure:^(NSError *error) {
             NSLog(@"%@", error);
+            [[MHProgress getSeachInstance] closeLoadingView];
         }];
     }
     else {
@@ -197,10 +204,13 @@
             else {
                 [self.view makeToast:[ret objectForKey:@"desc"]];
             }
+            [[MHProgress getSeachInstance] closeLoadingView];
         } failure:^(NSError *error) {
             NSLog(@"%@", error);
+            [[MHProgress getSeachInstance] closeLoadingView];
         }];
     }
+    
 }
 
 - (void)didReceiveMemoryWarning {
