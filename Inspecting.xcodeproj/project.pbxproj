@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		264687D61FBEBA2B004498CB /* i_add_postest.png in Resources */ = {isa = PBXBuildFile; fileRef = 264687D51FBEBA2B004498CB /* i_add_postest.png */; };
+		260DEA2420060E8400E4E0A7 /* i_add_postest.png in Resources */ = {isa = PBXBuildFile; fileRef = 260DEA2320060E8300E4E0A7 /* i_add_postest.png */; };
+		260DEA2A20061FC100E4E0A7 /* MHProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 260DEA2920061FC000E4E0A7 /* MHProgress.m */; };
+		260DEA302007407600E4E0A7 /* UIScrollView+UITouch.m in Sources */ = {isa = PBXBuildFile; fileRef = 260DEA2F2007407600E4E0A7 /* UIScrollView+UITouch.m */; };
 		912C7DDC1E7C3FFE000DAF06 /* IPubTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */; };
 		912C7DE21E7D8140000DAF06 /* IPubTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DE11E7D8140000DAF06 /* IPubTaskDetailViewController.m */; };
 		91360B6F1F94946900B8EA47 /* ITagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91360B6E1F94946900B8EA47 /* ITagView.m */; };
@@ -147,7 +149,12 @@
 
 /* Begin PBXFileReference section */
 		1A0DB2BD903CC4F18FE2A065 /* Pods-Inspecting.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inspecting.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Inspecting/Pods-Inspecting.debug.xcconfig"; sourceTree = "<group>"; };
-		264687D51FBEBA2B004498CB /* i_add_postest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = i_add_postest.png; path = ../../../Downloads/i_add_postest.png; sourceTree = "<group>"; };
+		260DEA2320060E8300E4E0A7 /* i_add_postest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = i_add_postest.png; path = images/i_add_postest.png; sourceTree = "<group>"; };
+		260DEA2820061FC000E4E0A7 /* MHProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHProgress.h; sourceTree = "<group>"; };
+		260DEA2920061FC000E4E0A7 /* MHProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHProgress.m; sourceTree = "<group>"; };
+		260DEA2B2006224900E4E0A7 /* DEFINE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DEFINE.h; sourceTree = "<group>"; };
+		260DEA2F2007407600E4E0A7 /* UIScrollView+UITouch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UITouch.m"; sourceTree = "<group>"; };
+		260DEA312007416600E4E0A7 /* UIScrollView+UITouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UITouch.h"; sourceTree = "<group>"; };
 		7F5BCA653F6238E36CA37A69 /* Pods-Inspecting.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inspecting.release.xcconfig"; path = "Pods/Target Support Files/Pods-Inspecting/Pods-Inspecting.release.xcconfig"; sourceTree = "<group>"; };
 		912C7DDA1E7C3FFE000DAF06 /* IPubTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPubTask.h; sourceTree = "<group>"; };
 		912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPubTask.m; sourceTree = "<group>"; };
@@ -364,6 +371,8 @@
 		917964521E582FE300B5E808 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				260DEA2820061FC000E4E0A7 /* MHProgress.h */,
+				260DEA2920061FC000E4E0A7 /* MHProgress.m */,
 				9172A78C1E78EF9C002E90C3 /* RSAEncrypt.h */,
 				9172A78D1E78EF9C002E90C3 /* RSAEncrypt.m */,
 				917964531E58306E00B5E808 /* UIImage+UIImageEx.h */,
@@ -380,6 +389,8 @@
 				914707B21E781B0200E46B3B /* RSAEncryptor.m */,
 				91F4B4761E98CD1E005968F8 /* MKMapView+ZoomLevel.h */,
 				91F4B4771E98CD1E005968F8 /* MKMapView+ZoomLevel.m */,
+				260DEA2F2007407600E4E0A7 /* UIScrollView+UITouch.m */,
+				260DEA312007416600E4E0A7 /* UIScrollView+UITouch.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -412,6 +423,7 @@
 				91831A9C1E54978B00E670B3 /* resource */,
 				91831A851E53F4CD00E670B3 /* AppDelegate.h */,
 				91831A861E53F4CD00E670B3 /* AppDelegate.m */,
+				260DEA2B2006224900E4E0A7 /* DEFINE.h */,
 				91831A911E53F4CD00E670B3 /* Assets.xcassets */,
 				91831A931E53F4CD00E670B3 /* LaunchScreen.storyboard */,
 				91831A961E53F4CD00E670B3 /* Info.plist */,
@@ -535,6 +547,7 @@
 		9183CB6D1E5B44450064572E /* images */ = {
 			isa = PBXGroup;
 			children = (
+				260DEA2320060E8300E4E0A7 /* i_add_postest.png */,
 				9183CB9A1E5B44E70064572E /* a_finished.png */,
 				9183CB9B1E5B44E70064572E /* a_unfinished.png */,
 				9183CB9C1E5B44E70064572E /* b_login_conform.9.png */,
@@ -550,7 +563,6 @@
 				9183CB971E5B44E70064572E /* i_add_mmzp.png */,
 				9183CBA31E5B44E70064572E /* i_add_pic.png */,
 				9183CB941E5B44E70064572E /* i_add_posdown.png */,
-				264687D51FBEBA2B004498CB /* i_add_postest.png */,
 				9183CB951E5B44E70064572E /* i_add_posup.png */,
 				9183CB981E5B44E70064572E /* i_add_yyzz.png */,
 				9183CB991E5B44E70064572E /* i_add_zp.png */,
@@ -717,7 +729,7 @@
 				9183CC231E5B44E70064572E /* i_pos.png in Resources */,
 				9183CC2D1E5B44E70064572E /* loading5.png in Resources */,
 				9183CC011E5B44E70064572E /* i_add_mmzp.png in Resources */,
-				264687D61FBEBA2B004498CB /* i_add_postest.png in Resources */,
+				260DEA2420060E8400E4E0A7 /* i_add_postest.png in Resources */,
 				9183CBF71E5B44E70064572E /* main_topbtn_down.9.png in Resources */,
 				9183CC351E5B44E70064572E /* p_login_logo1.png in Resources */,
 				91C78C591E680165009AC9A2 /* checked@2x.png in Resources */,
@@ -850,6 +862,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91831AAC1E54B67500E670B3 /* PublicMissionViewController.m in Sources */,
+				260DEA2A20061FC100E4E0A7 /* MHProgress.m in Sources */,
 				91C78C641E69B55F009AC9A2 /* ITextView.m in Sources */,
 				91B707BE1E76E4E1006E76AA /* IVersion.m in Sources */,
 				91CDD6351E7033B800ECAF58 /* IMission.m in Sources */,
@@ -866,6 +879,7 @@
 				91831AAF1E54B68400E670B3 /* MyMissionViewController.m in Sources */,
 				91655EAF1E6715FC0031CFE0 /* NoneImageView.m in Sources */,
 				91F46D2B1E657882004491E5 /* iInst.m in Sources */,
+				260DEA302007407600E4E0A7 /* UIScrollView+UITouch.m in Sources */,
 				914707B31E781B0200E46B3B /* RSAEncryptor.m in Sources */,
 				9195D1841E5DD912007B451F /* AFNRequestManager.m in Sources */,
 				91C78C821E6B3D01009AC9A2 /* PickerView.m in Sources */,
