@@ -204,7 +204,7 @@
     
     NSMutableArray *tagsArray = [[ITags getInstance] getTagsArray];
     self.tagView = [[ITagView alloc] initWithFrame:CGRectMake(0, 100, rScreen.size.width, 0) tagArray:tagsArray];
-    UIView *resultView = self.resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 240 + self.tagView.frame.size.height)];
+    UIView *resultView = self.resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 260 + self.tagView.frame.size.height)];
     [resultView setBackgroundColor:[UIColor whiteColor]];
     [self.scrollView addSubview:resultView];
     [resultView addSubview:self.tagView];
@@ -263,7 +263,7 @@
     photoLabel.font = [UIFont systemFontOfSize:13];
     [resultView addSubview:photoLabel];
     
-    self.licencePic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 180 + self.tagView.frame.size.height, 50, 50)];
+    self.licencePic = [[UIImageView alloc] initWithFrame: CGRectMake(5, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
     self.licencePic.image = [UIImage imageNamed:@"i_add_yyzz.png"];
     self.licencePic.tag = 0;
     self.licencePic.userInteractionEnabled = YES;
@@ -271,7 +271,7 @@
     [self.licencePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.licencePic];
     
-    self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 180 + self.tagView.frame.size.height, 50, 50)];
+    self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(58, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
     self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp.png"];
     self.facadePic.tag = 1;
     self.facadePic.userInteractionEnabled = YES;
@@ -279,7 +279,7 @@
     [self.facadePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.facadePic];
     
-    self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 180 + self.tagView.frame.size.height, 50, 50)];
+    self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(111, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
     self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
     self.signPic.tag = 2;
     self.signPic.userInteractionEnabled = YES;
@@ -287,13 +287,30 @@
     [self.signPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.signPic];
     
-    self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 180 + self.tagView.frame.size.height, 50, 50)];
+    self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(164, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
     self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
     self.sitePic.tag = 3;
     self.sitePic.userInteractionEnabled = YES;
     [self.sitePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
     [self.sitePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.sitePic];
+    
+    self.ylsignPic = [[UIImageView alloc] initWithFrame: CGRectMake(217, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
+    self.ylsignPic.image = [UIImage imageNamed:@"i_add_ylbs.png"];
+    self.ylsignPic.tag = 4;
+    self.ylsignPic.userInteractionEnabled = YES;
+    [self.ylsignPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.ylsignPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [resultView addSubview:self.ylsignPic];
+    
+    self.mpewmPic = [[UIImageView alloc] initWithFrame: CGRectMake(270, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
+    self.mpewmPic.image = [UIImage imageNamed:@"i_add_mpewm.png"];
+    self.mpewmPic.tag = 5;
+    self.mpewmPic.userInteractionEnabled = YES;
+    [self.mpewmPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.mpewmPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [resultView addSubview:self.mpewmPic];
+
     
     UIButton *commitBtn = self.commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     commitBtn.frame = CGRectMake(rScreen.size.width/2 - 50, resultView.frame.origin.y + resultView.frame.size.height + 10, 100, 30);
@@ -304,13 +321,13 @@
     [commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [commitBtn addTarget:self action:@selector(onCommit:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:commitBtn];
-    
+
     self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.indicator setCenter:CGPointMake(rScreen.size.width/2, rScreen.size.height/2)];
     self.indicator.color = [UIColor blueColor];
     [self.view addSubview:self.indicator];
     
-    self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height+20);
     
     self.userImgDict = [[NSMutableDictionary alloc] initWithCapacity:4];
     self.inspresultArray = [[NSMutableArray alloc] initWithCapacity:4];
@@ -349,9 +366,9 @@
         [self.tableView setFrame:rTable];
         
         [self.resultLabel setFrame:CGRectMake(5, self.tableView.frame.origin.y + self.tableView.frame.size.height + 5, 100, 25)];
-        [self.resultView setFrame:CGRectMake(0, self.resultLabel.frame.origin.y + 30, rTable.size.width, 240 + self.tagView.frame.size.height)];
+        [self.resultView setFrame:CGRectMake(0, self.resultLabel.frame.origin.y + 30, rTable.size.width, 260 + self.tagView.frame.size.height)];
         [self.commitBtn setFrame:CGRectMake(rTable.size.width/2 - 50, self.resultView.frame.origin.y + self.resultView.frame.size.height + 10, 100, 30)];
-        self.scrollView.contentSize = CGSizeMake(rTable.size.width, self.commitBtn.frame.origin.y + self.commitBtn.frame.size.height);
+        self.scrollView.contentSize = CGSizeMake(rTable.size.width, self.commitBtn.frame.origin.y + self.commitBtn.frame.size.height+20);
         
 //    }
     
@@ -369,6 +386,8 @@
     self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp"];
     self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
     self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
+    self.ylsignPic.image = [UIImage imageNamed:@"i_add_ylbs.png"];
+    self.mpewmPic.image = [UIImage imageNamed:@"i_add_mpewm.png"];
     self.radioButton.selected = YES;
     self.desc.text = @"";
     
@@ -422,6 +441,13 @@
                 else if (i == 3) {
                     [self.sitePic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
                 }
+                else if (i == 4) {
+                    [self.ylsignPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
+                }
+                else if (i == 5) {
+                    [self.mpewmPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
+                }
+
             }
         }
         [[MHProgress getSeachInstance] closeLoadingView];
@@ -464,7 +490,9 @@
     if ([image isEqual:[UIImage imageNamed:@"i_add_yyzz.png"]] ||
         [image isEqual:[UIImage imageNamed:@"i_add_mmzp.png"]] ||
         [image isEqual:[UIImage imageNamed:@"i_add_zp.png"]] ||
-        [image isEqual:[UIImage imageNamed:@"i_add_jycs.png"]]) {
+        [image isEqual:[UIImage imageNamed:@"i_add_jycs.png"]]||
+        [image isEqual:[UIImage imageNamed:@"i_add_ylbs.png"]]||
+        [image isEqual:[UIImage imageNamed:@"i_add_mpewm.png"]]) {
         return;
     }
     
@@ -520,7 +548,7 @@
         [self.view makeToast:@"选择其他时请填写其他支付方式!"];
         return;
     }
-    for (NSInteger i = 0; i < 4; i++) {
+    for (NSInteger i = 0; i < 5; i++) {
         if (self.inspresultArray.count > i) {
             NSDictionary *dict = [self.inspresultArray objectAtIndex:i];
             NSString *oldFile = @"";
@@ -674,11 +702,10 @@
 }
 
 - (void) uploadImages:(NSInteger)index {
-    if (index >= 4) {
+    if (index >= 6) {
         [self uploadImgOK];
         return;
     }
-    
     
     NSString *oldFile = @"";
     UIImage *img = [self.userImgDict objectForKey:@(index)];

@@ -10,6 +10,11 @@
 		260DEA2420060E8400E4E0A7 /* i_add_postest.png in Resources */ = {isa = PBXBuildFile; fileRef = 260DEA2320060E8300E4E0A7 /* i_add_postest.png */; };
 		260DEA2A20061FC100E4E0A7 /* MHProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 260DEA2920061FC000E4E0A7 /* MHProgress.m */; };
 		260DEA302007407600E4E0A7 /* UIScrollView+UITouch.m in Sources */ = {isa = PBXBuildFile; fileRef = 260DEA2F2007407600E4E0A7 /* UIScrollView+UITouch.m */; };
+		262273292063440900A39512 /* ITermDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C7B1E6B3102009AC9A2 /* ITermDetailViewController.m */; };
+		2661E4EC20625245004A57C0 /* i_add_pos_qgdewm.png in Resources */ = {isa = PBXBuildFile; fileRef = 2661E4E920625245004A57C0 /* i_add_pos_qgdewm.png */; };
+		2661E4ED20625245004A57C0 /* i_add_ylbs.png in Resources */ = {isa = PBXBuildFile; fileRef = 2661E4EA20625245004A57C0 /* i_add_ylbs.png */; };
+		2661E4EE20625245004A57C0 /* i_add_pos_qgdsjp.png in Resources */ = {isa = PBXBuildFile; fileRef = 2661E4EB20625245004A57C0 /* i_add_pos_qgdsjp.png */; };
+		26625B142068C33700B01FA1 /* i_add_mpewm.png in Resources */ = {isa = PBXBuildFile; fileRef = 26625B132068C33700B01FA1 /* i_add_mpewm.png */; };
 		912C7DDC1E7C3FFE000DAF06 /* IPubTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */; };
 		912C7DE21E7D8140000DAF06 /* IPubTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 912C7DE11E7D8140000DAF06 /* IPubTaskDetailViewController.m */; };
 		91360B6F1F94946900B8EA47 /* ITagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91360B6E1F94946900B8EA47 /* ITagView.m */; };
@@ -129,7 +134,6 @@
 		91C78C731E6B2D92009AC9A2 /* IShopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C721E6B2D92009AC9A2 /* IShopTableViewCell.m */; };
 		91C78C761E6B2D9D009AC9A2 /* ITermTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C751E6B2D9D009AC9A2 /* ITermTableViewCell.m */; };
 		91C78C791E6B30F3009AC9A2 /* IShopDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C781E6B30F3009AC9A2 /* IShopDetailViewController.m */; };
-		91C78C7C1E6B3102009AC9A2 /* ITermDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C7B1E6B3102009AC9A2 /* ITermDetailViewController.m */; };
 		91C78C7F1E6B31C5009AC9A2 /* INewShopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C7E1E6B31C5009AC9A2 /* INewShopViewController.m */; };
 		91C78C821E6B3D01009AC9A2 /* PickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C811E6B3D01009AC9A2 /* PickerView.m */; };
 		91C78C851E6C050B009AC9A2 /* INewTermViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C78C841E6C050B009AC9A2 /* INewTermViewController.m */; };
@@ -155,6 +159,10 @@
 		260DEA2B2006224900E4E0A7 /* DEFINE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DEFINE.h; sourceTree = "<group>"; };
 		260DEA2F2007407600E4E0A7 /* UIScrollView+UITouch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UITouch.m"; sourceTree = "<group>"; };
 		260DEA312007416600E4E0A7 /* UIScrollView+UITouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UITouch.h"; sourceTree = "<group>"; };
+		2661E4E920625245004A57C0 /* i_add_pos_qgdewm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = i_add_pos_qgdewm.png; path = images/i_add_pos_qgdewm.png; sourceTree = "<group>"; };
+		2661E4EA20625245004A57C0 /* i_add_ylbs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = i_add_ylbs.png; path = images/i_add_ylbs.png; sourceTree = "<group>"; };
+		2661E4EB20625245004A57C0 /* i_add_pos_qgdsjp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = i_add_pos_qgdsjp.png; path = images/i_add_pos_qgdsjp.png; sourceTree = "<group>"; };
+		26625B132068C33700B01FA1 /* i_add_mpewm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = i_add_mpewm.png; path = images/i_add_mpewm.png; sourceTree = "<group>"; };
 		7F5BCA653F6238E36CA37A69 /* Pods-Inspecting.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inspecting.release.xcconfig"; path = "Pods/Target Support Files/Pods-Inspecting/Pods-Inspecting.release.xcconfig"; sourceTree = "<group>"; };
 		912C7DDA1E7C3FFE000DAF06 /* IPubTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPubTask.h; sourceTree = "<group>"; };
 		912C7DDB1E7C3FFE000DAF06 /* IPubTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPubTask.m; sourceTree = "<group>"; };
@@ -547,6 +555,10 @@
 		9183CB6D1E5B44450064572E /* images */ = {
 			isa = PBXGroup;
 			children = (
+				26625B132068C33700B01FA1 /* i_add_mpewm.png */,
+				2661E4E920625245004A57C0 /* i_add_pos_qgdewm.png */,
+				2661E4EB20625245004A57C0 /* i_add_pos_qgdsjp.png */,
+				2661E4EA20625245004A57C0 /* i_add_ylbs.png */,
 				260DEA2320060E8300E4E0A7 /* i_add_postest.png */,
 				9183CB9A1E5B44E70064572E /* a_finished.png */,
 				9183CB9B1E5B44E70064572E /* a_unfinished.png */,
@@ -719,6 +731,7 @@
 			files = (
 				9183CC3F1E5B44E70064572E /* toolbar_icon_refresh_available06.png in Resources */,
 				9183CC111E5B44E70064572E /* i_botton_pick.png in Resources */,
+				26625B142068C33700B01FA1 /* i_add_mpewm.png in Resources */,
 				9183CBF91E5B44E70064572E /* icon_default.png in Resources */,
 				9183CBF31E5B44E70064572E /* main_icon_zoomin_dis.png in Resources */,
 				918D37381E7724AF00D954B9 /* public_ios.der in Resources */,
@@ -768,6 +781,7 @@
 				9183CC0E1E5B44E70064572E /* i_add.png in Resources */,
 				9183CBF41E5B44E70064572E /* main_icon_zoomin.png in Resources */,
 				9183CC311E5B44E70064572E /* loading9.png in Resources */,
+				2661E4ED20625245004A57C0 /* i_add_ylbs.png in Resources */,
 				9183CC191E5B44E70064572E /* i_location.png in Resources */,
 				9183CC291E5B44E70064572E /* loading1.png in Resources */,
 				9183CC371E5B44E70064572E /* p_whitering.png in Resources */,
@@ -791,6 +805,7 @@
 				9183CC331E5B44E70064572E /* loading11.png in Resources */,
 				9183CC361E5B44E70064572E /* p_login_logo2.png in Resources */,
 				9183CC2B1E5B44E70064572E /* loading3.png in Resources */,
+				2661E4EC20625245004A57C0 /* i_add_pos_qgdewm.png in Resources */,
 				9183CC2A1E5B44E70064572E /* loading2.png in Resources */,
 				9183CC021E5B44E70064572E /* i_add_yyzz.png in Resources */,
 				9183CC3A1E5B44E70064572E /* toolbar_icon_refresh_available01.png in Resources */,
@@ -800,6 +815,7 @@
 				9183CC121E5B44E70064572E /* i_botton_picked.png in Resources */,
 				9183CC1B1E5B44E70064572E /* i_login_shutup.png in Resources */,
 				9183CC341E5B44E70064572E /* loading12.png in Resources */,
+				2661E4EE20625245004A57C0 /* i_add_pos_qgdsjp.png in Resources */,
 				9183CC101E5B44E70064572E /* i_back.png in Resources */,
 				9183CC3B1E5B44E70064572E /* toolbar_icon_refresh_available02.png in Resources */,
 				9183CC321E5B44E70064572E /* loading10.png in Resources */,
@@ -884,11 +900,11 @@
 				9195D1841E5DD912007B451F /* AFNRequestManager.m in Sources */,
 				91C78C821E6B3D01009AC9A2 /* PickerView.m in Sources */,
 				91C78C6A1E6B117A009AC9A2 /* IShopViewController.m in Sources */,
+				262273292063440900A39512 /* ITermDetailViewController.m in Sources */,
 				91831AB21E54B6A000E670B3 /* UserInfoViewController.m in Sources */,
 				91C78C851E6C050B009AC9A2 /* INewTermViewController.m in Sources */,
 				91655EA91E66CC120031CFE0 /* Utils.m in Sources */,
 				91C78C6D1E6B1188009AC9A2 /* ITermViewController.m in Sources */,
-				91C78C7C1E6B3102009AC9A2 /* ITermDetailViewController.m in Sources */,
 				91F4B47F1E98ECE4005968F8 /* IAnnotationView.m in Sources */,
 				91360B6F1F94946900B8EA47 /* ITagView.m in Sources */,
 				91C78C761E6B2D9D009AC9A2 /* ITermTableViewCell.m in Sources */,
@@ -1031,8 +1047,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: chen jianfang (F37RXTE4KA)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = S68Y74UE24;
+				ENABLE_TESTABILITY = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -1057,8 +1075,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: chen jianfang (F37RXTE4KA)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = S68Y74UE24;
+				ENABLE_TESTABILITY = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",

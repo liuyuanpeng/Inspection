@@ -11,6 +11,8 @@
 
 @class ITextView;
 @class RadioButton;
+@class ITagView;
+
 
 @interface INewShopViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MKMapViewDelegate>
 
@@ -23,13 +25,17 @@
 
 @property (nonatomic, weak) RadioButton *radioButton;
 @property (nonatomic, strong) ITextView *desc;
+@property (nonatomic, strong) ITextView *otherPay;
 @property (nonatomic, strong) UIImageView *licencePic;
 @property (nonatomic, strong) UIImageView *facadePic;
 @property (nonatomic, strong) UIImageView *signPic;
 @property (nonatomic, strong) UIImageView *sitePic;
+@property (nonatomic, strong) UIImageView *ylsignPic;
+@property (nonatomic, strong) UIImageView *mpewmPic;
 
 
 @property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) ITagView *tagView;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
 @property (nonatomic, strong) NSDictionary *merchInfo;

@@ -16,6 +16,9 @@
 #import <PYPhotoBrowser/PYPhotoBrowser.h>
 #import "MHProgress.h"
 #import "UIScrollView+UITouch.h"
+#import "ITagView.h"
+#import "ITags.h"
+
 
 @interface INewShopViewController ()
 
@@ -168,9 +171,20 @@
     resultLabel.font = [UIFont systemFontOfSize:13];
     [self.scrollView addSubview:resultLabel];
     
-    UIView *resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 180)];
+    NSMutableArray *tagsArray = [[ITags getInstance] getTagsArray];
+    self.tagView = [[ITagView alloc] initWithFrame:CGRectMake(0, 100, rScreen.size.width, 0) tagArray:tagsArray];
+    UIView *resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 260 + self.tagView.frame.size.height)];
     [resultView setBackgroundColor:[UIColor whiteColor]];
     [self.scrollView addSubview:resultView];
+    [resultView addSubview:self.tagView];
+    
+    self.otherPay = [[ITextView alloc] initWithFrame:CGRectMake(30, 100 + self.tagView.frame.size.height, rScreen.size.width - 60, 50)];
+    [self.otherPay.layer setCornerRadius:2.0f];
+    [self.otherPay.layer setBorderColor:[UIColor grayColor].CGColor];
+    [self.otherPay.layer setBorderWidth:1.0f];
+    [self.otherPay setPlaceholder:@"请输入其他支付方式"];
+    [self.otherPay setPlaceholderColor:[UIColor grayColor]];
+    [resultView addSubview:self.otherPay];
     
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:3];
     CGRect btnRect = CGRectMake(25, 10, 100, 30);
@@ -190,8 +204,9 @@
         [btn setImage:[UIImage imageNamed:@"checked.png"] forState:UIControlStateSelected];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, 6, 0, 0);
+        btn.tag = btnTag;
+        btnTag++;
         [resultView addSubview:btn];
-        btn.tag = btnTag++;
         [buttons addObject:btn];
     }
     
@@ -208,16 +223,16 @@
     [self.desc setPlaceholderColor:[UIColor grayColor]];
     [resultView addSubview:self.desc];
     
-    UIView *splitView = [[UIView alloc] initWithFrame:CGRectMake(0, 110, rScreen.size.width, 1)];
+    UIView *splitView = [[UIView alloc] initWithFrame:CGRectMake(0, 170 + self.tagView.frame.size.height, rScreen.size.width, 1)];
     splitView.backgroundColor = [UIColor grayColor];
     [resultView addSubview:splitView];
     
-    UILabel *photoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 120, 30, 20)];
+    UILabel *photoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 180 + self.tagView.frame.size.height, 30, 20)];
     photoLabel.text = @"拍照";
     photoLabel.font = [UIFont systemFontOfSize:13];
     [resultView addSubview:photoLabel];
     
-    self.licencePic = [[UIImageView alloc] initWithFrame: CGRectMake(40, 120, 50, 50)];
+    self.licencePic = [[UIImageView alloc] initWithFrame: CGRectMake(5, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
     self.licencePic.image = [UIImage imageNamed:@"i_add_yyzz.png"];
     self.licencePic.tag = 0;
     self.licencePic.userInteractionEnabled = YES;
@@ -225,7 +240,7 @@
     [self.licencePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.licencePic];
     
-    self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(100, 120, 50, 50)];
+    self.facadePic = [[UIImageView alloc] initWithFrame: CGRectMake(58, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
     self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp.png"];
     self.facadePic.tag = 1;
     self.facadePic.userInteractionEnabled = YES;
@@ -233,7 +248,7 @@
     [self.facadePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.facadePic];
     
-    self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 120, 50, 50)];
+    self.signPic = [[UIImageView alloc] initWithFrame: CGRectMake(111, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
     self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
     self.signPic.tag = 2;
     self.signPic.userInteractionEnabled = YES;
@@ -241,13 +256,30 @@
     [self.signPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.signPic];
     
-    self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 120, 50, 50)];
+    self.sitePic = [[UIImageView alloc] initWithFrame: CGRectMake(164, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
     self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
     self.sitePic.tag = 3;
     self.sitePic.userInteractionEnabled = YES;
     [self.sitePic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
     [self.sitePic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.sitePic];
+    
+    self.ylsignPic = [[UIImageView alloc] initWithFrame: CGRectMake(217, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
+    self.ylsignPic.image = [UIImage imageNamed:@"i_add_ylbs.png"];
+    self.ylsignPic.tag = 4;
+    self.ylsignPic.userInteractionEnabled = YES;
+    [self.ylsignPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.ylsignPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [resultView addSubview:self.ylsignPic];
+    
+    self.mpewmPic = [[UIImageView alloc] initWithFrame: CGRectMake(270, 180 + self.tagView.frame.size.height+photoLabel.frame.size.height, 48, 48)];
+    self.mpewmPic.image = [UIImage imageNamed:@"i_add_mpewm.png"];
+    self.mpewmPic.tag = 5;
+    self.mpewmPic.userInteractionEnabled = YES;
+    [self.mpewmPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.mpewmPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [resultView addSubview:self.mpewmPic];
+
 
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     commitBtn.frame = CGRectMake(rScreen.size.width/2 - 50, resultView.frame.origin.y + resultView.frame.size.height + 10, 100, 30);
@@ -264,7 +296,7 @@
     self.indicator.color = [UIColor blueColor];
     [self.view addSubview:self.indicator];
     
-    self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height+20);
     
     self.userImgDict = [[NSMutableDictionary alloc] initWithCapacity:4];
     self.inspresultArray = [[NSMutableArray alloc] initWithCapacity:4];
@@ -305,6 +337,10 @@
     self.facadePic.image = [UIImage imageNamed:@"i_add_mmzp"];
     self.signPic.image = [UIImage imageNamed:@"i_add_zp.png"];
     self.sitePic.image = [UIImage imageNamed:@"i_add_jycs.png"];
+    self.ylsignPic.image = [UIImage imageNamed:@"i_add_ylbs.png"];
+    self.mpewmPic.image = [UIImage imageNamed:@"i_add_mpewm.png"];
+
+
 }
 
 - (IBAction)onSelectPic:(UIGestureRecognizer *)sender {
@@ -338,7 +374,8 @@
     if ([image isEqual:[UIImage imageNamed:@"i_add_yyzz.png"]] ||
         [image isEqual:[UIImage imageNamed:@"i_add_mmzp.png"]] ||
         [image isEqual:[UIImage imageNamed:@"i_add_zp.png"]] ||
-        [image isEqual:[UIImage imageNamed:@"i_add_jycs.png"]]) {
+        [image isEqual:[UIImage imageNamed:@"i_add_jycs.png"]]||
+        [image isEqual:[UIImage imageNamed:@"i_add_ylbs.png"]]) {
         return;
     }
     
@@ -354,7 +391,16 @@
         [Utils openLocationSetting:self];
         return;
     }
-    for (NSInteger i = 0; i < 4; i++) {
+    if ([self.tagView getSelectedTags].count == 0) {
+        [self.view makeToast:@"至少选择一种支付方式!"];
+        return;
+    }
+    if ([[self.tagView getSelectedTags] containsObject:@"其他"] && [self.otherPay.text compare:@""] == NSOrderedSame) {
+        [self.view makeToast:@"选择其他时请填写其他支付方式!"];
+        return;
+    }
+
+    for (NSInteger i = 0; i < 5; i++) {
         if (self.inspresultArray.count > i) {
             NSDictionary *dict = [self.inspresultArray objectAtIndex:i];
             NSString *oldFile = @"";
@@ -391,6 +437,8 @@
                              @"addrcode": [Utils getAddrCode],
                              @"content": self.desc.text,
                              @"flag": @(self.radioButton.selectedButton.tag),
+                             @"paytype": [[ITags getInstance] getCodesBySelectedTags:[self.tagView getSelectedTags]],
+                             @"paytypedesc": self.otherPay.text,
                              @"data": [AFNRequestManager convertToJSONData:data]
                              };
     
@@ -462,7 +510,7 @@
 }
 
 - (void) uploadImages:(NSInteger)index {
-    if (index >= 4) {
+    if (index >= 6) {
         [self uploadImgOK];
         return;
     }

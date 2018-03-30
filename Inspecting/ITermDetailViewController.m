@@ -157,7 +157,7 @@
     resultLabel.font = [UIFont systemFontOfSize:13];
     [self.scrollView addSubview:resultLabel];
     
-    UIView *resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 180)];
+    UIView *resultView = [[UIView alloc] initWithFrame:CGRectMake(0, resultLabel.frame.origin.y + 30, rScreen.size.width, 220)];
     [resultView setBackgroundColor:[UIColor whiteColor]];
     [self.scrollView addSubview:resultView];
     
@@ -221,12 +221,39 @@
     [self.serialPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
     [resultView addSubview:self.serialPic];
     
-    self.testPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 120, 50, 50)];
-    self.testPic.tag = 2;
-    self.testPic.userInteractionEnabled = YES;
-    [self.testPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
-    [self.testPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
-    [resultView addSubview:self.testPic];
+    self.qgdewmPic = [[UIImageView alloc] initWithFrame: CGRectMake(160, 120, 50, 50)];
+    self.qgdewmPic.tag = 2;
+    self.qgdewmPic.userInteractionEnabled = YES;
+    [self.qgdewmPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.qgdewmPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [resultView addSubview:self.qgdewmPic];
+    
+    self.qgdsjpPic = [[UIImageView alloc] initWithFrame: CGRectMake(220, 120, 50, 50)];
+    self.qgdsjpPic.tag = 3;
+    self.qgdsjpPic.userInteractionEnabled = YES;
+    [self.qgdsjpPic addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPic:)]];
+    [self.qgdsjpPic addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onImgPreview:)]];
+    [resultView addSubview:self.qgdsjpPic];
+    
+    
+    UIView *splitView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 180, rScreen.size.width, 1)];
+    splitView2.backgroundColor = [UIColor grayColor];
+    [resultView addSubview:splitView2];
+    
+    UILabel *qgdkhLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 185, 90, 30)];
+    qgdkhLabel.text = @"签购单卡号：";
+    qgdkhLabel.font = [UIFont systemFontOfSize:13];
+    qgdkhLabel.textAlignment = NSTextAlignmentRight;
+    [resultView addSubview:qgdkhLabel];
+    
+    self.qgdkh = [[ITextView alloc] initWithFrame:CGRectMake(95, 185, rScreen.size.width - 120, 30)];
+    [self.qgdkh.layer setCornerRadius:2.0f];
+    [self.qgdkh.layer setBorderColor:[UIColor grayColor].CGColor];
+    [self.qgdkh.layer setBorderWidth:1.0f];
+    [self.qgdkh setPlaceholder:@"请输入签购单卡号"];
+    [self.qgdkh setPlaceholderColor:[UIColor grayColor]];
+    [resultView addSubview:self.qgdkh];
+
 
     UIButton *commitBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     commitBtn.frame = CGRectMake(rScreen.size.width/2 - 50, resultView.frame.origin.y + resultView.frame.size.height + 10, 100, 30);
@@ -238,7 +265,7 @@
     [commitBtn addTarget:self action:@selector(onCommit:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:commitBtn];
     
-    self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(rScreen.size.width, commitBtn.frame.origin.y + commitBtn.frame.size.height+20);
     
     self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.indicator setCenter:CGPointMake(rScreen.size.width/2, rScreen.size.height/2)];
@@ -284,7 +311,11 @@
         [Utils openLocationSetting:self];
         return;
     }
-    for (NSInteger i = 0; i < 2; i++) {
+    if ([self.qgdkh.text compare:@""] == NSOrderedSame) {
+        [self.view makeToast:@"请填写签购单卡号!"];
+        return;
+    }
+    for (NSInteger i = 0; i < 4; i++) {
         if (self.inspresultArray.count > i) {
             NSDictionary *dict = [self.inspresultArray objectAtIndex:i];
             NSString *oldFile = @"";
@@ -320,10 +351,10 @@
                              @"serialnbr": [self.termInfo objectForKey:@"serialnbr"],
                              @"seq":@1,
                              @"content": self.desc.text,
+                             @"spono":self.qgdkh.text,
                              @"shopcode": self.shopInfo ? [self.shopInfo objectForKey:@"shopcode"] : [self.termInfo objectForKey:@"shopcode"],
                              @"termcode": [self.termInfo objectForKey:@"termcode"],
                              @"flag": @(self.radioButton.selectedButton.tag),
-                             @"content": self.desc.text,
                              @"data": [AFNRequestManager convertToJSONData:data]
                              };
     [self.indicator startAnimating];
@@ -354,9 +385,11 @@
     [self.inspresultArray removeAllObjects];
     self.instPic.image = [UIImage imageNamed:@"i_add_posup.png"];
     self.serialPic.image = [UIImage imageNamed:@"i_add_posdown.png"];
-    self.testPic.image = [UIImage imageNamed:@"i_add_postest.png"];
+    self.qgdewmPic.image = [UIImage imageNamed:@"i_add_pos_qgdewm.png"];
+    self.qgdsjpPic.image = [UIImage imageNamed:@"i_add_pos_qgdsjp.png"];
     self.radioButton.selected = YES;
     self.desc.text = @"";
+    self.qgdkh.text = @"";
 
     NSDictionary *params = @{
                              @"staffcode": [iUser getInstance].staffcode,
@@ -391,7 +424,7 @@
             else {
                 self.termBrand.text = @"";
             }
-            
+
             NSArray *inspresults = [[NSArray alloc] initWithArray:[self.termDetail objectForKey:@"inspresult"]];
             [self.inspresultArray addObjectsFromArray:inspresults];
             for (NSInteger i = 0; i < inspresults.count; i++) {
@@ -402,6 +435,9 @@
                     }
                     [self.radioButton setSelectedWithTag:[[dict objectForKey:@"flag"] integerValue]];
                     self.desc.text = [NSString stringWithString:[dict objectForKey:@"content"]];
+                    if(![@"" isEqualToString:[dict objectForKey:@"spono"]]){
+                        self.qgdkh.text = [NSString stringWithString:[dict objectForKey:@"spono"]];
+                    }
                 }
                 else if (i == 1) {
                     if (![@"" isEqualToString:[dict objectForKey:@"picuri"]]) {
@@ -409,9 +445,14 @@
                     }
                 }else if (i == 2) {
                     if (![@"" isEqualToString:[dict objectForKey:@"picuri"]]) {
-                        [self.testPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
+                        [self.qgdewmPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
+                    }
+                }else if (i == 3) {
+                    if (![@"" isEqualToString:[dict objectForKey:@"picuri"]]) {
+                        [self.qgdsjpPic sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", IMG_URL, [dict objectForKey:@"picuri"]]] placeholderImage:self.loadingImage];
                     }
                 }
+
             }
 
         }
@@ -536,7 +577,7 @@
 }
 
 - (void) uploadImages:(NSInteger)index {
-    if (index >= 3) {
+    if (index >= 4) {
         [self uploadImgOK];
         return;
     }

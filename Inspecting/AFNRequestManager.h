@@ -17,9 +17,9 @@
 //#define IMG_URL @"http://106.14.18.135:80"
 
 //// server test server
-//#define BASE_URL @"http://192.168.1.8:8881/xunjian/appapi/"
+//#define BASE_URL @"http://192.168.1.12:8881/xunjian/appapi/"
 //// image server
-//#define IMG_URL @"http://192.168.1.8:8881"
+//#define IMG_URL @"http://192.168.1.12:8881"
 
 // server product
 #define BASE_URL @"http://218.5.69.154:9500/xunjian/appapi/"

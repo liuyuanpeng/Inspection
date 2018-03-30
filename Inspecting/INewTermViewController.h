@@ -20,9 +20,12 @@
 
 @property (nonatomic, weak) RadioButton *radioButton;
 @property (nonatomic, strong) ITextView *desc;
+@property (nonatomic, strong) ITextView *qgdkh;
 @property (nonatomic, strong) UIImageView *instPic;
 @property (nonatomic, strong) UIImageView *serialPic;
-@property (nonatomic, strong) UIImageView *testPic;
+@property (nonatomic, strong) UIImageView *qgdewmPic;
+@property (nonatomic, strong) UIImageView *qgdsjpPic;
+
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
