@@ -548,7 +548,7 @@
         [self.view makeToast:@"选择其他时请填写其他支付方式!"];
         return;
     }
-    for (NSInteger i = 0; i < 5; i++) {
+    for (NSInteger i = 0; i < 6; i++) {
         if (self.inspresultArray.count > i) {
             NSDictionary *dict = [self.inspresultArray objectAtIndex:i];
             NSString *oldFile = @"";
